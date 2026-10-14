@@ -25,7 +25,8 @@ Build a board-first, lightweight, friendly website where users **learn actual na
 11. Frontend is **Vue 3**, not React. Target mobile and desktop.
 12. Hosting should be compatible with a shared PHP environment (e.g. O2Switch). No long-running Node server or always-on background jobs needed in production.
 13. **APPROVED: three-layer data architecture.** (1) Imported Lichess-derived chess position/move graph **with preserved named opening paths** and provenance; (2) independently curated lesson lines, branches and explanatory notes; (3) private user accounts and training progress. These layers must remain independent so source-data refreshes cannot overwrite authored lessons or user history.
-14. **APPROVED: lesson YAML files are the canonical authored source.** Maintain human-editable, version-controlled lesson definitions under `lessons/`; validate, then synchronise them to MariaDB using a dedicated, idempotent CLI command. No database-only lesson editing or automatically inferred authoritative lessons in v1.
+14. **APPROVED (revised): Doctrine data migrations for curated lessons.** Write intentional lesson records and later modifications as versioned PHP/Doctrine migrations in Git, not a lesson YAML loader. Upstream catalogue refreshes never change lesson content.
+15. **APPROVED: weekly opening-catalogue refresh.** Check Lichess's official opening-name dataset weekly, validate and activate safe updates to the imported layer. API/Vue must react to catalogue revisions without disrupting training or progress; see [OPENING_UPDATES.md](OPENING_UPDATES.md).
 
 ### Not in the initial version
 
@@ -84,6 +85,7 @@ Build a board-first, lightweight, friendly website where users **learn actual na
 | Testing | Vitest (unit), Playwright (e2e), PHPUnit (API), static analysis/lints | Validate full opening input and edge invariants |
 | Local tooling | Composer, Node LTS, package lock, optional Docker Compose MariaDB | Agent selects/pins compatible runtime versions; document exact commands |
 | Deployment | Build Vue in CI/local; deploy built static assets + Symfony/PHP API on shared host | SSH deployment, same-origin routing, DB migrations, secrets outside Git |
+| Weekly updater | GitHub Actions scheduled cron (Node chess.js) + Symfony CLI (PHP-only deploy) | Bundle validation, source diff, atomic activation, versioned catalogue metadata |
 
 **Licences:** repository code GPL-3.0-only, official text in `LICENSE`. Preserve upstream notices for Chessground and chess.js. Lichess named-opening data: CC0; preserve provenance in importer tables and documentation. Check licence of **any additional datasets** independently; Lichess broadcasts are not all CC0. Do not use a Lichess account or request their API for runtime training.
 
@@ -94,6 +96,8 @@ Build a board-first, lightweight, friendly website where users **learn actual na
   README.md
   LICENSE
   docs/IMPLEMENTATION_PLAN.md
+  docs/OPENING_UPDATES.md                 # Weekly source sync and Vue reactions
+  ops/cron/                              # Optional host crontab example
   frontend/
     src/
       components/chess/ChessBoard.vue       # Chessground adapter only
@@ -110,15 +114,13 @@ Build a board-first, lightweight, friendly website where users **learn actual na
       Service/Chess/                       # lesson/catalogue lookups
       Service/Progress/                    # progress write/reads
       Command/                             # import loader commands
-    migrations/
+    migrations/                          # Schema + separate lesson data migrations
     tests/
   tools/opening-importer/
     src/                                   # parse, normalise, validate, emit
     fixtures/                              # small deterministic TSV test inputs
     tests/
-  lessons/
-    italian-game/                          # first manually authored lesson
-  .github/workflows/
+  .github/workflows/                     # CI and eventual scheduled update
 ```
 
 This is a proposed layout, not a promise that those files exist today. Minimise circular dependencies. A shared TS type package is optional; prefer a small OpenAPI/schema contract over introducing monorepo complexity prematurely.
@@ -160,13 +162,14 @@ If expanding later to aggregate game-frequency statistics from https://database.
 8. Produce deterministic, sorted `positions.ndjson`, `edges.ndjson`, `opening_entries.ndjson`, `entry_steps.ndjson`, and `import-report.json`; use reproducible output ordering and no timestamps inside record IDs.
 9. Compare against a fixed collection of known paths/positions; fail generation on illegal moves, inconsistent edge targets or silently missing rows. Print counts of source rows, duplicate positions, transpositions, names sharing a position and invalid records.
 
-**Step 2 — Load to MariaDB (Symfony CLI / Doctrine DBAL):**
+**Step 2 — Load to MariaDB (Symfony CLI / Doctrine DBAL; `app:openings:apply-bundle` to implement):**
 1. Validate generated manifest/checksums and read the files outside HTTP, in bounded batches.
 2. Run under a migration-safe import lock; write an `opening_import_batch` record and use transactions/staging where practical.
 3. Upsert positions by `position_key`, edges by `(from_position_id, uci)`, entries by source fingerprint and line steps by `(entry_id, ply)`.
 4. Store the source batch/active version; deactivate old named entries only **after successful validation** and only if no active lesson depends on deleting them. Never overwrite editorial notes or personal progress during imports.
 5. A second run of the same manifest must be a **no-op on logical data**. Re-import with an updated upstream SHA should be deterministic and idempotent.
-6. Emit counts/diffs before applying an upstream update; support `--dry-run`, `--validate-only` and a reproducible import report. Never run destructive imports as a public HTTP request.
+6. Emit counts/diffs before applying an upstream update; support `--dry-run`, validation and a reproducible import report. Never run destructive imports as a public HTTP request.
+7. For weekly updates keep an active revision and prior successful version; after safe promotion publish the new catalogue revision. Preserve every curated lesson and user record. See [OPENING_UPDATES.md](OPENING_UPDATES.md).
 
 **Why two steps?** chess.js is shared with the Vue client and handles PGN/FEN consistently, while the server deployment remains PHP-only. Node is a **build/import tool**, not a production service. If a single PHP importer is preferred later, it must use a fully tested legal-move implementation and preserve the exact same canonical key semantics.
 
@@ -194,6 +197,8 @@ If expanding later to aggregate game-frequency statistics from https://database.
 | `chess_move` | `id`, `from_position_id`, `to_position_id`, `uci`, `san` | **UNIQUE(from_position_id, uci)**; FK on both nodes; index destination |
 | `opening_entry` | `id`, `source_uid`, `eco`, `full_name`, `original_pgn`, `terminal_position_id`, `import_batch_id`, `active` | **UNIQUE(source_uid)**; ECO/name may repeat |
 | `opening_entry_step` | `opening_entry_id`, `ply`, `chess_move_id` | **PK(opening_entry_id, ply)**; ordered source line |
+| `opening_catalogue_state` (proposed) | `active_batch_id`, `catalogue_revision`, `last_checked_at`, `last_updated_at` | Atomically promoted catalogue revision, separate from lesson revision |
+| `opening_catalogue_change` (optional) | `batch_id`, `change_type`, `entry_id`, `old_summary`, `new_summary`, `review_required` | Bounded import diff/history and curriculum review candidates |
 
 Sample essential SQL constraints (not complete migration DDL):
 
@@ -228,29 +233,20 @@ Never use `eco` as a primary key, never assume `full_name` is unique, and never 
 | `lesson_line_step` | `lesson_line_id`, `ply`, `chess_move_id` | **PK(lesson_line_id, ply)**; line's complete ordered path; validate `from -> to` continuity |
 | `lesson_note` | `id`, `lesson_id`, `lesson_line_id` nullable, `position_id` nullable, `chess_move_id` nullable, `kind`, `locale`, `text`, `sort_order` | Optional introduction, concept, hint, "why" or plan at a position/edge, with scope/priority |
 
-**Confirmed lesson-storage decision:** author lessons as **YAML files in `lessons/`**, committed to Git and reviewed as code. The YAML is the **source of truth for curriculum** (course/line slugs, colour, ordered UCI paths, teaching tiers, descriptions, explanations and hint annotations). MariaDB contains a validated, queryable **projection**, not the master authoring copy. The lesson loader runs as a **separate, idempotent CLI/seed command after the opening-graph import**; it must validate move legality, path continuity, selected graph edges, line endpoints and unique stable slugs before writing. Document an explicit version/revision policy when a published line changes, preserving or deliberately migrating player progress. Keep lessons editable in Git rather than building an admin editor for v1. Example:
+**Revised and approved lesson-storage decision:** authored lessons are maintained with **Doctrine PHP data migrations**, committed to Git, not a separate declarative content loader. Chess-opening lessons change relatively infrequently, so introducing a custom content synchronisation layer in v1 is unnecessary. Versioned migrations deliberately insert or update `lesson`, `lesson_line`, `lesson_line_step` and `lesson_note` using stable IDs, with validation against available graph moves and a `lesson_revision` for published content. Never let a weekly Lichess source refresh change these records.
 
-```yaml
-slug: italian-white
-title: Italian Game (White)
-playing_color: w
-status: published
-lines:
-  - slug: giuoco-piano-c3
-    title: Giuoco Piano — 4.c3
-    tier: 1
-    uci: [e2e4, e7e5, g1f3, b8c6, f1c4, f8c5, c2c3]
-    notes:
-      - after_ply: 7
-        kind: why
-        text: "c3 prepares d4 to challenge Black's centre."
-  - slug: giuoco-pianissimo-d3
-    title: Giuoco Pianissimo — 4.d3
-    tier: 2
-    uci: [e2e4, e7e5, g1f3, b8c6, f1c4, f8c5, d2d3]
+Example migration progression (illustrative; not yet created):
+
+```text
+backend/migrations/Schema/Version202610150900_CreateChessSchema.php
+backend/migrations/LessonData/Version202610151200_AddItalianGame.php
+backend/migrations/LessonData/Version202611030900_AddTwoKnightsVariants.php
+backend/migrations/LessonData/Version202612140930_ReviseItalianExplanation.php
 ```
 
-This is **illustrative seed data**, not a comprehensive or sufficiently deep Italian course. Every authored `uci` step must exist in or be deliberately added to the validated graph; a valid custom teaching line may extend beyond any Lichess named entry but must still pass chess.js legality validation. Do not rewrite/edit the upstream `opening_entry` to add lesson prose.
+**Important bootstrapping requirement:** authored `lesson_line_step` records reference chess edges created by the separate Lichess import. On a fresh database, implement a verified **schema migrations -> first Lichess catalogue import -> lesson data migrations** order. An indiscriminate one-pass migration run could attempt lesson inserts before those chess edges exist. Suggested approach: use separate Doctrine migration configurations/paths and a small documented bootstrap/deploy orchestrator; verify actual Doctrine CLI support. An equivalent proven two-stage migration execution is acceptable. Do not change the approved migrations-based lesson authoring to work around this without discussing it.
+
+Write a **new migration** for each later content correction, rather than editing a migration already applied. Validate legal UCI paths and continuity, track revisions when published content changes, and make an explicit decision about whether previous mastery remains valid. Curated lesson sequences can legally extend beyond named Lichess entries if independently validated. Do not write teaching prose into imported `opening_entry` records.
 
 **Editorial invariants:** Published lessons have a reachable, legal path from their declared start position; a stop/end condition; a supported colour; correctly configured opponent/user turns; no dangling steps; no empty branch after a computer-selected move; and a coherent label when the line crosses a variation boundary.
 
@@ -274,7 +270,7 @@ Choose an explicit deletion policy: `ON DELETE CASCADE` for user-owned progress 
 - `opening_entry_step(entry_id,ply)`, `lesson_line_step(line_id,ply)`, `lesson_line(lesson_id,tier)`.
 - `user_line_progress(user_id,next_review_at)`, `user_position_progress(user_id,lesson_id)`.
 - FKs with deliberate delete behaviour; no cascades that erase editorial content during an upstream data refresh.
-- Import in consistent dependency order: positions -> moves -> source entries -> entry steps -> authored lessons -> progress.
+- Bootstrap in dependency order: **schema migrations -> imported positions/moves/source paths -> Doctrine lesson data migrations -> user progress**. Weekly catalogue updates touch only imported chess knowledge and must not run pending lesson migrations.
 - Validate uniqueness on the same SQL collation rules used by the application. Normalise emails explicitly; don't rely on case-sensitive raw input.
 - Use prepared statements/batched inserts; never store or query legal move lists via large comma-separated strings.
 
@@ -291,7 +287,8 @@ Keep browser and Symfony on the **same origin** to simplify auth/cookies and dep
 - `GET /api/openings?search=italian&color=w`: names/ECO/family suggestions (not raw personal data).
 - `GET /api/lessons?color=w`: available published courses, tiers and counts.
 - `GET /api/lessons/{slug}`: lesson metadata, line selection, progress summary if authenticated.
-- `GET /api/lessons/{slug}/graph?tiers=1,2&lines=...`: only the relevant positions, legal *lesson-scope* edges, line paths and optional notes, with labels. Cache as versioned public content if privacy permits; otherwise normal private request.
+- `GET /api/lessons/{slug}/graph?tiers=1,2&lines=...`: only relevant lesson-scope edges, paths and notes; return independent `catalogueRevision` and `lessonRevision`. Cache as versioned public content when suitable.
+- `GET /api/openings/catalogue-status`: active `catalogueRevision`, update time, source SHA and optional change counts. Frontend compares revision on catalogue navigation and new-session start, refreshes only stale opening metadata, and leaves an active session pinned to its original lesson graph.
 
 **Progress (all authorised for current session's user):**
 - `GET /api/me/progress`: per lesson/line coverage and review due.
@@ -396,6 +393,7 @@ Sources: [CNIL GDPR](https://www.cnil.fr/fr/comprendre-le-rgpd), [CNIL retention
 - Export works and deletion removes account/progress while respecting documented retention/backup policy.
 - No accidental third-party trackers; HTTPS/cookie flags/CSRF checked in production-like environment.
 - DB migrations and Vite build deploy correctly on a PHP-only target.
+- Weekly sync cases: unchanged upstream is no-op; new source lines appear in catalogue but not as uncurated computer replies; renamed labels refresh next session; corrupt/interrupted import keeps prior active catalogue; existing progress stays intact.
 
 ## 12. Implementation milestones and acceptance criteria
 
@@ -411,13 +409,14 @@ Use small PRs or commits. **Do not wait for the entire product to be complete be
 - Move history/restart/undo and unit tests.
 - **Done when:** local test page can play and rewind legal moves on mobile/desktop.
 
-### M2 — Opening catalogue importer
-- Pinned Lichess TSV input, TypeScript generator, manifest/report, canonical graph, DBAL loader, Doctrine migrations, repeatable fixtures.
+### M2 — Opening catalogue importer and weekly refresh
+- Pinned Lichess TSV input, TypeScript generator, manifest/report, canonical graph, DBAL loader, Doctrine **schema** migrations, repeatable fixtures.
 - Search/browse API for named openings; no frontend training yet.
-- **Done when:** full dataset imports idempotently, known transpositions deduplicate, catalogue responds with labels, updated import does not destroy curated records.
+- Implement weekly GitHub Actions cron at 04:17 UTC Monday, validated bundle staging, a PHP-only `app:openings:apply-bundle` command, import lock, atomic activation, revision-aware API and manual retry. See [weekly-sync spec](OPENING_UPDATES.md) and [optional host crontab](../ops/cron/opening-catalogue.crontab.example).
+- **Done when:** imports are idempotent, transpositions deduplicate, latest validated additions become discoverable, corruption keeps old live data, and lesson/user records survive weekly updates.
 
 ### M3 — Curated lessons and strict Guided Learning
-- Lesson YAML/JSON authoring schema, validator, DB seed loader, first Italian Game family lines (main and common branch) reviewed for chess accuracy.
+- Doctrine PHP **lesson data migrations** applied after the initial validated chess graph import, including stable IDs, path validation and content revisions; first Italian Game family lines (main and common branch) reviewed for chess accuracy.
 - Guided training route, minimal explanation/hint drawer and exact-line policy.
 - **Done when:** a signed-in player can finish a selected line with correct feedback and replay.
 
@@ -432,7 +431,7 @@ Use small PRs or commits. **Do not wait for the entire product to be complete be
 - **Done when:** account progress survives logout, a new browser and a different device with no cross-user leakage.
 
 ### M6 — Privacy, quality and deployment
-- Privacy/legal pages, data export/deletion, retention policy, security review, responsive visual polish, CI and shared-host release guide.
+- Privacy/legal pages, data export/deletion, retention policy, security review, responsive visual polish, CI, verified weekly catalogue update/alerting and shared-host release guide.
 - **Done when:** production-like smoke tests pass, essential-only cookies verified, secrets excluded, backend migrates and deploys without Node runtime.
 
 **Sequencing note:** M5 account scaffolding/identity can begin alongside M2/M3; because login is required for training, provide a minimal working registration/login before declaring M3/M4 user-facing complete. Don't gate importer correctness on auth implementation.
@@ -441,10 +440,10 @@ Use small PRs or commits. **Do not wait for the entire product to be complete be
 
 **Do first:** M0 bootstrap, M1 board/rules test harness, and write a small M2 importer spike that processes ~10 sample PGNs and demonstrates transposition + idempotent output. Do not bulk-import the complete dataset before the position-key and lesson-schema review.
 
-**Already approved by owner:** the three-layer separation (imported chess graph with named opening paths / curated lesson definitions / user progress) and version-controlled **YAML files as the lesson source of truth**, synchronised to MariaDB via a separate loader. Do **not** reopen these architectural choices without a specific implementation problem.
+**Already approved by owner:** the three-layer separation (imported chess graph with named paths / authored lesson layer / user progress), **Doctrine PHP data migrations for lessons**, and **weekly automatic updates of Lichess opening data with revision-aware API and Vue behaviour**. No YAML sync. Do not reopen these decisions without a specific implementation problem.
 
 **Technical details still to review before permanent M2/M3 migrations:**
-1. The concrete column/index and source-fingerprint design, canonical position-key tests and importer update lifecycle.
+1. The concrete column/index and source-fingerprint design, canonical position-key tests, importer update lifecycle and safe two-stage bootstrap/migration ordering.
 2. Initial learning depth per line should be editorially chosen (often around 8–12 moves, not a fixed universal depth).
 3. Default scope of variation practice: learned lines versus all enabled course lines (make configurable; default learned).
 4. Additional source licences for any future datasets (project GPLv3 and Lichess openings CC0 are already chosen).
@@ -458,6 +457,8 @@ For v1 import opening **names/sequences**, not the large game-statistics databas
 - Chessground: https://github.com/lichess-org/chessground
 - chess.js: https://github.com/jhlywa/chess.js
 - Symfony LTS: https://symfony.com/releases/7.4
+- GitHub Actions schedule: https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule
+- Weekly importer update specification: [OPENING_UPDATES.md](OPENING_UPDATES.md)
 - CNIL GDPR: https://www.cnil.fr/fr/comprendre-le-rgpd
 
 ---
