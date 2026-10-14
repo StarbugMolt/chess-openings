@@ -65,6 +65,12 @@ See the full [engineering plan](docs/IMPLEMENTATION_PLAN.md) for architecture, p
 
 A named opening is **not** synonymous with a lesson, an ECO code is **not** a unique opening ID, and a position may have multiple names/paths.
 
+### Approved storage architecture
+
+The project uses **three distinct layers**: **(1)** an imported chess position/move graph with separately preserved Lichess names and source paths, **(2)** our curated lessons and theoretical branches, and **(3)** private accounts and progress. An upstream opening-data update must never overwrite lessons or player progress.
+
+**Lesson content is authored in Git as YAML under `lessons/` (source of truth).** A separate, repeatable CLI loader validates the named sequences, optional explanations and lesson metadata, then synchronises them into MariaDB for fast training queries. No database-only editing or lesson editor is planned for v1. The detailed table layout remains a proposal; the layer separation and YAML-based authoring are accepted design decisions.
+
 ## Proposed repository layout
 
 This is a target layout; directories will be created as the implementation progresses.
