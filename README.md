@@ -49,6 +49,7 @@ This is a friendly, approachable teaching experience inspired by clear chess edu
 | Backend | **Symfony 7.4 LTS** (PHP 8.2+), SecurityBundle, Mailer | Target modern PHP; verify hosting PHP availability |
 | Persistence | **MariaDB**, Doctrine ORM + DBAL + Migrations | Opening data and per-user data in separate logical tables |
 | Import pipeline | **TypeScript + chess.js** offline, Symfony CLI/DBAL for database loading | No runtime Lichess API; pin upstream dataset revision |
+| Automatic updates | **Weekly GitHub Actions cron** + Symfony importer command | Rebuild validated source data in CI, safely apply to MariaDB, refresh opening catalogue version in app |
 | Testing | **Vitest**, **Playwright**, **PHPUnit** | Opening graph validation and end-to-end training flows |
 | Deployment | Static Vite assets + Symfony API on compatible shared PHP hosting | Prefer same-origin HTTPS; build JS in local/CI, not on the host |
 | Licence | **GPLv3** (GPL-3.0-only for this project's code) | Lichess opening data is separately CC0; honour third-party notices |
@@ -60,7 +61,7 @@ See the full [engineering plan](docs/IMPLEMENTATION_PLAN.md) for architecture, p
 1. Pin and obtain the official [Lichess chess-openings](https://github.com/lichess-org/chess-openings) TSV files (`a.tsv` through `e.tsv`).
 2. Offline, replay each PGN with chess.js; validate every move; construct **position nodes** and **legal move edges**, deduplicating transpositions by a canonical position key.
 3. Keep each imported opening's ECO/name/source path as independent **catalogue metadata**.
-4. Curate lessons (main lines, accepted alternative paths, annotation/hints) **separately** from the imported catalogue.
+4. Maintain lessons (main lines, accepted alternative paths, annotations/hints) as version-controlled **Doctrine PHP data migrations**, separately from the imported catalogue.
 5. Serve only a selected lesson's relevant graph to the browser. No call to the Lichess API at play time.
 
 A named opening is **not** synonymous with a lesson, an ECO code is **not** a unique opening ID, and a position may have multiple names/paths.
@@ -69,7 +70,7 @@ A named opening is **not** synonymous with a lesson, an ECO code is **not** a un
 
 The project uses **three distinct layers**: **(1)** an imported chess position/move graph with separately preserved Lichess names and source paths, **(2)** our curated lessons and theoretical branches, and **(3)** private accounts and progress. An upstream opening-data update must never overwrite lessons or player progress.
 
-**Lesson content is authored in Git as YAML under `lessons/` (source of truth).** A separate, repeatable CLI loader validates the named sequences, optional explanations and lesson metadata, then synchronises them into MariaDB for fast training queries. No database-only editing or lesson editor is planned for v1. The detailed table layout remains a proposal; the layer separation and YAML-based authoring are accepted design decisions.
+**Curated lesson content is authored as version-controlled Doctrine data migrations** (PHP in Git). Since named opening theory changes relatively slowly, we don't need YAML files, a special content parser or a synchronization loader in v1. Schema migrations establish tables; the initial local Lichess catalogue import establishes chess edges; **then** lesson data migrations insert the taught paths and explanatory notes. Preserve stable lesson IDs/revisions and user progress. The three-layer architecture and migration-based lessons are approved decisions; exact columns and migration execution configuration remain implementation details.
 
 ## Proposed repository layout
 
@@ -79,10 +80,20 @@ This is a target layout; directories will be created as the implementation progr
 frontend/                   # Vue app, Chessground wrapper, training composables
 backend/                    # Symfony API, entities, auth and migrations
 tools/opening-importer/     # Offline TSV -> validated position graph
-lessons/                    # Version-controlled, curated lesson definitions
-docs/IMPLEMENTATION_PLAN.md # Authoritative implementation notes
+backend/migrations/         # Schema and versioned curated-lesson data migrations
+docs/IMPLEMENTATION_PLAN.md # Agent handoff, migrations and implementation roadmap
+docs/OPENING_UPDATES.md     # Weekly Lichess refresh and app-reaction contract
+ops/cron/                   # Example alternative host crontab (not installed)
 .github/workflows/          # Tests, build and optional deployment
 ```
+
+## Weekly Lichess opening updates (planned)
+
+Once the importer and deployment pipeline are implemented, a **Monday 04:17 UTC GitHub Actions cron** will check for changes to Lichess's official opening-name data, generate a validated chess.js import bundle and invoke a **Symfony PHP-only CLI loader** on the host. New names and opening paths will appear in the local catalogue; a `catalogueRevision` change will tell Vue/Pinia to refresh cached opening metadata at the next navigation or session start.
+
+**The weekly updater never edits Doctrine-managed lessons or private training progress.** A newly imported variation is discoverable in the catalogue but is not a computer training response until intentionally included by a reviewed lesson migration. Failed imports retain the previous live catalogue. See [OPENING_UPDATES.md](docs/OPENING_UPDATES.md) for the exact API/CLI contract, schedule, data safety and a [server-cron example](ops/cron/opening-catalogue.crontab.example) if a PHP-only apply phase is preferred.
+
+**This schedule and its CLI commands are specified, not operational yet:** the repository has no Symfony application, importer implementation, deployed database or configured GitHub Actions secrets. The implementation agent must only enable a working scheduled workflow after the updater is implemented and tested.
 
 ## Local development
 
