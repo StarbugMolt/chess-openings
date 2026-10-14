@@ -24,6 +24,8 @@ Build a board-first, lightweight, friendly website where users **learn actual na
 10. GDPR/RGPD-minimal accounts: no ads or unnecessary trackers. Design privacy/security before production release.
 11. Frontend is **Vue 3**, not React. Target mobile and desktop.
 12. Hosting should be compatible with a shared PHP environment (e.g. O2Switch). No long-running Node server or always-on background jobs needed in production.
+13. **APPROVED: three-layer data architecture.** (1) Imported Lichess-derived chess position/move graph **with preserved named opening paths** and provenance; (2) independently curated lesson lines, branches and explanatory notes; (3) private user accounts and training progress. These layers must remain independent so source-data refreshes cannot overwrite authored lessons or user history.
+14. **APPROVED: lesson YAML files are the canonical authored source.** Maintain human-editable, version-controlled lesson definitions under `lessons/`; validate, then synchronise them to MariaDB using a dedicated, idempotent CLI command. No database-only lesson editing or automatically inferred authoritative lessons in v1.
 
 ### Not in the initial version
 
@@ -181,7 +183,7 @@ If expanding later to aggregate game-frequency statistics from https://database.
 
 ## 7. Proposed MariaDB schema (review before implementation)
 
-This design deliberately separates **source graph**, **editorial lesson graph** and **user data**. Create it with Doctrine Migrations, proper FKs/indexes and realistic data fixtures; names may be adjusted to project conventions.
+**Architecture approved by the project owner:** keep the **imported chess graph and named paths**, **curated lesson definitions**, and **private account/progress records** as three independent layers. The specific table/column design below remains a technical proposal to validate before the first permanent migration. Create it with Doctrine Migrations, proper FKs/indexes and realistic data fixtures; names may be adjusted to project conventions.
 
 ### 7.1 Imported chess facts (shared/read mostly)
 
@@ -226,7 +228,7 @@ Never use `eco` as a primary key, never assume `full_name` is unique, and never 
 | `lesson_line_step` | `lesson_line_id`, `ply`, `chess_move_id` | **PK(lesson_line_id, ply)**; line's complete ordered path; validate `from -> to` continuity |
 | `lesson_note` | `id`, `lesson_id`, `lesson_line_id` nullable, `position_id` nullable, `chess_move_id` nullable, `kind`, `locale`, `text`, `sort_order` | Optional introduction, concept, hint, "why" or plan at a position/edge, with scope/priority |
 
-Use version-controlled YAML/JSON definitions under `lessons/`, imported with a **separate** CLI/seed command after the graph import. Example:
+**Confirmed lesson-storage decision:** author lessons as **YAML files in `lessons/`**, committed to Git and reviewed as code. The YAML is the **source of truth for curriculum** (course/line slugs, colour, ordered UCI paths, teaching tiers, descriptions, explanations and hint annotations). MariaDB contains a validated, queryable **projection**, not the master authoring copy. The lesson loader runs as a **separate, idempotent CLI/seed command after the opening-graph import**; it must validate move legality, path continuity, selected graph edges, line endpoints and unique stable slugs before writing. Document an explicit version/revision policy when a published line changes, preserving or deliberately migrating player progress. Keep lessons editable in Git rather than building an admin editor for v1. Example:
 
 ```yaml
 slug: italian-white
@@ -439,12 +441,15 @@ Use small PRs or commits. **Do not wait for the entire product to be complete be
 
 **Do first:** M0 bootstrap, M1 board/rules test harness, and write a small M2 importer spike that processes ~10 sample PGNs and demonstrates transposition + idempotent output. Do not bulk-import the complete dataset before the position-key and lesson-schema review.
 
-Before building the permanent M2/M3 migrations, confirm with owner:
-1. **Position graph + preserved named paths + curated lesson lines** as three separate layers (recommended).
-2. Import only opening *names* now; defer large Lichess game datasets and statistical probabilities.
-3. Initial learning depth per line should be editorially chosen (often around 8–12 moves, not a fixed universal depth).
-4. Default scope of variation practice: already learned lines vs all enabled course lines (make configurable; default learned).
-5. Source licence identifier: GPL-3.0-only chosen for project code, CC0 for opening names. Check all additional packages.
+**Already approved by owner:** the three-layer separation (imported chess graph with named opening paths / curated lesson definitions / user progress) and version-controlled **YAML files as the lesson source of truth**, synchronised to MariaDB via a separate loader. Do **not** reopen these architectural choices without a specific implementation problem.
+
+**Technical details still to review before permanent M2/M3 migrations:**
+1. The concrete column/index and source-fingerprint design, canonical position-key tests and importer update lifecycle.
+2. Initial learning depth per line should be editorially chosen (often around 8–12 moves, not a fixed universal depth).
+3. Default scope of variation practice: learned lines versus all enabled course lines (make configurable; default learned).
+4. Additional source licences for any future datasets (project GPLv3 and Lichess openings CC0 are already chosen).
+
+For v1 import opening **names/sequences**, not the large game-statistics database.
 
 ### Source links / references
 
