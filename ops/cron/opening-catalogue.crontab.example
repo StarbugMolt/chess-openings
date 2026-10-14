@@ -1,0 +1,12 @@
+# Chess Openings — example PHP-only crontab apply phase (NOT installed or active).
+# Only use AFTER the Symfony app, app:openings:apply-bundle command, staging
+# directory and a trusted TypeScript/CI job that prepares validated bundles exist.
+# This is the alternative host-cron apply scheduler. For normal operation prefer
+# the GitHub Actions weekly cron described in docs/OPENING_UPDATES.md; do not
+# enable two competing schedules that both promote catalogue revisions.
+#
+# Runs every Monday at 05:17 in the HOST cron timezone (verify the host TZ).
+# Change PHP executable, account home path, private staging directory, and logs.
+# A no-change bundle must be a successful no-op.
+#
+17 5 * * 1 /usr/local/bin/php /home/ACCOUNT/chess-openings/backend/bin/console app:openings:apply-bundle --bundle=/home/ACCOUNT/private/chess-openings/imports/latest --env=prod --no-interaction >> /home/ACCOUNT/logs/chess-opening-sync.log 2>&1
