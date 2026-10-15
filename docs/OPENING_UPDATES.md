@@ -1,144 +1,165 @@
-# Weekly opening-catalogue refresh — implementation specification
+# PHP opening importer and weekly catalogue refresh
 
-> **Status: approved feature specification / NOT IMPLEMENTED.** The repository is still documentation-only. The commands, CI job and production schedule described here are tasks for the implementation agent. No weekly refresh is running yet.
+> **Status: approved technical specification, NOT implemented or scheduled.** The repository is currently documentation-only. The implementation agent must create and test the Symfony services and commands, then install the weekly task in the O2Switch/cPanel cron interface. Merely committing this document does **not** install a cron.
 >
-> "Latest news" means the **latest additions, corrections, renamed lines and move-order/transposition changes in the official Lichess `chess-openings` dataset**. It does **not** mean scraping chess-news articles, changing our courses automatically, or adding an AI engine.
+> **Owner's decision:** the complete importer and scheduler integration belong to the **Symfony/PHP backend**. No Node/TypeScript opening-import script, GitHub Actions scheduled importer, SSH-delivered bundles or remote worker is required. Vue/TypeScript and chess.js remain frontend-only. CI can still build Vue and run tests.
 
-## Purpose and scope
+## Meaning of "latest news"
 
-Keep our local MariaDB **chess-knowledge layer** reasonably current via a **weekly scheduled import** of the official [Lichess openings data](https://github.com/lichess-org/chess-openings), while preserving:
+Fetch the latest **official Lichess named-opening data**: new named lines, renamed openings, corrected PGN paths, aliases and transpositions. This is **not** a general chess-news or master-games feed. The data source is the CC0 [lichess-org/chess-openings](https://github.com/lichess-org/chess-openings) repository, whose **root** files `a.tsv` ... `e.tsv` contain columns `eco`, `name`, `pgn`. Do not assume generated `dist/` files exist in the checkout.
 
-- Curated lessons/variations maintained as **version-controlled Doctrine data migrations**.
-- Existing stable lesson identifiers, revisions, completion and user progress.
-- Validity of in-progress training sessions and API responses.
-- Reliable naming/transposition matching, even when upstream names and source paths change.
+Lichess labels are **catalogue metadata**; source changes do not constitute an authoritative modification of any of our manually maintained training lessons.
 
-**Golden rule:** upstream opening-catalogue updates automatically affect the *catalogue and recognition metadata*, never the set of *allowed moves in a curated lesson*. A newly discovered name/line is not automatically an authored lesson. Surface it as a candidate for later reviewed migration if it falls within a known course family.
+## Confirmed architecture
 
-## Where the weekly job runs
-
-The normal importer uses **Node/TypeScript + chess.js** to validate/replay PGN and build a canonical graph. Production hosting is **PHP-only** (shared host/O2Switch), so don't attempt to run Node via the server's PHP cron or introduce a second chess-rules implementation just for weekly updates.
-
-**Recommended primary scheduler:** a GitHub Actions scheduled workflow runs the **existing offline TypeScript importer weekly**, produces a validated, versioned import bundle, and safely uploads the bundle to the server via SSH/SFTP. It invokes a **short-lived Symfony Console / Doctrine DBAL command** on the server to apply the bundle to MariaDB. No always-on worker or production Node runtime is needed.
-
-### Proposed GitHub Actions cron
-
-Once **M2** has delivered a working importer and secure deployment secrets exist, activate a real workflow at `.github/workflows/update-opening-catalogue.yml`:
-
-```yaml
-name: Weekly Lichess opening catalogue sync
-on:
-  schedule:
-    - cron: '17 4 * * 1' # Every Monday at 04:17 UTC
-  workflow_dispatch:
-
-# Implementation agent must add a working job that:
-# 1. Checks out this repo, installs pinned Node dependencies;
-# 2. Checks official Lichess upstream SHA and exits if unchanged;
-# 3. Builds/validates versioned bundle with chess.js and writes a diff;
-# 4. Transfers only the validated bundle to a non-public server directory;
-# 5. Invokes Symfony CLI app:openings:apply-bundle over SSH;
-# 6. Verifies DB activation and reports success/failure.
-# Store SSH credentials in GitHub Actions secrets; do not print them.
+```text
+O2Switch / cPanel cron — weekly (single scheduler)
+    |
+    v
+PHP CLI: backend/bin/console app:openings:sync
+    |
+    +--> Symfony HttpClient: resolve upstream Git SHA + download all 5 TSVs at that SAME SHA
+    |
+    +--> PHP TSV parser + PHP chess rules/notation library
+    |      validate SAN/PGN, replay every move, compute UCI, SAN, canonical positions
+    |
+    +--> compare old/new; lock; stage SQL data (Doctrine DBAL)
+    |      validate foreign keys, integrity and unacceptable large drops
+    |
+    +--> atomic promotion of catalogue revision or rollback on failure
+    |
+    v
+MariaDB — imported knowledge only (NOT curated lessons or user progress)
+    |
+    v
+Symfony API revision/ETag -> Vue/Pinia refreshes opening metadata on next navigation/new session
 ```
 
-This is an **example, not a complete runnable workflow**. Do NOT commit an enabled workflow with missing commands: it would fail on schedule. GitHub scheduled workflows run on the default branch, can be delayed, and public-repo schedules may be disabled after 60 days without activity. Use a non-round minute and provide `workflow_dispatch` for manual retries. GitHub scheduled workflows are not a hard uptime guarantee.
+### PHP chess-rules dependency
 
-**Alternative host cron:** after a trusted, prevalidated bundle has been staged on the server, a PHP-only crontab can apply it. The provided [ops/cron/opening-catalogue.crontab.example](../ops/cron/opening-catalogue.crontab.example) documents the command. This is **an alternative**, not a second independently enabled scheduled updater. Choose one scheduler/orchestrator, or use the host cron strictly as the **apply phase** of a deliberately staged pipeline. Never let both race to promote conflicting revisions.
+**Preferred candidate: [p-chess/chess](https://github.com/p-chess/chess)**, a MIT-licensed PHP port originally based on chess.js, available through Composer (`composer require p-chess/chess`). Packagist shows v1.2.0 (2026-09-01), PHP `^8.1`, `ext-ctype`. It supports playing SAN moves, legal-move validation and FEN export. It is a candidate to **confirm via implementation spike**, not a promise that it perfectly handles every source PGN out of the box.
 
-### Symfony CLI contract (to be implemented)
+- Encapsulate it behind a `ChessMoveReplayerInterface` / `OpeningLineParser` adapter. Do not tightly couple import/application services to the vendor's API.
+- Use a robust PHP TSV parser (`fgetcsv` with `\t` delimiter and configured quoting/escaping), and a dedicated PGN movetext tokenizer. Handle SAN, castling, checks/mates, annotations, move numbers, results, escaped text/UTF-8 and malformed records. Lichess opening TSV values are typically single-line main lines, not arbitrary annotated studies; nevertheless reject unexpected input instead of silently skipping moves.
+- Use the chess library to **legally replay** tokens; convert each move to canonical SAN, UCI (`from+to+promotion`) and resulting FEN. Implement and test canonical position keys as board placement, side to move, castling rights and **legally capturable en-passant**; omit FEN move clocks. Never assume a raw FEN string or the library's E.P. field is already canonical.
+- Build shared **golden fixtures**: PHP output must match frontend chess.js replay results for normal lines, two equivalent transpositions, castling, ambiguous SAN, promotion, checkmate and en-passant. Use these tests to decide whether `p-chess/chess` meets the importer contract; document and explicitly choose an alternative maintained PHP library only if the spike fails.
+- Node is only needed for **Vue build/frontend tests**, **not** for import, refresh or production.
+
+References: [p-chess/chess on Packagist](https://packagist.org/packages/p-chess/chess), [chess.js](https://github.com/jhlywa/chess.js).
+
+## Backend command specification
+
+Create a real Symfony Console command using Symfony HttpClient, Doctrine DBAL, Symfony Lock (or a deliberate DB advisory lock) and an importer service responsible for the complete fetch-parse-validate-stage-activate sequence:
 
 ```bash
-# Validate and apply a versioned, already-built importer bundle.
-php backend/bin/console app:openings:apply-bundle \
-  --bundle=/absolute/private/path/to/bundle \
-  --env=prod --no-interaction
+# The command to configure in cPanel after implementation.
+php backend/bin/console app:openings:sync --env=prod --no-interaction
 
-# Preview changes without modifying the active dataset.
-php backend/bin/console app:openings:apply-bundle \
-  --bundle=/absolute/private/path/to/bundle \
-  --dry-run --env=prod --no-interaction
+# Safe inspection without writes.
+php backend/bin/console app:openings:sync --dry-run --env=prod --no-interaction
 
-# Inspection/helpful operations.
+# Deterministic fixture/offline run for testing, no GitHub access.
+php backend/bin/console app:openings:sync --source-directory=/absolute/path/to/tsv --dry-run
+
+# Inspect active version, last check and status.
 php backend/bin/console app:openings:status --env=prod
 ```
 
-No PHP command should download arbitrary code or use a public unauthenticated HTTP endpoint to mutate the database. Bundles must be generated by our trusted CI/import process and have a manifest, SHA/checksums, validated format and size limits. Treat all upstream data as untrusted input.
+Commands above are a **future interface**; they do not exist yet. Provide documented `--force` and `--source-ref=<immutable SHA>` options if needed, but a normal scheduled run must not require arguments besides production environment. Manual reruns must be idempotent. There is **no public HTTP endpoint** that triggers updates.
 
-## Import job algorithm — required behavior
+### Weekly O2Switch cron
 
-1. **Check for new upstream data:** compare upstream Git commit SHA (and/or checksums of `a.tsv` to `e.tsv`) with the last **successfully activated** `opening_import_batch`. The Git HEAD alone is not enough to assume file content changed. No changes => successful no-op; record last checked time.
-2. **Pin the snapshot:** download all five source TSV files from the **same immutable upstream SHA** via HTTPS/Git, not mixed mutable `main` URLs. Record source provenance and checksums.
-3. **Parse, replay and validate:** reuse the TypeScript/chess.js importer. Require legal PGN, canonical position keys, consistent `(fromPosition, UCI) -> toPosition`, valid labels/ECO and no unexplained data loss. Produce a deterministic manifest + NDJSON bundle, and compare against previous version.
-4. **Generate change report:** number of additions, new paths, renamed/changed entries, deactivations, deduplicated positions, and possibly new candidate branches for authored lessons. Do not equate a different named path with a new chess position.
-5. **Safety threshold:** reject or require manual approval for anomalous or destructive deltas (e.g. unexpected large drop in rows, invalid position changes, inconsistent source files). Choose/document sensible thresholds after real importer tests; never blindly erase source history.
-6. **Stage and validate on the server:** use a single import lock (Symfony Lock/DB lock), confirm bundle checksum, repeat graph/foreign-key checks, perform batched upserts in a staging generation or a safe transaction/promotion model. Use `--dry-run`/validation before activation.
-7. **Atomically activate a complete validated catalogue revision:** maintain a pointer to the active `opening_import_batch` or equivalent version. Retain the previous successful dataset/revision for rollback. Never serve a half-loaded graph.
-8. **Preserve curated content:** never delete a `chess_move` or `chess_position` referenced by a published lesson, and never delete/update user progress. Changed or removed source labels can become `inactive` with historical provenance; no automatic rewriting of lesson paths.
-9. **Publish an update signal:** set the new active `catalogueRevision`, committed-at time, and a change summary. Invalidate cached opening catalogue/recognition responses by revision-aware cache keys/ETags. Do not change `lessonRevision` unless a Doctrine lesson data migration changes lessons.
-10. **Report failures:** nonzero exit/status to CI, actionable logs, optional notification to repository owner; active revision remains unchanged on failed validation/import. A manual rerun must be safe, including retry of the same SHA.
+Create a cron job in **O2Switch cPanel → Tâches Cron**. The [sample crontab](../ops/cron/opening-catalogue.crontab.example) contains a concrete PHP-CLI invocation. Typical example:
 
-A fresh import and weekly incremental update must share **the same canonical chess rules and schema**. A re-import of an already-applied SHA/checksum is logically idempotent.
+```cron
+# Every Monday at 05:17 in the server cron timezone (verify O2Switch/cPanel TZ).
+17 5 * * 1 /opt/alt/php83/usr/bin/php /home/ACCOUNT/chess-openings/backend/bin/console app:openings:sync --env=prod --no-interaction >> /home/ACCOUNT/logs/chess-openings-sync.log 2>&1
+```
 
-## Database additions (proposed)
+**Replace** the placeholder account directory, actual Symfony path and PHP executable with values verified on the deployed host. `php83` is an **example**, not confirmation that production is on 8.3. The log directory must exist, be writable and be **outside the public webroot**. Check the host's timezone before interpreting the scheduled hour; cPanel may use the server clock, not Europe/Paris. Configure optional failure email/monitoring. Do not use a web-facing `wget` URL; this is a CLI cron with PHP's CLI limits. A weekly job is much lighter than any persistent scheduler service.
 
-Extend the existing *imported knowledge layer*, not the lesson or private-data layers:
+O2Switch specifically documents `php /absolute/path/to/cron.php` and versioned CLI binary paths for cron jobs: https://faq.o2switch.fr/cpanel/outils-avances/tache-planifiee-cron/ and https://faq.o2switch.fr/cpanel/logiciels/hebergement-php-multi-version/.
 
-- `opening_import_batch`: `id`, `source_repo`, `upstream_sha`, `source_checksum`, `importer_version`, `checked_at`, `started_at`, `finished_at`, `status` (`staged/active/failed/superseded`), `report_json`. Record last-check attempts separately if needed (especially for unchanged runs).
-- `opening_catalogue_state` (single logical row): `active_batch_id`, `catalogue_revision` (monotonically increasing), `last_checked_at`, `last_updated_at`, and metadata needed for safe read-side publication. Enforce one active revision.
-- `opening_catalogue_change` (optional, bounded history): `batch_id`, `change_type` (`added/renamed/changed/deactivated`), `opening_entry_id` nullable, `old_summary`, `new_summary`, `review_required`; use for import reports/review candidates, **not user data**.
+### Processing algorithm
 
-Implementation choice: either version all entry/label rows by batch or perform an atomic activation/replace strategy that guarantees readers only see a consistent active snapshot; **do not only update `import_batch_id` on existing source rows and call it versioning**. Retain immutable or reconstructible prior version until rollback window expires. State the read and rollback strategy before permanent migrations.
+1. **Lock and inspect state:** acquire a single import lock. Read `opening_catalogue_state` (current active batch/revision; last successful check). Prevent overlapping/manual competing imports.
+2. **Resolve upstream SHA:** using Symfony HttpClient, fetch GitHub repository metadata/branch head, verify TLS/status/timeout and pin one immutable commit SHA. If GitHub is unavailable, exit nonzero and keep old data. Respect API rate limits; use conditional requests or optional token only if necessary, stored in environment secrets.
+3. **Check for change:** ideally compare file content hashes for `a.tsv` ... `e.tsv`; the branch SHA may change due to unrelated files. Unchanged content => successful no-op, update `last_checked_at` without incrementing `catalogue_revision`. Never mark failed checks successful.
+4. **Download consistent snapshot:** fetch all five TSV files by **same SHA** into a bounded, private temporary directory. Validate size caps, checksum, exact header/columns, UTF-8, row count, duplicate/repeated rows and valid ECO.
+5. **PHP replay:** stream TSV lines; parse source PGN, replay legal moves through the selected PHP chess library. Generate full ordered edge paths and canonical position keys. Fail the entire batch on a required invalid record, or apply a deliberate reviewed quarantine policy—not silent skipping.
+6. **Diff and safeguards:** compare current active source entries with candidate entries. Record additions, removals, corrections and renames; check threshold for anomalous drops, missing files, changed edge target or extra data. Surface suspected new teaching variations as **review candidates**, not automatically enabled lesson moves.
+7. **Stage and validate:** write versioned source entries/paths (or equivalent safely staged representation), append new shared positions/edges without deleting lesson-referenced records, validate integrity, and record the pending import batch. Use bounded DBAL inserts/upserts; do not use an unbounded one-shot ORM flush.
+8. **Atomic activation:** promote a complete validated catalogue version (e.g. switch an `active_batch_id` in `opening_catalogue_state` within one transaction). Keep a known-good previous revision for rollback. **Important:** updating `import_batch_id` in-place on source rows is *not* versioning; snapshot semantics must be explicit and testable.
+9. **Reactivity:** commit a monotonic `catalogue_revision`, UTC `updated_at`, source hash/SHA and change-summary metadata. Invalidate relevant cache by version; leave `lesson_revision` unchanged.
+10. **Report:** log import ID, SHA, counts, no-op/updated/failure, run duration, and actionable exception. On any failure use nonzero exit code and do not promote partial data. Keep log and snapshot retention bounded. Do not leak private URLs, tokens or account data.
 
-**Curated lessons:** keep `lesson`, `lesson_line`, `lesson_line_step`, `lesson_note` in a distinct layer. Add stable identifiers and a content revision where needed. Manage content changes with **Doctrine data migrations**, committed to Git, not YAML sync jobs. Weekly catalogue jobs **must not run Doctrine migrations or alter lesson content**.
+**Database access:** the command must operate on the existing **imported chess-data layer** only; user accounts/progress and curated lessons are not writable from this service. Prefer strict service boundaries and tests rather than relying solely on developer discipline.
 
-**Bootstrapping dependency:** curated lesson lines reference imported chess edges. Agent must choose and test an explicit **fresh install ordering**: create schema -> first catalogue import -> apply lesson data migrations. If using Doctrine migrations for both schema and lesson records, configure/separate execution so a plain initial migration run cannot apply lesson inserts before required imported graph exists. Document exact bootstrap and deploy commands.
+## Schema and doctrine migration relationship
 
-## Application reaction to successful updates
+Retain our **three layers**:
 
-### Symfony API
+1. **Imported knowledge:** `chess_position`, `chess_move`, `opening_entry`, `opening_entry_step`, source import batches and active catalogue revision; imported source labels may be versioned independently.
+2. **Curated lessons:** `lesson`, `lesson_line`, `lesson_line_step`, `lesson_note` and `lesson_revision`. They are created/modified intentionally via **version-controlled Doctrine PHP data migrations**, **not** by the weekly importer.
+3. **Private users:** accounts, line/position mastery, optional minimal practice sessions. Do not modify them during refresh.
 
-- `GET /api/openings` and opening-lookup endpoints use the newly **active** catalogue revision as soon as promotion succeeds; newly recognised variants/names are searchable/discoverable.
-- Add `GET /api/openings/catalogue-status` returning at least `catalogueRevision`, `updatedAt`, `sourceSha` (public, non-sensitive), and optionally summary counts.
-- Every catalogue response should provide revision/ETag (or matching cache key). `GET /api/lessons/{slug}/graph` should provide both `catalogueRevision` and **independent** `lessonRevision`.
-- Recognition recomputes names using the active catalogue but **selected lesson and move history take precedence**; do not silently rename a current authored lesson from an upstream alias.
-- New upstream *catalogue paths* appear in opening search and review/reporting. They are **not automatically opponent choices** in strict or variation training, because they have not been included by a reviewed lesson migration.
+Proposed additional/import tables:
 
-### Vue / Pinia frontend
+| Table | Purpose |
+| --- | --- |
+| `opening_import_batch` | Import provenance (SHA, file hashes, timestamps, validation, failure or success summary) |
+| `opening_catalogue_state` | Single active batch pointer, monotonic revision, last checked/updated times |
+| `opening_catalogue_change` (optional) | Small audit/diff of added, renamed, removed entries for review |
 
-- Track `catalogueRevision`; on entering the catalogue, opening a lesson or beginning a **new** training session, compare cached revision with the API's revision. Refresh opening lists/name metadata only when stale.
-- **Do not interrupt ongoing training** to swap graph edges, renamed labels or difficulty. Pin a `lessonRevision` (and graph snapshot) when the session starts; apply the new catalogue at the next lesson selection/session. Display a subtle, optional "Opening catalogue updated" indication on navigation, not an intrusive popup.
-- Cache versioned public opening data; never cache/ship private progress in a public shared cache. Reactivity is a simple Pinia state + API refetch, **not** a websocket, polling every second or full reload.
-- When a curated lesson is intentionally changed via migration, use the lesson revision to refresh exercises and evaluate whether saved progress remains valid.
+**Fresh database ordering:** Doctrine **schema migrations** -> first `app:openings:sync` (or `--source-directory` for deterministic bootstrap) -> Doctrine **lesson data migrations** -> users/progress. The importer must **not** run schema or lesson migrations every week. Implementation must document and test staged Doctrine migration configuration/ordering so a fresh DB cannot try to insert lesson steps before their chess edges exist.
 
-## Safety, observability and acceptance tests
+Consider retaining source `opening_entry` history by batch (or explicit versioned labels), with an atomic active pointer. New shared positions/moves can be append-only; **never delete** facts referenced by authored content. Do not use an opening's ECO or display name as a unique identifier.
 
-**Must-pass tests:**
-1. Unchanged upstream SHA/source files => no-op, no changed revision, no churn in user state.
-2. New named line => imported and discoverable; if uncurated, **not** played by the training opponent.
-3. Renamed opening => current catalogue label updated; active lessons keep authored labels where they override; old/import history can be inspected.
-4. Removed upstream entry => remains historically safe/inactive, existing lesson steps/FKs remain intact.
-5. Multiple source entries reach the same position => deduped graph node, source paths preserved.
-6. Corrupt/missing TSV or inconsistent move => fail, old active revision still served.
-7. Interrupted import/parallel execution => lock, safe retry and atomic active revision.
-8. Browser has old cached catalogue => refetch upon next navigation/session; ongoing session finishes with its pinned lesson graph.
-9. Existing account progress remains byte-for-byte unchanged across upstream-only catalogue refresh.
-10. Repeat an identical validated bundle => no duplicate nodes/edges and no new active revision.
-11. Large suspicious removal/change => abort or review before promotion; status/report shows reason.
-12. Fresh DB bootstrap and revisioned lesson migrations succeed in documented ordering.
-13. Cron/job failure => actionable non-zero CI result; no secret leakage, full previous dataset remains available.
+## What "the code should react to it" means
 
-**Operations:**
-- Record last checked, last successful activation, SHA, counts and error summaries; make it inspectable via `app:openings:status`.
-- Bounded logs and artifact retention; no imported payloads in web-public folders.
-- Store server SSH/DB secrets exclusively in deployment secrets/environment, never in Git.
-- GitHub Actions scheduled jobs can be delayed/disabled on inactive public repos; plan manual run and a simple overdue-update check if necessary.
+**Symfony API**
+- Opening catalogue/search/recognition endpoints query only the **active** source revision.
+- Expose `GET /api/openings/catalogue-status` with `catalogueRevision`, `updatedAt`, `sourceSha` and optional change summary. Return versioned ETags/cache keys.
+- Lesson graph responses expose `catalogueRevision` **and independently managed** `lessonRevision`. Apply contextual lesson names when appropriate rather than overwriting the authored name with the latest source alias.
+- New source-only paths become searchable in the catalogue but do **not** expand playable computer branches until a reviewed Doctrine lesson migration adds them.
 
-### Sources
+**Vue / Pinia**
+- Check `catalogueRevision` on entering catalogue/search or starting the next lesson/session. If stale, refetch names/metadata with ETag rather than reloading the whole app.
+- **Pin** active session to its original `lessonRevision`/graph: no mid-session move graph changes, popups or progress rewrites after cron.
+- The app may show a subtle "opening catalogue updated" indicator in browsing views; explanations stay optional and low-noise.
+- Keep public cached catalogue data separate from authenticated user state. No websockets, constant polling or new Node backend needed.
 
-- Official Lichess dataset and source fields: https://github.com/lichess-org/chess-openings
-- GitHub Actions schedule constraints: https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule
-- Symfony console commands: https://symfony.com/doc/7.4/console.html
-- Symfony command locks: https://symfony.com/doc/7.4/console/lockable_trait.html
+## Automated tests and acceptance
 
-**Bottom line:** automate imported opening knowledge weekly; keep the manually reviewed curriculum stable, and let the UI refresh named-opening metadata when an import is successfully promoted.
+1. A correct fixture sequence replays to the same position/UCI/SAN as chess.js (including castling, promotions, SAN disambiguation and legal en passant).
+2. Same legal state reached through transpositions deduplicates to one canonical position with separate source paths.
+3. Unchanged five TSVs => successful no-op, stable active revision.
+4. A new Lichess entry appears in catalogue search after sync; it **does not become an uncurated training opponent move**.
+5. Rename/change/removal is reflected in active source labels, while existing lesson names/edges, saved progress and current sessions survive.
+6. Missing/corrupted upstream file, invalid PGN, timeout, suspicious large drop => fail safely; previous active revision still queryable.
+7. Two simultaneous invocations lock correctly, and retry of the exact same source is idempotent.
+8. Cron uses selected production PHP binary/path; command runs without Node, GitHub Actions scheduled workflow, browser request or exposed HTTP trigger.
+9. Source reports preserve provenance; logs/errors do not disclose tokens or personal data.
+10. Fresh install executes schema/import/lesson data migrations in a supported documented sequence; weekly sync never runs migrations.
+11. Vue cache refreshes only at navigation/new-session boundary after a catalogue revision change.
+
+## Implementation checklist
+
+- **M0**: Symfony backend, HttpClient, DBAL, console setup, baseline PHP CLI and test fixtures; pin composer dependencies.
+- **M2**: PHP chess-replayer spike and golden chess.js fixtures; parser, graph and stable source import; import batches/staging; run against real official TSVs; update/rollback tests; `app:openings:sync`, `app:openings:status` and dry-run/local-directory options.
+- **M2 operations**: cPanel weekly cron installation **after deployment** and end-to-end tests; log and alert checks.
+- **M3**: Doctrine data migrations for manually curated lessons; no lessons silently changed on refresh.
+- **M4 / API + Vue**: revision/status API, ETag, Pinia revalidation and pinned active lesson graph.
+- **M6**: production smoke tests, privacy review, rollback test, confirmation cron successfully performed a live check.
+
+## References
+
+- [Lichess official opening dataset (CC0)](https://github.com/lichess-org/chess-openings)
+- [p-chess/chess — PHP chess library (MIT)](https://github.com/p-chess/chess)
+- [Packagist package details](https://packagist.org/packages/p-chess/chess)
+- [O2Switch cPanel cron](https://faq.o2switch.fr/cpanel/outils-avances/tache-planifiee-cron/)
+- [O2Switch PHP CLI versions](https://faq.o2switch.fr/cpanel/logiciels/hebergement-php-multi-version/)
+- [Symfony Console](https://symfony.com/doc/current/console.html)
+- [Symfony HttpClient](https://symfony.com/doc/current/http_client.html)
+
+**Design principle:** one Symfony/PHP command owns data acquisition, chess validation, database promotion and reporting. The Vue app only consumes revisions; the imported graph, curated lessons and private player progress remain separate.
