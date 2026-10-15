@@ -1,12 +1,21 @@
-# Chess Openings — example PHP-only crontab apply phase (NOT installed or active).
-# Only use AFTER the Symfony app, app:openings:apply-bundle command, staging
-# directory and a trusted TypeScript/CI job that prepares validated bundles exist.
-# This is the alternative host-cron apply scheduler. For normal operation prefer
-# the GitHub Actions weekly cron described in docs/OPENING_UPDATES.md; do not
-# enable two competing schedules that both promote catalogue revisions.
+# Chess Openings — O2Switch/cPanel weekly PHP importer (EXAMPLE; NOT INSTALLED)
+# The single scheduled job runs the complete import in Symfony/PHP:
+# fetch Lichess TSVs -> validate moves -> stage MariaDB -> safely promote new revision.
+# Requires deployed, tested app:openings:sync Symfony Console command.
 #
-# Runs every Monday at 05:17 in the HOST cron timezone (verify the host TZ).
-# Change PHP executable, account home path, private staging directory, and logs.
-# A no-change bundle must be a successful no-op.
+# Every Monday at 05:17 in HOST server's cron timezone (verify before enabling).
+# Adapt all placeholder paths and PHP CLI version to the actual hosting account.
+# O2Switch documents /opt/alt/php83/usr/bin/php as an example PHP 8.3 binary;
+# do not assume that is the version configured on the actual site.
+# /home/ACCOUNT/logs/ must exist, be writable and be outside public_html.
 #
-17 5 * * 1 /usr/local/bin/php /home/ACCOUNT/chess-openings/backend/bin/console app:openings:apply-bundle --bundle=/home/ACCOUNT/private/chess-openings/imports/latest --env=prod --no-interaction >> /home/ACCOUNT/logs/chess-opening-sync.log 2>&1
+17 5 * * 1 /opt/alt/php83/usr/bin/php /home/ACCOUNT/chess-openings/backend/bin/console app:openings:sync --env=prod --no-interaction >> /home/ACCOUNT/logs/chess-openings-sync.log 2>&1
+#
+# Optional manual checks (replace paths/version):
+# /opt/alt/php83/usr/bin/php /home/ACCOUNT/chess-openings/backend/bin/console app:openings:sync --env=prod --dry-run --no-interaction
+# /opt/alt/php83/usr/bin/php /home/ACCOUNT/chess-openings/backend/bin/console app:openings:status --env=prod
+#
+# Symfony command must hold an import lock; unchanged data => successful no-op.
+# Invalid data/network failures => nonzero exit without changing active revision.
+# Do NOT schedule an additional GitHub Actions or secondary importer cron.
+# Cron details: https://faq.o2switch.fr/cpanel/outils-avances/tache-planifiee-cron/
