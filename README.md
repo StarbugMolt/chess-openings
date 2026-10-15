@@ -44,12 +44,12 @@ This is a friendly, approachable teaching experience inspired by clear chess edu
 | Frontend | **Vue 3**, **TypeScript**, **Vite** | Vue Composition API / single-page app |
 | State & routing | **Pinia**, **Vue Router** | Domain logic separated from UI |
 | Board | **Lichess Chessground** | Directly wrapped as a Vue component; GPL-compatible |
-| Rules & notation | **chess.js** | Legal moves, SAN, UCI, PGN, FEN |
+| Browser rules & notation | **chess.js** | Validate player moves, SAN, UCI, PGN, FEN in the Vue app |
 | UI | **Element Plus** for forms/dialogs, lightweight application CSS | Board-first, touch-friendly; avoid UI bloat |
 | Backend | **Symfony 7.4 LTS** (PHP 8.2+), SecurityBundle, Mailer | Target modern PHP; verify hosting PHP availability |
 | Persistence | **MariaDB**, Doctrine ORM + DBAL + Migrations | Opening data and per-user data in separate logical tables |
-| Import pipeline | **TypeScript + chess.js** offline, Symfony CLI/DBAL for database loading | No runtime Lichess API; pin upstream dataset revision |
-| Automatic updates | **Weekly GitHub Actions cron** + Symfony importer command | Rebuild validated source data in CI, safely apply to MariaDB, refresh opening catalogue version in app |
+| Backend importer | **Symfony Console (PHP)** + HttpClient + Doctrine DBAL + PHP chess library | Fetch all five upstream TSVs by immutable Git SHA, replay PGN, validate, upsert/stage/promote locally |
+| Automatic updates | **Weekly O2Switch/cPanel cron** calling `app:openings:sync` | Symfony PHP fetches, validates and applies Lichess updates; app refreshes catalogue version |
 | Testing | **Vitest**, **Playwright**, **PHPUnit** | Opening graph validation and end-to-end training flows |
 | Deployment | Static Vite assets + Symfony API on compatible shared PHP hosting | Prefer same-origin HTTPS; build JS in local/CI, not on the host |
 | Licence | **GPLv3** (GPL-3.0-only for this project's code) | Lichess opening data is separately CC0; honour third-party notices |
@@ -59,7 +59,7 @@ See the full [engineering plan](docs/IMPLEMENTATION_PLAN.md) for architecture, p
 ## How the data works
 
 1. Pin and obtain the official [Lichess chess-openings](https://github.com/lichess-org/chess-openings) TSV files (`a.tsv` through `e.tsv`).
-2. Offline, replay each PGN with chess.js; validate every move; construct **position nodes** and **legal move edges**, deduplicating transpositions by a canonical position key.
+2. In a PHP Symfony Console command, use a tested PHP chess-rules library to replay each PGN and validate every move; construct **position nodes** and **legal move edges**, deduplicating transpositions by a canonical position key. Cross-check representative positions against frontend chess.js tests.
 3. Keep each imported opening's ECO/name/source path as independent **catalogue metadata**.
 4. Maintain lessons (main lines, accepted alternative paths, annotations/hints) as version-controlled **Doctrine PHP data migrations**, separately from the imported catalogue.
 5. Serve only a selected lesson's relevant graph to the browser. No call to the Lichess API at play time.
@@ -79,7 +79,7 @@ This is a target layout; directories will be created as the implementation progr
 ```text
 frontend/                   # Vue app, Chessground wrapper, training composables
 backend/                    # Symfony API, entities, auth and migrations
-tools/opening-importer/     # Offline TSV -> validated position graph
+backend/src/Service/OpeningImport/ # PHP fetch, TSV/PGN replay, graph staging and activation
 backend/migrations/         # Schema and versioned curated-lesson data migrations
 docs/IMPLEMENTATION_PLAN.md # Agent handoff, migrations and implementation roadmap
 docs/OPENING_UPDATES.md     # Weekly Lichess refresh and app-reaction contract
@@ -89,17 +89,23 @@ ops/cron/                   # Example alternative host crontab (not installed)
 
 ## Weekly Lichess opening updates (planned)
 
-Once the importer and deployment pipeline are implemented, a **Monday 04:17 UTC GitHub Actions cron** will check for changes to Lichess's official opening-name data, generate a validated chess.js import bundle and invoke a **Symfony PHP-only CLI loader** on the host. New names and opening paths will appear in the local catalogue; a `catalogueRevision` change will tell Vue/Pinia to refresh cached opening metadata at the next navigation or session start.
+The **Symfony backend owns the entire refresh**. An O2Switch/cPanel cron task will invoke a PHP CLI command **each Monday at 05:17 in the host server timezone (to be verified)**:
 
-**The weekly updater never edits Doctrine-managed lessons or private training progress.** A newly imported variation is discoverable in the catalogue but is not a computer training response until intentionally included by a reviewed lesson migration. Failed imports retain the previous live catalogue. See [OPENING_UPDATES.md](docs/OPENING_UPDATES.md) for the exact API/CLI contract, schedule, data safety and a [server-cron example](ops/cron/opening-catalogue.crontab.example) if a PHP-only apply phase is preferred.
+```cron
+17 5 * * 1 /opt/alt/php83/usr/bin/php /home/ACCOUNT/chess-openings/backend/bin/console app:openings:sync --env=prod --no-interaction >> /home/ACCOUNT/logs/chess-openings-sync.log 2>&1
+```
 
-**This schedule and its CLI commands are specified, not operational yet:** the repository has no Symfony application, importer implementation, deployed database or configured GitHub Actions secrets. The implementation agent must only enable a working scheduled workflow after the updater is implemented and tested.
+The PHP binary/path and account directory are illustrative. The command is **specified but not implemented or installed yet**. PHP's Symfony HttpClient retrieves all five official TSV source files at one immutable upstream Git SHA; a PHP chess library replays/validates them; Doctrine DBAL stages and atomically promotes the revised local MariaDB catalogue if the content changed. The recommended library for an initial proof of concept is [p-chess/chess](https://github.com/p-chess/chess) (MIT; Composer), to be tested against chess.js golden fixtures.
+
+Once an import is activated, the API publishes a new `catalogueRevision` and Vue/Pinia refreshes stale opening names/metadata at the next navigation or training session. **Current sessions, curated Doctrine-migration-managed lessons and private progress must never be silently modified by upstream data.** A newly catalogued line is searchable but cannot be played by the training computer until it is deliberately added to a reviewed lesson migration. On bad source data, network failure or interrupted import, keep the last valid catalogue.
+
+No Node.js importer, GitHub Actions scheduled importer or remote bundle pipeline is required. Node is used for **building/testing the Vue frontend only**. Read [OPENING_UPDATES.md](docs/OPENING_UPDATES.md) and the [O2Switch cron example](ops/cron/opening-catalogue.crontab.example) for the full command, error handling, acceptance checks and host installation steps.
 
 ## Local development
 
-**Not available yet.** The implementation agent will create the Symfony/Vue scaffolding, Docker Compose development database, example environment files, migration commands, repeatable import commands and seed lessons as the first milestones. Do not assume `npm install`, `composer install` or a database import is runnable in this documentation-only state.
+**Not available yet.** The implementation agent will create the Symfony/Vue scaffolding, Docker Compose development database, example environment files, migration commands, the Symfony/PHP importer command, scheduled host cron instructions and curated lesson data migrations as the first milestones. Do not assume `npm install`, `composer install` or a database import is runnable in this documentation-only state.
 
-Suggested local requirements: supported PHP/Composer, Node.js LTS with package manager, MariaDB 10.11+, and Docker Compose optionally for local database services. Versions and commands should be recorded once the scaffolding is committed.
+Suggested local requirements: supported PHP/Composer and PHP CLI with HttpClient/JSON/ctype support, Node.js LTS for the Vue frontend, MariaDB 10.11+, and optionally Docker Compose for the development database. Versions and commands should be recorded once the scaffolding is committed.
 
 ## Privacy / RGPD
 
