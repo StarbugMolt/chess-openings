@@ -26,7 +26,7 @@ Build a board-first, lightweight, friendly website where users **learn actual na
 12. Hosting should be compatible with a shared PHP environment (e.g. O2Switch). No long-running Node server or always-on background jobs needed in production.
 13. **APPROVED: three-layer data architecture.** (1) Imported Lichess-derived chess position/move graph **with preserved named opening paths** and provenance; (2) independently curated lesson lines, branches and explanatory notes; (3) private user accounts and training progress. These layers must remain independent so source-data refreshes cannot overwrite authored lessons or user history.
 14. **APPROVED (revised): Doctrine data migrations for curated lessons.** Write intentional lesson records and later modifications as versioned PHP/Doctrine migrations in Git, not a lesson YAML loader. Upstream catalogue refreshes never change lesson content.
-15. **APPROVED: weekly opening-catalogue refresh.** Check Lichess's official opening-name dataset weekly, validate and activate safe updates to the imported layer. API/Vue must react to catalogue revisions without disrupting training or progress; see [OPENING_UPDATES.md](OPENING_UPDATES.md).
+15. **APPROVED: weekly opening-catalogue refresh, owned entirely by Symfony/PHP.** O2Switch/cPanel cron invokes one Symfony Console command; PHP HttpClient fetches official Lichess TSV data, a PHP chess library validates/replays it, Doctrine DBAL stages/promotes the catalogue and Vue reacts to updated revisions. No Node/TypeScript importer or scheduled GitHub Actions pipeline. See [OPENING_UPDATES.md](OPENING_UPDATES.md).
 
 ### Not in the initial version
 
@@ -76,18 +76,18 @@ Build a board-first, lightweight, friendly website where users **learn actual na
 | Frontend | Vue 3 Composition API, TypeScript, Vite | Strict TS, component-based; SPA |
 | Navigation / state | Vue Router + Pinia | Store current session, app preferences, current user |
 | Board | [@lichess-org/chessground](https://github.com/lichess-org/chessground) directly in a Vue wrapper | GPL-3.0-or-later; handle mount/unmount, destroy, orientation, shapes, moves |
-| Rules, PGN, FEN, UCI | [chess.js](https://github.com/jhlywa/chess.js) | Authoritative legal moves and SAN calculation on frontend/offline importer |
+| Browser chess rules, PGN, FEN, UCI | [chess.js](https://github.com/jhlywa/chess.js) | Validate moves and manage game state in Vue; NOT used by importer |
 | UI | Element Plus for forms/dialogues + minimal scoped CSS / variables | Keep chessboard focus; accessible/touch friendly |
 | Backend | Symfony **7.4 LTS**, PHP 8.2+ (prefer PHP 8.3/8.4 if host permits) | SecurityBundle, Validator, Mailer, Serializer |
 | Persistence | MariaDB (target 10.11+), Doctrine ORM/Migrations, DBAL for bulk import | Charset utf8mb4; explicit indexes and FKs |
 | Auth | Symfony Security sessions, password hasher, login throttling, CSRF | Same-origin API and Secure/HttpOnly/SameSite session cookies |
-| Source importer | Standalone Node/TypeScript tool with chess.js; Symfony Console DBAL loader | Run offline/local/CI; not as an on-demand production HTTP endpoint |
+| Source importer | **Symfony Console PHP command** + HttpClient + Doctrine DBAL + PHP chess library (prefer [p-chess/chess](https://github.com/p-chess/chess), validate in spike) | PHP handles remote fetch, PGN replay, graph validation and database promotion; no Node importer |
 | Testing | Vitest (unit), Playwright (e2e), PHPUnit (API), static analysis/lints | Validate full opening input and edge invariants |
 | Local tooling | Composer, Node LTS, package lock, optional Docker Compose MariaDB | Agent selects/pins compatible runtime versions; document exact commands |
 | Deployment | Build Vue in CI/local; deploy built static assets + Symfony/PHP API on shared host | SSH deployment, same-origin routing, DB migrations, secrets outside Git |
-| Weekly updater | GitHub Actions scheduled cron (Node chess.js) + Symfony CLI (PHP-only deploy) | Bundle validation, source diff, atomic activation, versioned catalogue metadata |
+| Weekly updater | **O2Switch/cPanel weekly PHP CLI cron** calling `app:openings:sync` | End-to-end Symfony import; no GitHub Actions scheduler, no intermediate SSH bundle |
 
-**Licences:** repository code GPL-3.0-only, official text in `LICENSE`. Preserve upstream notices for Chessground and chess.js. Lichess named-opening data: CC0; preserve provenance in importer tables and documentation. Check licence of **any additional datasets** independently; Lichess broadcasts are not all CC0. Do not use a Lichess account or request their API for runtime training.
+**Licences:** repository code GPL-3.0-only, official text in `LICENSE`. Preserve upstream notices for Chessground, chess.js and the selected PHP chess library (preferred p-chess/chess is MIT). Lichess named-opening data: CC0; preserve provenance in importer tables and documentation. Check licence of **any additional datasets** independently; Lichess broadcasts are not all CC0. Do not use a Lichess account or request their API for runtime training.
 
 ## 4. Suggested code organisation
 
@@ -97,7 +97,7 @@ Build a board-first, lightweight, friendly website where users **learn actual na
   LICENSE
   docs/IMPLEMENTATION_PLAN.md
   docs/OPENING_UPDATES.md                 # Weekly source sync and Vue reactions
-  ops/cron/                              # Optional host crontab example
+  ops/cron/                              # O2Switch weekly PHP crontab example
   frontend/
     src/
       components/chess/ChessBoard.vue       # Chessground adapter only
@@ -112,24 +112,22 @@ Build a board-first, lightweight, friendly website where users **learn actual na
       Entity/                              # Doctrine entities
       Controller/Api/                      # thin controllers
       Service/Chess/                       # lesson/catalogue lookups
+      Service/OpeningImport/               # PHP TSV/PGN parser, chess replayer, diff/stage/promote
       Service/Progress/                    # progress write/reads
-      Command/                             # import loader commands
+      Command/                             # app:openings:sync, app:openings:status
     migrations/                          # Schema + separate lesson data migrations
     tests/
-  tools/opening-importer/
-    src/                                   # parse, normalise, validate, emit
-    fixtures/                              # small deterministic TSV test inputs
-    tests/
-  .github/workflows/                     # CI and eventual scheduled update
+  backend/tests/Fixtures/Openings/       # small, deterministic TSV/PGN transposition tests
+  .github/workflows/                     # Build / test CI ONLY; no scheduled importer
 ```
 
 This is a proposed layout, not a promise that those files exist today. Minimise circular dependencies. A shared TS type package is optional; prefer a small OpenAPI/schema contract over introducing monorepo complexity prematurely.
 
 **Critical layering:**
 1. **Chessground renders** pieces, drag/drop and arrows; it is *not* the game-rules authority.
-2. **chess.js validates** moves and converts PGN/SAN/UCI/FEN; create a fresh controlled game state for each session.
+2. **chess.js validates browser moves** and converts PGN/SAN/UCI/FEN during frontend training. **On the backend, a PHP chess-rules adapter independently replays imported PGN**; shared golden fixtures must prove consistent positions and canonical keys between the two implementations.
 3. **Training domain service** decides which *legal* moves are in the selected lesson, tracks current path and exercises policy.
-4. **Symfony API** serves imported catalogue + curated lesson graphs, accounts and progress; it does not need to run Stockfish.
+4. **Symfony backend** is responsible for *all* source downloading, legal chess-line import, MariaDB revision promotion, catalogue API, lesson graphs, accounts and progress; it does not need to run Stockfish.
 5. **DB** stores canonical chess facts, source/catalogue labels, curated lesson content and private user state in separate table groups.
 
 ## 5. Source data: what Lichess actually supplies
@@ -147,31 +145,28 @@ Generated `dist/` includes `uci` and `epd` columns. We can use source PGN and de
 
 If expanding later to aggregate game-frequency statistics from https://database.lichess.org/ , plan a **separate** resource-heavy pipeline and inspect each source's licence. That is explicitly not required for v1.
 
-## 6. Proposed importer (agent design baseline; review before schema freeze)
+## 6. Proposed importer — single Symfony PHP pipeline
 
-### 6.1 Two-step, offline pipeline
+The entire importer executes **inside Symfony/PHP**, both for first installation and subsequent weekly cron updates. No separate Node/TypeScript generator, CI-produced NDJSON bundle, GitHub Actions updater or production JavaScript runtime is needed. See [OPENING_UPDATES.md](OPENING_UPDATES.md) for the definitive operational and API details.
 
-**Step 1 — Extract/validate (TypeScript tool, runs locally or in CI):**
-1. Pin a specific upstream commit SHA in an importer manifest. Download/clone official TSVs as a build task; no runtime remote call.
-2. Record upstream repository URL, SHA, file checksums, importer version and run timestamp; support offline reruns from already downloaded TSVs.
-3. Stream/parse TSV as tab-separated text with correct quoting (use a mature parser, not naive `split('\t')`). Reject missing required fields or malformed ECO/PGN.
-4. For each source row: initialise chess.js at standard start, replay the PGN and collect verbose legal moves, UCI, SAN and *every intermediate canonical position* including root and terminal.
-5. Canonical position key should represent **board placement + side to move + castling rights + legally relevant en-passant**. Exclude halfmove and fullmove counters. Apply one tested normalisation consistently. The key cannot simply be `piecePlacement` or raw entire FEN.
-6. Create a **position node** for each unique canonical key and a **directed edge** for each distinct `(fromPosition, UCI)` pair; confirm edge's `toPosition` is always identical when repeated.
-7. Preserve every named source entry with ECO, full name, original PGN, stable source fingerprint, terminal position and complete ordered edge sequence. Do not collapse different named lines just because they transpose.
-8. Produce deterministic, sorted `positions.ndjson`, `edges.ndjson`, `opening_entries.ndjson`, `entry_steps.ndjson`, and `import-report.json`; use reproducible output ordering and no timestamps inside record IDs.
-9. Compare against a fixed collection of known paths/positions; fail generation on illegal moves, inconsistent edge targets or silently missing rows. Print counts of source rows, duplicate positions, transpositions, names sharing a position and invalid records.
+### 6.1 PHP fetch, replay, validate and promote
 
-**Step 2 — Load to MariaDB (Symfony CLI / Doctrine DBAL; `app:openings:apply-bundle` to implement):**
-1. Validate generated manifest/checksums and read the files outside HTTP, in bounded batches.
-2. Run under a migration-safe import lock; write an `opening_import_batch` record and use transactions/staging where practical.
-3. Upsert positions by `position_key`, edges by `(from_position_id, uci)`, entries by source fingerprint and line steps by `(entry_id, ply)`.
-4. Store the source batch/active version; deactivate old named entries only **after successful validation** and only if no active lesson depends on deleting them. Never overwrite editorial notes or personal progress during imports.
-5. A second run of the same manifest must be a **no-op on logical data**. Re-import with an updated upstream SHA should be deterministic and idempotent.
-6. Emit counts/diffs before applying an upstream update; support `--dry-run`, validation and a reproducible import report. Never run destructive imports as a public HTTP request.
-7. For weekly updates keep an active revision and prior successful version; after safe promotion publish the new catalogue revision. Preserve every curated lesson and user record. See [OPENING_UPDATES.md](OPENING_UPDATES.md).
+**Create Symfony Console commands** `app:openings:sync` and `app:openings:status`. `sync` must own the complete workflow via small backend services (`OpeningSourceFetcher`, `TsvOpeningParser`, `ChessMoveReplayer`, `OpeningGraphBuilder`, `ImportDiffValidator`, `CataloguePromoter`, naming illustrative). Implement `--dry-run` and `--source-directory` for local deterministic testing.
 
-**Why two steps?** chess.js is shared with the Vue client and handles PGN/FEN consistently, while the server deployment remains PHP-only. Node is a **build/import tool**, not a production service. If a single PHP importer is preferred later, it must use a fully tested legal-move implementation and preserve the exact same canonical key semantics.
+1. **Acquire lock** (DB or Symfony Lock) and record last-check status. An unchanged upstream dataset must be a successful no-op; don't issue a new active revision.
+2. **Resolve immutable upstream SHA** using Symfony HttpClient; download `a.tsv` ... `e.tsv` from the *same* commit SHA using HTTPS into a private bounded temporary directory. Limit size and timeouts. Track source SHA and per-file checksums. Fail safely if offline.
+3. **Stream TSV** using native PHP parsing and proper quoted/escaped field support. Validate expected `eco`, `name`, `pgn` schema, UTF-8, ECO codes, duplicates and row counts. Never blindly split PGN on spaces and assume move numbers/annotations are absent.
+4. **Replay PGN with a PHP rules library.** Preferred initial candidate: [p-chess/chess](https://packagist.org/packages/p-chess/chess) (MIT, modern Composer PHP package). Wrap it in a narrow adapter so replacing it doesn't affect import logic. It supports SAN input, legal move validation and FEN; confirm via an importer spike that it correctly handles all five official files and edge cases before committing permanently to the package. Validate every move, derive UCI, canonical SAN and positions. No chess.js/Node invocation server-side.
+5. **Canonicalise chess state** using placement, side-to-move, castling rights and legally relevant en-passant, excluding move clocks. Test against known transpositions and cross-language golden fixtures produced independently by frontend chess.js. Avoid equating board placement alone with a complete legal state.
+6. **Build deduplicated graph**: one position per canonical key, one edge per `(fromPosition,UCI)`; verify destination consistency. Preserve named Lichess entries with source ECO/name, original PGN, every ordered edge, aliases and provenance. Never infer an authored "main line" from file order.
+7. **Calculate diff and safety thresholds**: added/renamed/changed/removed entries, source checksums, unexpected count reductions, conflicts or missing files. Require manual review or abort on anomalous updates.
+8. **Stage via Doctrine DBAL** in bounded batches without deleting lesson-referenced positions/moves. Use an import batch and a *versioned* source-label snapshot (or a proven equivalent) so reads can stay on the prior complete version while new data is loaded.
+9. **Atomically activate** a validated source batch: switch the single active pointer/revision in a short transaction. Retain the previous known-good revision for rollback. If validation/import fails, leave old data active, log a nonzero error and permit safe retry.
+10. **Publish revision metadata** to Symfony API (`catalogueRevision`, source SHA, updated time, summary) so Vue/Pinia refreshes catalogue/labels on the next navigation or new session. **Never change `lessonRevision` or player progress** during an upstream refresh.
+
+**Weekly schedule:** create exactly one O2Switch/cPanel cron job after deployment, calling the **PHP** CLI command. Example schedule runs Monday at 05:17 **server-local time** (verify host timezone). `/opt/alt/php83/usr/bin/php /absolute/path/backend/bin/console app:openings:sync --env=prod --no-interaction`. Replace PHP binary/path/log destinations with actual host settings. [Complete example](../ops/cron/opening-catalogue.crontab.example). No public HTTP update trigger.
+
+**Why PHP end-to-end?** Symfony already owns the MariaDB connection, operational logs, locks, security and deployments, and O2Switch supports scheduled CLI PHP scripts. The maintained PHP chess rules package needs a one-time compatibility review, but avoids any ongoing Node/remote runner/import artifact chain. Node remains strictly for **Vue build and browser testing**.
 
 ### 6.2 Transposition and naming rules
 
@@ -370,11 +365,11 @@ Sources: [CNIL GDPR](https://www.cnil.fr/fr/comprendre-le-rgpd), [CNIL retention
 ## 11. Test plan / must-pass cases
 
 ### Source data / importer
-- Parse all five official files and verify declared counts/checksums; run twice and compare logical table data.
-- Every source PGN replays legally; every edge has unique `(from,uci)` and a consistent destination.
+- **PHP-only Symfony command** fetches/parses all five official source files and verifies checksums; run twice and compare logical tables. No Node/TS importer anywhere.
+- Every source PGN replays legally using the PHP chess-library adapter; cross-check canonical UCI/SAN/FEN with chess.js golden fixtures; every edge has unique `(from,uci)` and a consistent destination.
 - A different move order to same board produces one canonical node but separate source paths.
 - Different castling rights or a legally available en-passant capture produce different position keys.
-- An upstream catalogue update preserves curated lesson paths/notes and user progress; invalid import leaves previous active dataset intact.
+- A cPanel cron-driven upstream catalogue update preserves curated lesson paths/notes and user progress; invalid import leaves previous active dataset intact; import locks and manual reruns are safe.
 - Names can collide/alias at one board position; no ECO or name uniqueness assumed.
 
 ### Core training
@@ -409,11 +404,12 @@ Use small PRs or commits. **Do not wait for the entire product to be complete be
 - Move history/restart/undo and unit tests.
 - **Done when:** local test page can play and rewind legal moves on mobile/desktop.
 
-### M2 — Opening catalogue importer and weekly refresh
-- Pinned Lichess TSV input, TypeScript generator, manifest/report, canonical graph, DBAL loader, Doctrine **schema** migrations, repeatable fixtures.
-- Search/browse API for named openings; no frontend training yet.
-- Implement weekly GitHub Actions cron at 04:17 UTC Monday, validated bundle staging, a PHP-only `app:openings:apply-bundle` command, import lock, atomic activation, revision-aware API and manual retry. See [weekly-sync spec](OPENING_UPDATES.md) and [optional host crontab](../ops/cron/opening-catalogue.crontab.example).
-- **Done when:** imports are idempotent, transpositions deduplicate, latest validated additions become discoverable, corruption keeps old live data, and lesson/user records survive weekly updates.
+### M2 — Symfony PHP opening importer and weekly cron
+- Symfony HttpClient fetcher, PHP TSV/PGN parser, adapter for maintained PHP chess rules library (initial candidate `p-chess/chess`), graph builder, Doctrine DBAL staging/atomic promotion, import provenance/status and Doctrine **schema** migrations.
+- Add fixture-based tests including canonical FEN/UCI equivalence with frontend chess.js and known transpositions; check full Lichess dataset replay and repeated/no-change imports.
+- Implement `app:openings:sync` (`--dry-run`, `--source-directory`) and `app:openings:status` as Symfony Console commands. The weekly **O2Switch/cPanel PHP cron** runs `app:openings:sync` directly (Monday 05:17 host-local time, verify timezone). No GitHub Actions scheduled importer and no Node in the import flow. See [PHP update spec](OPENING_UPDATES.md) and [cron example](../ops/cron/opening-catalogue.crontab.example).
+- Search/browse API for named openings; implement active `catalogueRevision`/ETag, with Vue/Pinia refresh at next navigation or new session only.
+- **Done when:** entire PHP command imports official dataset idempotently, transpositions deduplicate, weekly automatic check works on the PHP host, new validated entries are discoverable, corruption leaves old revision live, and lesson/progress records remain intact.
 
 ### M3 — Curated lessons and strict Guided Learning
 - Doctrine PHP **lesson data migrations** applied after the initial validated chess graph import, including stable IDs, path validation and content revisions; first Italian Game family lines (main and common branch) reviewed for chess accuracy.
@@ -432,18 +428,18 @@ Use small PRs or commits. **Do not wait for the entire product to be complete be
 
 ### M6 — Privacy, quality and deployment
 - Privacy/legal pages, data export/deletion, retention policy, security review, responsive visual polish, CI, verified weekly catalogue update/alerting and shared-host release guide.
-- **Done when:** production-like smoke tests pass, essential-only cookies verified, secrets excluded, backend migrates and deploys without Node runtime.
+- **Done when:** production-like smoke tests pass, essential-only cookies verified, secrets excluded, backend migrates/deploys with PHP CLI and scheduled importer works with **no Node process on the host**.
 
 **Sequencing note:** M5 account scaffolding/identity can begin alongside M2/M3; because login is required for training, provide a minimal working registration/login before declaring M3/M4 user-facing complete. Don't gate importer correctness on auth implementation.
 
 ## 13. Next implementation handoff
 
-**Do first:** M0 bootstrap, M1 board/rules test harness, and write a small M2 importer spike that processes ~10 sample PGNs and demonstrates transposition + idempotent output. Do not bulk-import the complete dataset before the position-key and lesson-schema review.
+**Do first:** M0 bootstrap, M1 board/rules test harness, and an **M2 PHP/Symfony importer spike** (using `p-chess/chess`) processing ~10 sample PGNs and demonstrating transpositions and idempotency. Compare with chess.js golden fixtures. Only then replay the full source dataset and implement scheduled cPanel cron. Do not bulk-import before canonical position-key and schema review.
 
-**Already approved by owner:** the three-layer separation (imported chess graph with named paths / authored lesson layer / user progress), **Doctrine PHP data migrations for lessons**, and **weekly automatic updates of Lichess opening data with revision-aware API and Vue behaviour**. No YAML sync. Do not reopen these decisions without a specific implementation problem.
+**Already approved by owner:** the three-layer separation (imported chess graph with named paths / authored lesson layer / user progress), **Doctrine PHP data migrations for lessons**, and a **weekly O2Switch cron running a complete Symfony/PHP opening importer with revision-aware API/Vue updates**. No YAML sync, Node/TypeScript importer or scheduled GitHub Actions updater. Do not reopen these decisions without a specific implementation problem.
 
 **Technical details still to review before permanent M2/M3 migrations:**
-1. The concrete column/index and source-fingerprint design, canonical position-key tests, importer update lifecycle and safe two-stage bootstrap/migration ordering.
+1. The concrete column/index and source-fingerprint design, canonical position-key tests (including PHP/chess.js compatibility), safe versioned PHP import/activation and two-stage bootstrap/migration ordering.
 2. Initial learning depth per line should be editorially chosen (often around 8–12 moves, not a fixed universal depth).
 3. Default scope of variation practice: learned lines versus all enabled course lines (make configurable; default learned).
 4. Additional source licences for any future datasets (project GPLv3 and Lichess openings CC0 are already chosen).
@@ -457,8 +453,9 @@ For v1 import opening **names/sequences**, not the large game-statistics databas
 - Chessground: https://github.com/lichess-org/chessground
 - chess.js: https://github.com/jhlywa/chess.js
 - Symfony LTS: https://symfony.com/releases/7.4
-- GitHub Actions schedule: https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule
-- Weekly importer update specification: [OPENING_UPDATES.md](OPENING_UPDATES.md)
+- O2Switch cPanel cron: https://faq.o2switch.fr/cpanel/outils-avances/tache-planifiee-cron/
+- PHP chess library candidate: https://packagist.org/packages/p-chess/chess
+- PHP-only weekly importer and cron specification: [OPENING_UPDATES.md](OPENING_UPDATES.md)
 - CNIL GDPR: https://www.cnil.fr/fr/comprendre-le-rgpd
 
 ---
