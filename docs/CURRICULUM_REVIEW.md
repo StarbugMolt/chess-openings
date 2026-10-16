@@ -52,3 +52,8 @@ Five new courses (`Version20261015011000`–`011400`) teach twelve complete name
 ## Revision 3: no short lines (2026-10-16)
 
 The owner asked that the openings have enough moves. Six current lines gave the learner fewer than nine moves, and Italian, Caro-Kann and French opened on them by default. `Version20261015011500`–`011800` publish Italian, Caro-Kann and French revision 3 and Slav revision 2. Every current line except London is now a complete pinned named record with at least nine learner moves, and each course opens on a deep main line. The short introductions remain in retained earlier revisions with their saved practice. London stays at eight White moves because the pinned catalogue has no deeper London record; going further would need a new authored-provenance decision. The courses store 46 lines and 880 steps; 25 lines are current. The lesson integration test now fails if any non-London current line drops below nine learner moves. Details are in [lessons/NAMED_LINES_REVISION_3.md](lessons/NAMED_LINES_REVISION_3.md).
+
+## Phase 5: nine more courses (2026-10-16)
+
+The owner asked for more training courses. Nine new courses (`Version20261016020000`–`020800`) teach nineteen complete named records at the pinned SHA, from 17 to 26 plies, each giving the learner at least nine moves. Scotch Game, Four Knights Game and Evans Gambit are White courses; Petrov's Defense, Alekhine Defense, Nimzo-Indian Defense, Grünfeld Defense, Benoni Defense and Tarrasch Defense are Black defences. They use the same imported-path validation and add no authored graph facts. Bootstrap now publishes 19 courses, 65 stored lines and 1,269 steps; the current curriculum has 44 lines. See [NAMED_LINES_PHASE_5.md](lessons/NAMED_LINES_PHASE_5.md).
+

@@ -21,6 +21,15 @@ use AppMigrations\LessonData\Version20261015011500;
 use AppMigrations\LessonData\Version20261015011600;
 use AppMigrations\LessonData\Version20261015011700;
 use AppMigrations\LessonData\Version20261015011800;
+use AppMigrations\LessonData\Version20261016020000;
+use AppMigrations\LessonData\Version20261016020100;
+use AppMigrations\LessonData\Version20261016020200;
+use AppMigrations\LessonData\Version20261016020300;
+use AppMigrations\LessonData\Version20261016020400;
+use AppMigrations\LessonData\Version20261016020500;
+use AppMigrations\LessonData\Version20261016020600;
+use AppMigrations\LessonData\Version20261016020700;
+use AppMigrations\LessonData\Version20261016020800;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -62,6 +71,25 @@ final class FrozenLessonPathsTest extends TestCase
         'caro-kann/3/panov-development' => [19, 'e4 c6 d4 d5 exd5 cxd5 c4 Nc6 Nc3 Nf6 Nf3 e6 cxd5 exd5 Bb5 Bd6 Bg5 O-O O-O'],
         'french/3/tarrasch-chistyakov' => [20, 'e4 e6 d4 d5 Nd2 c5 exd5 Qxd5 Ngf3 cxd4 Bc4 Qd6 O-O Nf6 Nb3 Nc6 Nbxd4 Nxd4 Nxd4 a6'],
         'slav/2/czech-main-line' => [19, 'd4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5 e3 e6 Bxc4 Bb4 O-O O-O Qe2 Ne4 g4'],
+        'scotch/1/classical-gottschall' => [24, 'e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Qf6 c3 Nge7 Qd2 d5 Nb5 Bxe3 Qxe3 O-O Nxc7 Rb8 Nxd5 Nxd5 exd5 Nb4'],
+        'scotch/1/scotch-gambit-max-lange' => [21, 'e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 O-O Bc5 e5 d5 exf6 dxc4 Re1+ Be6 Ng5 Qd5 Nc3 Qf5 Nce4'],
+        'four-knights/1/scotch-four-knights' => [17, 'e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nxd4 Bb4 Nxc6 bxc6 Bd3 d5 exd5 O-O O-O'],
+        'four-knights/1/spanish-symmetrical' => [20, 'e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Bg5 Bxc3 bxc3 Qe7 Re1 Nd8 d4 Bg4'],
+        'four-knights/1/rubinstein-maroczy' => [18, 'e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Nd4 Be2 Nxf3+ Bxf3 Bc5 O-O O-O d3 d6 Na4 Bb6'],
+        'evans-gambit/1/accepted-steinitz' => [21, 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bc5 d4 exd4 O-O d6 cxd4 Bb6 Nc3 Na5 Bg5 f6 Be3'],
+        'evans-gambit/1/accepted-levenfish' => [21, 'e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 d6 Qb3 Qd7 dxe5 dxe5 O-O Bb6 Ba3 Na5 Nxe5'],
+        'petrov/1/classical-maroczy' => [20, 'e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Be7 O-O Nc6 Re1 Bg4 c3 f5 c4 Bh4'],
+        'petrov/1/classical-marshall' => [18, 'e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Bd6 O-O O-O c4 c6 Re1 Bg4'],
+        'alekhine/1/four-pawns-tartakower' => [22, 'e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Nc3 e6 Nf3 Qd7 Be2 O-O-O O-O Be7'],
+        'alekhine/1/exchange-karpov' => [21, 'e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 exd6 cxd6 Nc3 g6 h3 Bg7 Nf3 O-O Be2 Nc6 O-O Bf5 Bf4'],
+        'nimzo-indian/1/rubinstein-bernstein' => [21, 'd4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 a3 Bxc3+ bxc3 dxc4 Bxc4 c5 Nf3 Nc6 O-O Qc7 Qc2'],
+        'nimzo-indian/1/samisch-capablanca' => [18, 'd4 Nf6 c4 e6 Nc3 Bb4 e3 c5 Bd3 Nc6 a3 Bxc3+ bxc3 O-O Ne2 b6 e4 Ne8'],
+        'grunfeld/1/exchange-spassky' => [26, 'd4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 c5 Ne2 Nc6 Be3 O-O O-O Bg4 f3 Na5 Bd3 cxd4 cxd4 Be6'],
+        'grunfeld/1/russian-keres' => [21, 'd4 Nf6 c4 g6 Nc3 d5 Nf3 Bg7 Qb3 dxc4 Qxc4 O-O e4 Bg4 Be3 Nfd7 Be2 Nb6 Qd3 Nc6 O-O-O'],
+        'benoni/1/classical-tal-line' => [20, 'd4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 Nf3 Bg7 Be2 O-O O-O Re8 Nd2 Nbd7'],
+        'benoni/1/four-pawns-main-line' => [20, 'd4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 f4 Bg7 Nf3 O-O Be2 Nbd7 O-O Re8'],
+        'tarrasch/1/classical-main-line' => [22, 'd4 d5 c4 e6 Nc3 c5 cxd5 exd5 Nf3 Nc6 g3 Nf6 Bg2 Be7 O-O O-O Bg5 cxd4 Nxd4 h6 Be3 Re8'],
+        'tarrasch/1/classical-advance' => [18, 'd4 d5 c4 e6 Nc3 c5 cxd5 exd5 Nf3 Nc6 g3 Nf6 Bg2 Be7 O-O O-O Bg5 c4'],
     ];
 
     /** @return iterable<string, array{list<array{uci: string, san: string, fromKey: string, toKey: string}>, int, string}> */
@@ -142,6 +170,15 @@ final class FrozenLessonPathsTest extends TestCase
         require_once $migrationRoot.'/LessonData/Version20261015011600.php';
         require_once $migrationRoot.'/LessonData/Version20261015011700.php';
         require_once $migrationRoot.'/LessonData/Version20261015011800.php';
+        require_once $migrationRoot.'/LessonData/Version20261016020000.php';
+        require_once $migrationRoot.'/LessonData/Version20261016020100.php';
+        require_once $migrationRoot.'/LessonData/Version20261016020200.php';
+        require_once $migrationRoot.'/LessonData/Version20261016020300.php';
+        require_once $migrationRoot.'/LessonData/Version20261016020400.php';
+        require_once $migrationRoot.'/LessonData/Version20261016020500.php';
+        require_once $migrationRoot.'/LessonData/Version20261016020600.php';
+        require_once $migrationRoot.'/LessonData/Version20261016020700.php';
+        require_once $migrationRoot.'/LessonData/Version20261016020800.php';
 
         /** @var array<string, list<array{uci: string, san: string, fromKey: string, toKey: string}>> $paths */
         $paths = require $migrationRoot.'/Support/Paths20261015.php';
@@ -175,6 +212,25 @@ final class FrozenLessonPathsTest extends TestCase
             'caro-kann/3/panov-development' => [Version20261015011600::class, 'PANOV_FACTS'],
             'french/3/tarrasch-chistyakov' => [Version20261015011700::class, 'TARRASCH_FACTS'],
             'slav/2/czech-main-line' => [Version20261015011800::class, 'CZECH_FACTS'],
+            'scotch/1/classical-gottschall' => [Version20261016020000::class, 'CLASSICAL_GOTTSCHALL_FACTS'],
+            'scotch/1/scotch-gambit-max-lange' => [Version20261016020000::class, 'SCOTCH_GAMBIT_MAX_LANGE_FACTS'],
+            'four-knights/1/scotch-four-knights' => [Version20261016020100::class, 'SCOTCH_FOUR_KNIGHTS_FACTS'],
+            'four-knights/1/spanish-symmetrical' => [Version20261016020100::class, 'SPANISH_SYMMETRICAL_FACTS'],
+            'four-knights/1/rubinstein-maroczy' => [Version20261016020100::class, 'RUBINSTEIN_MAROCZY_FACTS'],
+            'evans-gambit/1/accepted-steinitz' => [Version20261016020200::class, 'ACCEPTED_STEINITZ_FACTS'],
+            'evans-gambit/1/accepted-levenfish' => [Version20261016020200::class, 'ACCEPTED_LEVENFISH_FACTS'],
+            'petrov/1/classical-maroczy' => [Version20261016020300::class, 'CLASSICAL_MAROCZY_FACTS'],
+            'petrov/1/classical-marshall' => [Version20261016020300::class, 'CLASSICAL_MARSHALL_FACTS'],
+            'alekhine/1/four-pawns-tartakower' => [Version20261016020400::class, 'FOUR_PAWNS_TARTAKOWER_FACTS'],
+            'alekhine/1/exchange-karpov' => [Version20261016020400::class, 'EXCHANGE_KARPOV_FACTS'],
+            'nimzo-indian/1/rubinstein-bernstein' => [Version20261016020500::class, 'RUBINSTEIN_BERNSTEIN_FACTS'],
+            'nimzo-indian/1/samisch-capablanca' => [Version20261016020500::class, 'SAMISCH_CAPABLANCA_FACTS'],
+            'grunfeld/1/exchange-spassky' => [Version20261016020600::class, 'EXCHANGE_SPASSKY_FACTS'],
+            'grunfeld/1/russian-keres' => [Version20261016020600::class, 'RUSSIAN_KERES_FACTS'],
+            'benoni/1/classical-tal-line' => [Version20261016020700::class, 'CLASSICAL_TAL_LINE_FACTS'],
+            'benoni/1/four-pawns-main-line' => [Version20261016020700::class, 'FOUR_PAWNS_MAIN_LINE_FACTS'],
+            'tarrasch/1/classical-main-line' => [Version20261016020800::class, 'CLASSICAL_MAIN_LINE_FACTS'],
+            'tarrasch/1/classical-advance' => [Version20261016020800::class, 'CLASSICAL_ADVANCE_FACTS'],
         ];
         foreach ($constants as $id => [$class, $constant]) {
             /** @var list<array{uci: string, san: string, fromKey: string, toKey: string}> $facts */

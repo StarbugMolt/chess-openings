@@ -2,7 +2,7 @@
 
 The owner approved the imported-table schema, canonical keys and refresh lifecycle on 2026-10-15 in [IMPORTER_REVIEW.md](IMPORTER_REVIEW.md). M2b implements the seven imported tables in [Version20261015000100.php](../backend/migrations/Schema/Version20261015000100.php). `Version20261015000410` later adds the nullable `automatic_updates_held_at` rollback hold without rewriting the approved initial migration/reference. The application database starts with **no active catalogue**: singleton ID 1, null batch and revision 0. No catalogue, account or lesson data is seeded by schema migrations.
 
-The current tree includes **ten schema migrations and 19 lesson migrations**, publishing ten courses with 25 current taught lines. Its separately owner-approved private recall addition is [Version20261015000430.php](../backend/migrations/Schema/Version20261015000430.php); see [practice and review](PROGRESS.md) for current behavior/results. Importer, curriculum and earlier migration approvals remain settled.
+The current tree includes **ten schema migrations and 28 lesson migrations**, publishing nineteen courses with 44 current taught lines (65 stored lines, 1,269 steps). Its separately owner-approved private recall addition is [Version20261015000430.php](../backend/migrations/Schema/Version20261015000430.php); see [practice and review](PROGRESS.md) for current behavior/results. Importer, curriculum and earlier migration approvals remain settled.
 
 ## Separate execution and histories
 
