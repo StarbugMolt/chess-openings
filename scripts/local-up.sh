@@ -12,6 +12,8 @@ docker compose run --rm --no-deps --user root frontend sh -c '
     if [ -f "$generated" ]; then chown "$1:$2" "$generated"; fi
   done
 ' sh "$LOCAL_UID" "$LOCAL_GID"
+# Composer's post-install cache:clear boots Doctrine, which needs the db hostname.
+docker compose up -d --wait db mailpit
 docker compose run --rm --no-deps --user "$LOCAL_UID:33" app sh -c 'umask 0002; composer install --no-interaction --prefer-dist'
 docker compose run --rm --no-deps frontend npm ci
 docker compose up -d --wait db mailpit app
