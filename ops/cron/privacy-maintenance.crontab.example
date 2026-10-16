@@ -1,0 +1,16 @@
+# Chess Openings — daily privacy maintenance (EXAMPLE; NOT INSTALLED)
+# Install only after the new release is active, --check-config succeeds, and the
+# dry-run paths/counts have been checked on this host. Verify PHP CLI/timezone.
+# Replace ACCOUNT and the application root; the template puts bin/console at current/.
+# Configure and test cPanel's cron-email recipient: successful count output is
+# discarded here; failures remain visible on stderr. Do not log private DB rows.
+# Unlike deployment polling and weekly opening sync, this job only removes expired
+# tokens/limits and known stale sessions/logs/deployment snapshots. It never purges accounts.
+# Daily at 02:47 in the HOST timezone (verify it before enabling):
+47 2 * * * /opt/alt/php83/usr/bin/php /home/ACCOUNT/apps/chess-openings/current/bin/console app:privacy:cleanup --apply --limit=1000 --env=prod --no-debug --no-interaction > /dev/null
+# First run these manually with the actual paths, without --apply:
+# /opt/alt/php83/usr/bin/php /home/ACCOUNT/apps/chess-openings/current/bin/console app:privacy:cleanup --check-config --env=prod --no-debug
+# /opt/alt/php83/usr/bin/php /home/ACCOUNT/apps/chess-openings/current/bin/console app:privacy:cleanup --env=prod --no-debug
+# Check an initial --apply result manually, then schedule. Monitor counts/backlog
+# and failures. Limits are per category per run; busy files wait for a later run.
+# See docs/PRIVACY_RETENTION.md for retained accounts, private paths and restore gates.

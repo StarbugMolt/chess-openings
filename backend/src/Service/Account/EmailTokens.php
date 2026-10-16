@@ -21,7 +21,7 @@ final class EmailTokens
     {
     }
 
-    public function send(User $user, string $purpose, #[\SensitiveParameter] ?string $pendingPasswordHash = null): void
+    public function send(User $user, string $purpose, #[\SensitiveParameter] ?string $pendingPasswordHash = null, string $locale = 'en'): void
     {
         if (!in_array($purpose, ['verify', 'reset'], true)) {
             throw new \InvalidArgumentException('Unsupported email purpose.');
@@ -53,16 +53,16 @@ final class EmailTokens
         }
         // Canonical configured URL, never a request Host header. Fragments avoid access-log tokens.
         $path = 'verify' === $purpose ? '/verify-email' : '/reset-password';
-        $link = rtrim($this->baseUri, '/').$path.'#token='.$token;
-        $subject = 'verify' === $purpose ? 'Verify your Chess Openings email' : 'Reset your Chess Openings password';
-        $expiry = 'verify' === $purpose ? '24 hours' : 'one hour';
-        $confirmation = 'verify' === $purpose ? 'Open this link and confirm your email, then sign in with the password you chose:' : 'Open this link and choose your new password:';
-        $this->pendingEmails[] = (new Email())->from($this->from)->to($user->getEmail())->subject($subject)->text($subject."\n\n".$confirmation."\n".$link."\n\nThis link expires in ".$expiry." and can be used once. If you did not request it, ignore this email.\n");
+        $locale = AccountEmailText::locale($locale);
+        $link = rtrim($this->baseUri, '/').$path.('en' === $locale ? '' : '?lang='.$locale).'#token='.$token;
+        $text = AccountEmailText::link($purpose, $locale, $link);
+        $this->pendingEmails[] = (new Email())->from($this->from)->to($user->getEmail())->subject($text['subject'])->text($text['body']);
     }
 
-    public function registrationNotice(User $user): void
+    public function registrationNotice(User $user, string $locale = 'en'): void
     {
-        $this->pendingEmails[] = (new Email())->from($this->from)->to($user->getEmail())->subject('Your Chess Openings account already exists')->text("An account already exists for this address. Sign in, or request a password reset from the sign-in page.\n\nIf you did not request registration, ignore this email.\n");
+        $text = AccountEmailText::existingAccount($locale);
+        $this->pendingEmails[] = (new Email())->from($this->from)->to($user->getEmail())->subject($text['subject'])->text($text['body']);
     }
 
     /** SMTP runs after the response is sent; delivery is best effort, without durable retries. */

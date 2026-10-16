@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { t, message as textMessage, type Text } from '../i18n'
 import { computed, ref, shallowRef } from 'vue'
 import ChessBoard from '../components/chess/ChessBoard.vue'
 import { BrowserChessGame, type PromotionPiece } from '../domain/chess/BrowserChessGame'
@@ -10,7 +11,9 @@ const position = shallowRef(game.snapshot())
 const orientation = ref<'white' | 'black'>('white')
 const from = ref('e2')
 const to = ref('e4')
-const message = ref('Manual board: you move both colours here. There is no automatic opponent.')
+const message = ref<Text>(
+  'Manual board: you move both colours here. There is no automatic opponent.',
+)
 const pending = ref<{ from: string; to: string; choices: PromotionPiece[] }>()
 const noDestinations = new Map()
 const turn = computed(() => (position.value.turn === 'w' ? 'white' : 'black'))
@@ -37,7 +40,7 @@ function play(origin: string, destination: string, promotion?: PromotionPiece) {
     }
     message.value =
       result.kind === 'played'
-        ? `Played ${result.move.san}.`
+        ? textMessage('Played {p0}.', { p0: result.move.san })
         : 'That move is not legal in this position.'
   }
 }
@@ -77,14 +80,15 @@ function promotionPosition() {
   <main id="main-content" class="page-width lab-main">
     <div class="lab-heading">
       <div>
-        <p class="eyebrow">Development only</p>
-        <h1>Board & rules lab</h1>
+        <p class="eyebrow">{{ t('Development only') }}</p>
+        <h1>{{ t('Board & rules lab') }}</h1>
         <p>
-          This is a manual developer tool. For automatic replies and hints,
-          <RouterLink to="/learn">start a guided lesson</RouterLink>.
+          {{ t('This is a manual developer tool. For automatic replies and hints,') }}
+          <RouterLink to="/learn">{{ t('start a guided lesson') }}</RouterLink
+          >.
         </p>
       </div>
-      <RouterLink to="/">← Home</RouterLink>
+      <RouterLink to="/">{{ t('← Home') }}</RouterLink>
     </div>
     <div class="lab-grid">
       <div class="lab-board">
@@ -95,22 +99,22 @@ function promotionPosition() {
           :destinations="pending ? noDestinations : position.destinations"
           :last-move="position.lastMove"
           :in-check="position.inCheck"
-          :label="`Chessboard, ${turn} to move`"
+          :label="t('Chessboard, {p0} to move', { p0: turn === 'white' ? 'White' : 'Black' })"
           @move="play"
         />
       </div>
-      <section class="lab-panel" aria-label="Board controls">
+      <section class="lab-panel" :aria-label="t('Board controls')">
         <p class="turn-indicator">
-          {{ turn === 'white' ? 'White' : 'Black' }} to move<span v-if="position.inCheck">
-            · Check</span
-          ><span v-if="position.gameOver"> · Game over</span>
+          {{ t('{p0} to move', { p0: turn === 'white' ? t('White') : t('Black') })
+          }}<span v-if="position.inCheck"> {{ t('· Check') }}</span
+          ><span v-if="position.gameOver"> {{ t('· Game over') }}</span>
         </p>
-        <p class="move-feedback" role="status">{{ message }}</p>
+        <p class="move-feedback" role="status">{{ t(message) }}</p>
         <div
           v-if="pending"
           class="promotion-picker"
           role="group"
-          aria-label="Choose promotion piece"
+          :aria-label="t('Choose promotion piece')"
         >
           <button
             v-for="choice in pending.choices"
@@ -118,55 +122,49 @@ function promotionPosition() {
             type="button"
             @click="play(pending.from, pending.to, choice)"
           >
-            {{ promotionNames[choice] }}</button
-          ><button type="button" @click="cancelPromotion">Cancel</button>
+            {{ t(promotionNames[choice]) }}</button
+          ><button type="button" @click="cancelPromotion">{{ t('Cancel') }}</button>
         </div>
         <form class="coordinate-form" @submit.prevent="play(from, to)">
           <label
-            >From square<input
-              v-model="from"
-              pattern="[a-h][1-8]"
-              maxlength="2"
-              required
-              autocomplete="off"
+            >{{ t('From square')
+            }}<input v-model="from" pattern="[a-h][1-8]" maxlength="2" required autocomplete="off"
           /></label>
           <label
-            >To square<input
-              v-model="to"
-              pattern="[a-h][1-8]"
-              maxlength="2"
-              required
-              autocomplete="off"
+            >{{ t('To square')
+            }}<input v-model="to" pattern="[a-h][1-8]" maxlength="2" required autocomplete="off"
           /></label>
-          <button type="submit" :disabled="!!pending">Play move</button>
+          <button type="submit" :disabled="!!pending">{{ t('Play move') }}</button>
         </form>
         <div class="lab-actions">
           <button
             type="button"
-            aria-label="Move sound"
+            :aria-label="t('Move sound')"
             :aria-pressed="preferences.soundEnabled"
             @click="preferences.toggleSound"
           >
-            Sound {{ preferences.soundEnabled ? 'on' : 'off' }}
+            {{ t('Sound {p0}', { p0: preferences.soundEnabled ? t('on') : t('off') }) }}
           </button>
           <button type="button" :disabled="position.history.length === 0 && !pending" @click="undo">
-            Undo</button
-          ><button type="button" @click="restart">Restart</button
+            {{ t('Undo') }}</button
+          ><button type="button" @click="restart">{{ t('Restart') }}</button
           ><button type="button" @click="orientation = orientation === 'white' ? 'black' : 'white'">
-            Flip board
+            {{ t('Flip board') }}
           </button>
         </div>
-        <h2>Move history</h2>
-        <ol class="move-history" aria-label="Move history">
+        <h2>{{ t('Move history') }}</h2>
+        <ol class="move-history" :aria-label="t('Move history')">
           <li v-for="(move, index) in position.history" :key="index">{{ move }}</li>
         </ol>
-        <p v-if="!position.history.length" class="muted">No moves yet.</p>
+        <p v-if="!position.history.length" class="muted">{{ t('No moves yet.') }}</p>
         <details>
-          <summary>Rules fixtures</summary>
-          <button type="button" @click="promotionPosition">Load promotion fixture</button>
+          <summary>{{ t('Rules fixtures') }}</summary>
+          <button type="button" @click="promotionPosition">
+            {{ t('Load promotion fixture') }}
+          </button>
         </details>
         <details>
-          <summary>Current FEN</summary>
+          <summary>{{ t('Current FEN') }}</summary>
           <code data-testid="fen">{{ position.fen }}</code>
         </details>
       </section>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import type { Key } from '@lichess-org/chessground/types'
+import { t } from '../i18n'
 import ChessBoard from '../components/chess/ChessBoard.vue'
 
 /** The Italian Game, precomputed so the home page does not need the rules engine. */
@@ -64,15 +65,20 @@ onBeforeUnmount(() => {
 <template>
   <main id="main-content" class="page-width home-main">
     <section class="hero" aria-labelledby="hero-title">
-      <h1 id="hero-title">Learn the line.<br />Recognise the variation.</h1>
+      <h1 id="hero-title">{{ t('Learn the line.') }}<br />{{ t('Recognise the variation.') }}</h1>
       <div class="hero-copy">
         <p class="hero-description">
-          First, make an opening feel familiar. Then learn to find your way when the moves change.
-          You move your pieces, we reply, and a hint is always one tap away.
+          {{
+            t(
+              'First, make an opening feel familiar. Then learn to find your way when the moves change. You move your pieces, we reply, and a hint is always one tap away.',
+            )
+          }}
         </p>
         <div class="hero-actions">
-          <RouterLink class="primary-link" to="/learn">Start your first lesson</RouterLink>
-          <RouterLink class="text-action" to="/openings">Look up an opening</RouterLink>
+          <RouterLink class="primary-link" to="/learn">{{
+            t('Start your first lesson')
+          }}</RouterLink>
+          <RouterLink class="text-action" to="/openings">{{ t('Look up an opening') }}</RouterLink>
         </div>
       </div>
       <figure class="hero-demo">
@@ -81,12 +87,12 @@ onBeforeUnmount(() => {
             :fen="current?.fen ?? start"
             :last-move="current?.lastMove"
             read-only
-            label="Italian Game opening position"
+            :label="t('Italian Game opening position')"
           />
         </div>
         <figcaption class="scoresheet">
-          <strong class="scoresheet-title">Italian Game</strong>
-          <ol aria-label="Italian Game moves">
+          <strong class="scoresheet-title">{{ t('Italian Game') }}</strong>
+          <ol :aria-label="t('Italian Game moves')">
             <li v-for="pair in pairs" :key="pair.number">
               <span class="move-number">{{ pair.number }}.</span>
               <span
@@ -97,34 +103,42 @@ onBeforeUnmount(() => {
               >
             </li>
           </ol>
-          <p>Both bishops aim at the square beside the enemy king.</p>
-          <button type="button" class="replay-button" @click="playThrough">Replay the moves</button>
+          <p>{{ t('Both bishops aim at the square beside the enemy king.') }}</p>
+          <button type="button" class="replay-button" @click="playThrough">
+            {{ t('Replay the moves') }}
+          </button>
         </figcaption>
       </figure>
     </section>
     <section class="approach" aria-labelledby="approach-title">
-      <h2 id="approach-title">Two steps to a reliable opening</h2>
+      <h2 id="approach-title">{{ t('Two steps to a reliable opening') }}</h2>
       <ol class="steps">
         <li>
           <span class="step-number" aria-hidden="true">1</span>
           <div>
-            <h3>Follow the line</h3>
+            <h3>{{ t('Follow the line') }}</h3>
             <p>
-              Play one precise sequence. We answer each move and explain why it matters, with a hint
-              whenever you need one.
+              {{
+                t(
+                  'Play one precise sequence. We answer each move and explain why it matters, with a hint whenever you need one.',
+                )
+              }}
             </p>
-            <RouterLink to="/learn">Start a guided lesson</RouterLink>
+            <RouterLink to="/learn">{{ t('Start a guided lesson') }}</RouterLink>
           </div>
         </li>
         <li>
           <span class="step-number" aria-hidden="true">2</span>
           <div>
-            <h3>Find your response</h3>
+            <h3>{{ t('Find your response') }}</h3>
             <p>
-              Mix the lines you have learned. We choose among their taught replies, and you find the
-              response that fits.
+              {{
+                t(
+                  'Mix the lines you have learned. We choose among their taught replies, and you find the response that fits.',
+                )
+              }}
             </p>
-            <RouterLink to="/learn#variation-training">Choose lines to mix</RouterLink>
+            <RouterLink to="/learn#variation-training">{{ t('Choose lines to mix') }}</RouterLink>
           </div>
         </li>
       </ol>

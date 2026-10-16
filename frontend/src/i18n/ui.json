@@ -1,0 +1,2306 @@
+{
+  "Skip to content": {
+    "fr": "Aller au contenu",
+    "es": "Saltar al contenido"
+  },
+  "Chess Openings home": {
+    "fr": "Accueil Chess Openings",
+    "es": "Inicio de Chess Openings"
+  },
+  "Learn": {
+    "fr": "Apprendre",
+    "es": "Aprender"
+  },
+  "Openings": {
+    "fr": "Ouvertures",
+    "es": "Aperturas"
+  },
+  "Account": {
+    "fr": "Compte",
+    "es": "Cuenta"
+  },
+  "Sign in": {
+    "fr": "Se connecter",
+    "es": "Iniciar sesión"
+  },
+  "Early preview": {
+    "fr": "Version préliminaire",
+    "es": "Versión preliminar"
+  },
+  "Main navigation": {
+    "fr": "Navigation principale",
+    "es": "Navegación principal"
+  },
+  "We could not check your sign-in.": {
+    "fr": "Impossible de vérifier votre connexion.",
+    "es": "No hemos podido comprobar tu sesión."
+  },
+  "Try again": {
+    "fr": "Réessayer",
+    "es": "Volver a intentar"
+  },
+  "A little theory. A lot more confidence.": {
+    "fr": "Un peu de théorie. Beaucoup plus de confiance.",
+    "es": "Un poco de teoría. Mucha más confianza."
+  },
+  "Privacy": {
+    "fr": "Confidentialité",
+    "es": "Privacidad"
+  },
+  "Dependency licences": {
+    "fr": "Licences des dépendances",
+    "es": "Licencias de las dependencias"
+  },
+  "Developer board": {
+    "fr": "Échiquier de développement",
+    "es": "Tablero de desarrollo"
+  },
+  "Open source · GPLv3": {
+    "fr": "Code source ouvert · GPLv3",
+    "es": "Código abierto · GPLv3"
+  },
+  "YOUR ACCOUNT": {
+    "fr": "VOTRE COMPTE",
+    "es": "TU CUENTA"
+  },
+  "Account deleted.": {
+    "fr": "Compte supprimé.",
+    "es": "Cuenta eliminada."
+  },
+  "Your account and saved practice have been removed. You are signed out.": {
+    "fr": "Votre compte et vos entraînements enregistrés ont été supprimés. Vous êtes déconnecté.",
+    "es": "Tu cuenta y tus prácticas guardadas se han eliminado. Se ha cerrado tu sesión."
+  },
+  "Back to home": {
+    "fr": "Retour à l’accueil",
+    "es": "Volver al inicio"
+  },
+  "Your account.": {
+    "fr": "Votre compte.",
+    "es": "Tu cuenta."
+  },
+  "Your email is verified. Choose a guided lesson to practise an opening, with automatic replies and saved completion.": {
+    "fr": "Votre adresse e-mail est confirmée. Choisissez une leçon guidée pour travailler une ouverture, avec des réponses automatiques et un suivi de vos séances.",
+    "es": "Tu correo está verificado. Elige una lección guiada para practicar una apertura, con respuestas automáticas y prácticas guardadas."
+  },
+  "Signed in": {
+    "fr": "Connecté",
+    "es": "Sesión iniciada"
+  },
+  "Only you can access your account details.": {
+    "fr": "Vous seul pouvez accéder aux informations de votre compte.",
+    "es": "Solo tú puedes acceder a los datos de tu cuenta."
+  },
+  "We could not check your sign-in. Please try again.": {
+    "fr": "Impossible de vérifier votre connexion. Réessayez.",
+    "es": "No hemos podido comprobar tu sesión. Vuelve a intentarlo."
+  },
+  "Your session has ended.": {
+    "fr": "Votre session a expiré.",
+    "es": "Tu sesión ha caducado."
+  },
+  "Sign in again": {
+    "fr": "Se reconnecter",
+    "es": "Volver a iniciar sesión"
+  },
+  "to continue.": {
+    "fr": "pour continuer.",
+    "es": "para continuar."
+  },
+  "Choose a lesson →": {
+    "fr": "Choisir une leçon →",
+    "es": "Elegir una lección →"
+  },
+  "Your practice & reviews →": {
+    "fr": "Vos entraînements et révisions →",
+    "es": "Tus prácticas y repasos →"
+  },
+  "Signing out…": {
+    "fr": "Déconnexion…",
+    "es": "Cerrando sesión…"
+  },
+  "Sign out": {
+    "fr": "Se déconnecter",
+    "es": "Cerrar sesión"
+  },
+  "Reset password": {
+    "fr": "Réinitialiser le mot de passe",
+    "es": "Restablecer contraseña"
+  },
+  "Privacy notice": {
+    "fr": "Notice de confidentialité",
+    "es": "Aviso de privacidad"
+  },
+  "Account details": {
+    "fr": "Informations du compte",
+    "es": "Datos de la cuenta"
+  },
+  "Download your data": {
+    "fr": "Télécharger vos données",
+    "es": "Descargar tus datos"
+  },
+  "Get a JSON file with your account details and all saved practice, including earlier course versions. Passwords and sign-in secrets are excluded.": {
+    "fr": "Obtenez un fichier JSON contenant les informations de votre compte et tous vos entraînements, y compris les anciennes versions des cours. Les mots de passe et secrets de connexion sont exclus.",
+    "es": "Obtén un archivo JSON con los datos de tu cuenta y todas tus prácticas guardadas, incluidas las versiones anteriores de los cursos. No incluye contraseñas ni secretos de acceso."
+  },
+  "Current password for download": {
+    "fr": "Mot de passe actuel pour le téléchargement",
+    "es": "Contraseña actual para la descarga"
+  },
+  "Your download is ready. Keep the file somewhere private.": {
+    "fr": "Votre téléchargement est prêt. Conservez ce fichier dans un endroit privé.",
+    "es": "Tu descarga está lista. Guarda el archivo en un lugar privado."
+  },
+  "Preparing download…": {
+    "fr": "Préparation du téléchargement…",
+    "es": "Preparando descarga…"
+  },
+  "Download my data": {
+    "fr": "Télécharger mes données",
+    "es": "Descargar mis datos"
+  },
+  "Delete your account": {
+    "fr": "Supprimer votre compte",
+    "es": "Eliminar tu cuenta"
+  },
+  "Permanently remove your account and all saved practice. This cannot be undone. You can download your data first.": {
+    "fr": "Supprimez définitivement votre compte et tous vos entraînements. Cette action est irréversible. Vous pouvez d’abord télécharger vos données.",
+    "es": "Elimina permanentemente tu cuenta y todas tus prácticas. Esta acción es irreversible. Puedes descargar tus datos primero."
+  },
+  "Delete my account…": {
+    "fr": "Supprimer mon compte…",
+    "es": "Eliminar mi cuenta…"
+  },
+  "Current password for deletion": {
+    "fr": "Mot de passe actuel pour la suppression",
+    "es": "Contraseña actual para la eliminación"
+  },
+  "I understand that my account and saved practice will be permanently deleted.": {
+    "fr": "Je comprends que mon compte et mes entraînements seront définitivement supprimés.",
+    "es": "Entiendo que mi cuenta y mis prácticas guardadas se eliminarán permanentemente."
+  },
+  "Deleting account…": {
+    "fr": "Suppression du compte…",
+    "es": "Eliminando cuenta…"
+  },
+  "Permanently delete my account": {
+    "fr": "Supprimer définitivement mon compte",
+    "es": "Eliminar mi cuenta permanentemente"
+  },
+  "Keep my account": {
+    "fr": "Conserver mon compte",
+    "es": "Conservar mi cuenta"
+  },
+  "Read how deletion affects backups and security records.": {
+    "fr": "En savoir plus sur les sauvegardes et les données de sécurité après suppression.",
+    "es": "Consulta cómo afecta la eliminación a las copias de seguridad y los registros de seguridad."
+  },
+  "Your session has ended. Sign in again to continue.": {
+    "fr": "Votre session a expiré. Reconnectez-vous pour continuer.",
+    "es": "Tu sesión ha caducado. Vuelve a iniciar sesión para continuar."
+  },
+  "Too many confirmation attempts. Try again in {p0} seconds.": {
+    "fr": "Trop de tentatives de confirmation. Réessayez dans {p0} secondes.",
+    "es": "Demasiados intentos de confirmación. Vuelve a intentarlo en {p0} segundos."
+  },
+  "Too many confirmation attempts. Please try again later.": {
+    "fr": "Trop de tentatives de confirmation. Réessayez plus tard.",
+    "es": "Demasiados intentos de confirmación. Vuelve a intentarlo más tarde."
+  },
+  "Could not download your data. Please try again.": {
+    "fr": "Impossible de télécharger vos données. Réessayez.",
+    "es": "No se han podido descargar tus datos. Vuelve a intentarlo."
+  },
+  "Could not confirm deletion. Check your connection and try again.": {
+    "fr": "Impossible de confirmer la suppression. Vérifiez votre connexion et réessayez.",
+    "es": "No se ha podido confirmar la eliminación. Comprueba tu conexión y vuelve a intentarlo."
+  },
+  "Could not sign out. Please try again.": {
+    "fr": "Impossible de vous déconnecter. Réessayez.",
+    "es": "No se ha podido cerrar la sesión. Vuelve a intentarlo."
+  },
+  "YOUR CHESS OPENINGS ACCOUNT": {
+    "fr": "VOTRE COMPTE CHESS OPENINGS",
+    "es": "TU CUENTA DE CHESS OPENINGS"
+  },
+  "Save your lesson practice. Just your email and a password.": {
+    "fr": "Enregistrez vos entraînements. Une adresse e-mail et un mot de passe suffisent.",
+    "es": "Guarda tus prácticas. Solo necesitas tu correo y una contraseña."
+  },
+  "Sign in with your verified email address.": {
+    "fr": "Connectez-vous avec votre adresse e-mail confirmée.",
+    "es": "Inicia sesión con tu dirección de correo verificada."
+  },
+  "Confirm your email below. If you didn’t create this account, you can ignore this.": {
+    "fr": "Confirmez votre adresse e-mail ci-dessous. Si vous n’avez pas créé ce compte, ignorez ce message.",
+    "es": "Confirma tu correo a continuación. Si no has creado esta cuenta, puedes ignorar este mensaje."
+  },
+  "Use at least 12 characters. Saving your password signs out existing sessions.": {
+    "fr": "Utilisez au moins 12 caractères. L’enregistrement du mot de passe déconnecte les sessions existantes.",
+    "es": "Usa al menos 12 caracteres. Al guardar la contraseña se cierran las sesiones existentes."
+  },
+  "We’ll email a link if this address is eligible. Check your spam folder too.": {
+    "fr": "Si cette adresse est éligible, vous recevrez un lien par e-mail. Vérifiez aussi vos courriers indésirables.",
+    "es": "Enviaremos un enlace si esta dirección cumple los requisitos. Revisa también la carpeta de spam."
+  },
+  "We could not check your sign-in. The account service may be unavailable. Please try again.": {
+    "fr": "Impossible de vérifier votre connexion. Le service de comptes est peut-être indisponible. Réessayez.",
+    "es": "No hemos podido comprobar tu sesión. El servicio de cuentas podría no estar disponible. Vuelve a intentarlo."
+  },
+  "Sign-in succeeded, but your browser did not keep the session. Allow cookies for this site and try again.": {
+    "fr": "La connexion a réussi, mais votre navigateur n’a pas conservé la session. Autorisez les cookies pour ce site et réessayez.",
+    "es": "Has iniciado sesión, pero tu navegador no la ha conservado. Permite las cookies de este sitio y vuelve a intentarlo."
+  },
+  "Email address": {
+    "fr": "Adresse e-mail",
+    "es": "Correo electrónico"
+  },
+  "New password": {
+    "fr": "Nouveau mot de passe",
+    "es": "Nueva contraseña"
+  },
+  "Password": {
+    "fr": "Mot de passe",
+    "es": "Contraseña"
+  },
+  "12–256 characters, up to 256 bytes. Spaces and password managers welcome.": {
+    "fr": "De 12 à 256 caractères, jusqu’à 256 octets. Les espaces et gestionnaires de mots de passe sont acceptés.",
+    "es": "Entre 12 y 256 caracteres, hasta 256 bytes. Se permiten espacios y gestores de contraseñas."
+  },
+  "Use the password you chose when you registered.": {
+    "fr": "Utilisez le mot de passe choisi lors de votre inscription.",
+    "es": "Usa la contraseña que elegiste al registrarte."
+  },
+  "Hide password": {
+    "fr": "Masquer le mot de passe",
+    "es": "Ocultar contraseña"
+  },
+  "Show password": {
+    "fr": "Afficher le mot de passe",
+    "es": "Mostrar contraseña"
+  },
+  "Remember me for 30 days": {
+    "fr": "Se souvenir de moi pendant 30 jours",
+    "es": "Recordarme durante 30 días"
+  },
+  "Use on your own device. Sign out on shared computers.": {
+    "fr": "À utiliser sur votre propre appareil. Déconnectez-vous sur les ordinateurs partagés.",
+    "es": "Úsalo en tu propio dispositivo. Cierra la sesión en ordenadores compartidos."
+  },
+  "By creating an account, you acknowledge the": {
+    "fr": "En créant un compte, vous prenez connaissance de la",
+    "es": "Al crear una cuenta, confirmas que has leído el"
+  },
+  "account privacy notice": {
+    "fr": "notice de confidentialité des comptes",
+    "es": "aviso de privacidad de las cuentas"
+  },
+  "Open the complete link from your email, or request a new one below.": {
+    "fr": "Ouvrez le lien complet reçu par e-mail ou demandez-en un nouveau ci-dessous.",
+    "es": "Abre el enlace completo de tu correo o solicita uno nuevo a continuación."
+  },
+  "Please wait…": {
+    "fr": "Veuillez patienter…",
+    "es": "Espera…"
+  },
+  "Create an account": {
+    "fr": "Créer un compte",
+    "es": "Crear una cuenta"
+  },
+  "Resend verification email": {
+    "fr": "Renvoyer l’e-mail de confirmation",
+    "es": "Reenviar correo de verificación"
+  },
+  "Sign in.": {
+    "fr": "Connectez-vous.",
+    "es": "Inicia sesión."
+  },
+  "Create an account.": {
+    "fr": "Créez un compte.",
+    "es": "Crea una cuenta."
+  },
+  "Reset your password.": {
+    "fr": "Réinitialisez votre mot de passe.",
+    "es": "Restablece tu contraseña."
+  },
+  "Verify your email.": {
+    "fr": "Confirmez votre adresse e-mail.",
+    "es": "Verifica tu correo."
+  },
+  "Choose a new password.": {
+    "fr": "Choisissez un nouveau mot de passe.",
+    "es": "Elige una nueva contraseña."
+  },
+  "Resend verification email.": {
+    "fr": "Renvoyez l’e-mail de confirmation.",
+    "es": "Reenvía el correo de verificación."
+  },
+  "Create account": {
+    "fr": "Créer le compte",
+    "es": "Crear cuenta"
+  },
+  "Send reset link": {
+    "fr": "Envoyer le lien de réinitialisation",
+    "es": "Enviar enlace de restablecimiento"
+  },
+  "Verify email": {
+    "fr": "Confirmer l’adresse e-mail",
+    "es": "Verificar correo"
+  },
+  "Save new password": {
+    "fr": "Enregistrer le nouveau mot de passe",
+    "es": "Guardar nueva contraseña"
+  },
+  "Resend verification": {
+    "fr": "Renvoyer la confirmation",
+    "es": "Reenviar verificación"
+  },
+  "Continue": {
+    "fr": "Continuer",
+    "es": "Continuar"
+  },
+  "This form is unavailable.": {
+    "fr": "Ce formulaire est indisponible.",
+    "es": "Este formulario no está disponible."
+  },
+  "Email confirmed. You can now sign in.": {
+    "fr": "Adresse e-mail confirmée. Vous pouvez maintenant vous connecter.",
+    "es": "Correo confirmado. Ya puedes iniciar sesión."
+  },
+  "Check your email to confirm your address, then sign in with the password you just chose.": {
+    "fr": "Consultez votre messagerie pour confirmer votre adresse, puis connectez-vous avec le mot de passe que vous venez de choisir.",
+    "es": "Revisa tu correo para confirmar tu dirección e inicia sesión con la contraseña que acabas de elegir."
+  },
+  "Done.": {
+    "fr": "Terminé.",
+    "es": "Hecho."
+  },
+  "The account service is unavailable. Please try again.": {
+    "fr": "Le service de comptes est indisponible. Réessayez.",
+    "es": "El servicio de cuentas no está disponible. Vuelve a intentarlo."
+  },
+  "DEVELOPMENT ONLY": {
+    "fr": "DÉVELOPPEMENT UNIQUEMENT",
+    "es": "SOLO DESARROLLO"
+  },
+  "Board & rules lab": {
+    "fr": "Laboratoire de l’échiquier et des règles",
+    "es": "Laboratorio del tablero y las reglas"
+  },
+  "This is a manual developer tool. For automatic replies and hints,": {
+    "fr": "Cet outil manuel est destiné au développement. Pour des réponses automatiques et des indices,",
+    "es": "Esta es una herramienta manual de desarrollo. Para respuestas automáticas y pistas,"
+  },
+  "start a guided lesson": {
+    "fr": "commencez une leçon guidée",
+    "es": "empieza una lección guiada"
+  },
+  "← Home": {
+    "fr": "← Accueil",
+    "es": "← Inicio"
+  },
+  "Chessboard, {p0} to move": {
+    "fr": "Échiquier, aux {p0} de jouer",
+    "es": "Tablero, juegan {p0}"
+  },
+  "White": {
+    "fr": "Blancs",
+    "es": "Blancas"
+  },
+  "Black": {
+    "fr": "Noirs",
+    "es": "Negras"
+  },
+  "{p0} to move": {
+    "fr": "Aux {p0} de jouer",
+    "es": "Juegan {p0}"
+  },
+  "· Check": {
+    "fr": "· Échec",
+    "es": "· Jaque"
+  },
+  "· Game over": {
+    "fr": "· Partie terminée",
+    "es": "· Partida terminada"
+  },
+  "Cancel": {
+    "fr": "Annuler",
+    "es": "Cancelar"
+  },
+  "Choose promotion piece": {
+    "fr": "Choisir la pièce de promotion",
+    "es": "Elegir pieza de promoción"
+  },
+  "From square": {
+    "fr": "Case de départ",
+    "es": "Casilla de origen"
+  },
+  "To square": {
+    "fr": "Case d’arrivée",
+    "es": "Casilla de destino"
+  },
+  "Play move": {
+    "fr": "Jouer le coup",
+    "es": "Jugar movimiento"
+  },
+  "on": {
+    "fr": "activé",
+    "es": "activado"
+  },
+  "off": {
+    "fr": "désactivé",
+    "es": "desactivado"
+  },
+  "Sound {p0}": {
+    "fr": "Son {p0}",
+    "es": "Sonido {p0}"
+  },
+  "Move sound": {
+    "fr": "Son des coups",
+    "es": "Sonido de los movimientos"
+  },
+  "Undo": {
+    "fr": "Annuler le coup",
+    "es": "Deshacer"
+  },
+  "Restart": {
+    "fr": "Recommencer",
+    "es": "Reiniciar"
+  },
+  "Flip board": {
+    "fr": "Retourner l’échiquier",
+    "es": "Girar tablero"
+  },
+  "Move history": {
+    "fr": "Historique des coups",
+    "es": "Historial de movimientos"
+  },
+  "No moves yet.": {
+    "fr": "Aucun coup joué.",
+    "es": "Todavía no hay movimientos."
+  },
+  "Rules fixtures": {
+    "fr": "Positions de test des règles",
+    "es": "Posiciones de prueba de las reglas"
+  },
+  "Load promotion fixture": {
+    "fr": "Charger la position de promotion",
+    "es": "Cargar posición de promoción"
+  },
+  "Current FEN": {
+    "fr": "FEN actuelle",
+    "es": "FEN actual"
+  },
+  "Board controls": {
+    "fr": "Commandes de l’échiquier",
+    "es": "Controles del tablero"
+  },
+  "Manual board: you move both colours here. There is no automatic opponent.": {
+    "fr": "Échiquier manuel : vous jouez les deux couleurs. Aucun adversaire automatique.",
+    "es": "Tablero manual: aquí mueves ambos colores. No hay rival automático."
+  },
+  "Queen": {
+    "fr": "Dame",
+    "es": "Dama"
+  },
+  "Rook": {
+    "fr": "Tour",
+    "es": "Torre"
+  },
+  "Bishop": {
+    "fr": "Fou",
+    "es": "Alfil"
+  },
+  "Knight": {
+    "fr": "Cavalier",
+    "es": "Caballo"
+  },
+  "Choose a piece for promotion.": {
+    "fr": "Choisissez une pièce pour la promotion.",
+    "es": "Elige una pieza para la promoción."
+  },
+  "Played {p0}.": {
+    "fr": "Coup joué : {p0}.",
+    "es": "Movimiento jugado: {p0}."
+  },
+  "That move is not legal in this position.": {
+    "fr": "Ce coup n’est pas légal dans cette position.",
+    "es": "Ese movimiento no es legal en esta posición."
+  },
+  "Promotion cancelled. Choose your move.": {
+    "fr": "Promotion annulée. Choisissez votre coup.",
+    "es": "Promoción cancelada. Elige tu movimiento."
+  },
+  "Previous position restored.": {
+    "fr": "Position précédente rétablie.",
+    "es": "Posición anterior restaurada."
+  },
+  "Position restarted.": {
+    "fr": "Position réinitialisée.",
+    "es": "Posición reiniciada."
+  },
+  "Promotion fixture loaded.": {
+    "fr": "Position de promotion chargée.",
+    "es": "Posición de promoción cargada."
+  },
+  "OPENING REFERENCE": {
+    "fr": "RÉPERTOIRE DES OUVERTURES",
+    "es": "REFERENCIA DE APERTURAS"
+  },
+  "Look up an opening.": {
+    "fr": "Recherchez une ouverture.",
+    "es": "Busca una apertura."
+  },
+  "Search names and compare recorded sequences. Some sequences stop earlier or reach a setup in a different order, so we group identical names together.": {
+    "fr": "Recherchez des noms et comparez les suites répertoriées. Certaines s’arrêtent plus tôt ou atteignent une position dans un ordre différent. Les noms identiques sont donc regroupés.",
+    "es": "Busca nombres y compara las secuencias registradas. Algunas terminan antes o llegan a una posición en otro orden, por lo que agrupamos los nombres idénticos."
+  },
+  "Browse a family:": {
+    "fr": "Explorer une famille :",
+    "es": "Explorar una familia:"
+  },
+  "Browse opening families": {
+    "fr": "Explorer les familles d’ouvertures",
+    "es": "Explorar familias de aperturas"
+  },
+  "Want to play?": {
+    "fr": "Envie de jouer ?",
+    "es": "¿Quieres jugar?"
+  },
+  "Start a beginner lesson →": {
+    "fr": "Commencer une leçon pour débutants →",
+    "es": "Empezar una lección para principiantes →"
+  },
+  "We play the other side and guide your next move.": {
+    "fr": "Nous jouons l’autre camp et guidons votre prochain coup.",
+    "es": "Jugamos con el otro bando y guiamos tu próximo movimiento."
+  },
+  "Opening name": {
+    "fr": "Nom de l’ouverture",
+    "es": "Nombre de la apertura"
+  },
+  "Italian Game": {
+    "fr": "Partie italienne",
+    "es": "Apertura italiana"
+  },
+  "Optional search filters": {
+    "fr": "Filtres de recherche facultatifs",
+    "es": "Filtros de búsqueda opcionales"
+  },
+  "ECO code": {
+    "fr": "Code ECO",
+    "es": "Código ECO"
+  },
+  "This is a reference code. You do not need it to learn an opening.": {
+    "fr": "C’est un code de référence. Il n’est pas nécessaire pour apprendre une ouverture.",
+    "es": "Es un código de referencia. No lo necesitas para aprender una apertura."
+  },
+  "Search openings": {
+    "fr": "Rechercher des ouvertures",
+    "es": "Buscar aperturas"
+  },
+  "Loading openings…": {
+    "fr": "Chargement des ouvertures…",
+    "es": "Cargando aperturas…"
+  },
+  "{p0} named variations found": {
+    "fr": "{p0} variantes nommées trouvées",
+    "es": "{p0} variantes con nombre encontradas"
+  },
+  "The opening library is being prepared.": {
+    "fr": "Le répertoire des ouvertures est en préparation.",
+    "es": "Se está preparando la biblioteca de aperturas."
+  },
+  "sequence": {
+    "fr": "suite",
+    "es": "secuencia"
+  },
+  "sequences": {
+    "fr": "suites",
+    "es": "secuencias"
+  },
+  "{p0} recorded {p1} ·": {
+    "fr": "{p0} {p1} répertoriées ·",
+    "es": "{p0} {p1} registradas ·"
+  },
+  "View moves on a board": {
+    "fr": "Voir les coups sur un échiquier",
+    "es": "Ver movimientos en un tablero"
+  },
+  "These are reference sequences, not separate lessons. Longer sequences can continue a shorter one.": {
+    "fr": "Ce sont des suites de référence, pas des leçons distinctes. Une suite longue peut prolonger une suite plus courte.",
+    "es": "Son secuencias de referencia, no lecciones separadas. Una secuencia más larga puede continuar otra más corta."
+  },
+  "Reference code {p0} · Show on the board": {
+    "fr": "Code de référence {p0} · Voir sur l’échiquier",
+    "es": "Código de referencia {p0} · Mostrar en el tablero"
+  },
+  "Move sequences are unavailable in this cached result. Search again to refresh it.": {
+    "fr": "Les suites de coups ne sont pas disponibles dans ce résultat en cache. Relancez la recherche pour l’actualiser.",
+    "es": "Las secuencias no están disponibles en este resultado guardado. Busca de nuevo para actualizarlo."
+  },
+  "Showing the three shortest sequences.": {
+    "fr": "Affichage des trois suites les plus courtes.",
+    "es": "Se muestran las tres secuencias más cortas."
+  },
+  "{p0} beginner lesson →": {
+    "fr": "Leçon pour débutants : {p0} →",
+    "es": "Lección para principiantes: {p0} →"
+  },
+  "Reference entry · Guided lesson not available yet": {
+    "fr": "Référence · Aucune leçon guidée disponible pour le moment",
+    "es": "Referencia · Lección guiada aún no disponible"
+  },
+  "Named openings": {
+    "fr": "Ouvertures nommées",
+    "es": "Aperturas con nombre"
+  },
+  "No matching openings. Try a shorter name or another ECO code.": {
+    "fr": "Aucune ouverture correspondante. Essayez un nom plus court ou un autre code ECO.",
+    "es": "No hay aperturas coincidentes. Prueba con un nombre más corto u otro código ECO."
+  },
+  "Previous": {
+    "fr": "Précédent",
+    "es": "Anterior"
+  },
+  "Page {p0}": {
+    "fr": "Page {p0}",
+    "es": "Página {p0}"
+  },
+  "Next": {
+    "fr": "Suivant",
+    "es": "Siguiente"
+  },
+  "Catalogue pages": {
+    "fr": "Pages du répertoire",
+    "es": "Páginas del catálogo"
+  },
+  "Opening names from the Lichess CC0 catalogue. Course content is curated separately.": {
+    "fr": "Les noms d’ouvertures proviennent du répertoire Lichess sous CC0. Le contenu des cours est rédigé séparément.",
+    "es": "Los nombres proceden del catálogo Lichess CC0. El contenido de los cursos se prepara por separado."
+  },
+  "Opening search results": {
+    "fr": "Résultats de recherche d’ouvertures",
+    "es": "Resultados de búsqueda de aperturas"
+  },
+  "London System": {
+    "fr": "Système de Londres",
+    "es": "Sistema Londres"
+  },
+  "Caro-Kann": {
+    "fr": "Caro-Kann",
+    "es": "Caro-Kann"
+  },
+  "Caro-Kann Defense": {
+    "fr": "Défense Caro-Kann",
+    "es": "Defensa Caro-Kann"
+  },
+  "French Defense": {
+    "fr": "Défense française",
+    "es": "Defensa francesa"
+  },
+  "Sicilian Defense": {
+    "fr": "Défense sicilienne",
+    "es": "Defensa siciliana"
+  },
+  "Queen's Gambit": {
+    "fr": "Gambit dame",
+    "es": "Gambito de dama"
+  },
+  "Ruy Lopez": {
+    "fr": "Partie espagnole",
+    "es": "Apertura española"
+  },
+  "Catalan Opening": {
+    "fr": "Ouverture catalane",
+    "es": "Apertura catalana"
+  },
+  "King's Indian Defense": {
+    "fr": "Défense est-indienne",
+    "es": "Defensa india de rey"
+  },
+  "Slav Defense": {
+    "fr": "Défense slave",
+    "es": "Defensa eslava"
+  },
+  "← All lessons": {
+    "fr": "← Toutes les leçons",
+    "es": "← Todas las lecciones"
+  },
+  "Preparing your lesson…": {
+    "fr": "Préparation de votre leçon…",
+    "es": "Preparando tu lección…"
+  },
+  "GUIDED LESSON · BEGINNER": {
+    "fr": "LEÇON GUIDÉE · DÉBUTANT",
+    "es": "LECCIÓN GUIADA · PRINCIPIANTE"
+  },
+  "You play {p0} · We play {p1}": {
+    "fr": "Vous jouez les {p0} · Nous jouons les {p1}",
+    "es": "Juegas con {p0} · Jugamos con {p1}"
+  },
+  "Opponent replying…": {
+    "fr": "L’adversaire répond…",
+    "es": "El rival está respondiendo…"
+  },
+  "Your turn": {
+    "fr": "À vous de jouer",
+    "es": "Tu turno"
+  },
+  "Hint": {
+    "fr": "Indice",
+    "es": "Pista"
+  },
+  "{p0} lesson board, you play {p1}": {
+    "fr": "Échiquier de la leçon {p0}, vous jouez les {p1}",
+    "es": "Tablero de la lección {p0}, juegas con {p1}"
+  },
+  "Tap the glowing destination.": {
+    "fr": "Touchez la case d’arrivée éclairée.",
+    "es": "Toca la casilla de destino iluminada."
+  },
+  "Pick up the glowing piece.": {
+    "fr": "Sélectionnez la pièce éclairée.",
+    "es": "Selecciona la pieza iluminada."
+  },
+  "How the line ends": {
+    "fr": "La fin de la ligne",
+    "es": "Cómo termina la línea"
+  },
+  "YOUR FIRST STEPS": {
+    "fr": "VOS PREMIERS PAS",
+    "es": "TUS PRIMEROS PASOS"
+  },
+  "Tap a piece, then a highlighted square. You can also drag it. We reply automatically. Select": {
+    "fr": "Touchez une pièce, puis une case en surbrillance. Vous pouvez aussi la faire glisser. Nous répondons automatiquement. Sélectionnez",
+    "es": "Toca una pieza y después una casilla resaltada. También puedes arrastrarla. Respondemos automáticamente. Selecciona"
+  },
+  "whenever you need help.": {
+    "fr": "quand vous avez besoin d’aide.",
+    "es": "cuando necesites ayuda."
+  },
+  "You have practised this line before. Repetition helps it feel familiar.": {
+    "fr": "Vous avez déjà travaillé cette ligne. La répétition vous aide à la reconnaître.",
+    "es": "Ya has practicado esta línea. Repetirla te ayuda a familiarizarte con ella."
+  },
+  "Other lesson options": {
+    "fr": "Autres options de la leçon",
+    "es": "Otras opciones de la lección"
+  },
+  "Line": {
+    "fr": "Ligne",
+    "es": "Línea"
+  },
+  "Your pieces": {
+    "fr": "Vos pièces",
+    "es": "Tus piezas"
+  },
+  " (recommended)": {
+    "fr": " (recommandé)",
+    "es": " (recomendado)"
+  },
+  "Start lesson": {
+    "fr": "Commencer la leçon",
+    "es": "Empezar lección"
+  },
+  "NICE WORK": {
+    "fr": "BIEN JOUÉ",
+    "es": "BIEN HECHO"
+  },
+  "Line complete.": {
+    "fr": "Ligne terminée.",
+    "es": "Línea completada."
+  },
+  "You played all {p0} of your moves in “{p1}”. You can repeat it or try another lesson.": {
+    "fr": "Vous avez joué vos {p0} coups dans « {p1} ». Vous pouvez recommencer ou essayer une autre leçon.",
+    "es": "Has jugado tus {p0} movimientos en «{p1}». Puedes repetirla o probar otra lección."
+  },
+  "Takebacks used. This practice is recorded with help; try a fresh attempt to check your recall.": {
+    "fr": "Vous avez repris des coups. Cette séance est enregistrée avec aide ; faites un nouvel essai pour vérifier votre mémoire.",
+    "es": "Has deshecho movimientos. Esta práctica se guarda con ayuda; empieza un nuevo intento para comprobar lo que recuerdas."
+  },
+  "{p0} of {p1} taught decisions played on the first try without a hint.": {
+    "fr": "{p0} décisions enseignées sur {p1} jouées du premier coup sans indice.",
+    "es": "{p0} de {p1} decisiones enseñadas jugadas al primer intento sin pistas."
+  },
+  "Saving your practice…": {
+    "fr": "Enregistrement de votre entraînement…",
+    "es": "Guardando tu práctica…"
+  },
+  "Practice saved to your account.": {
+    "fr": "Entraînement enregistré dans votre compte.",
+    "es": "Práctica guardada en tu cuenta."
+  },
+  "Try saving again": {
+    "fr": "Réessayer l’enregistrement",
+    "es": "Volver a guardar"
+  },
+  "Sign in in another tab": {
+    "fr": "Se connecter dans un autre onglet",
+    "es": "Iniciar sesión en otra pestaña"
+  },
+  "Practise again": {
+    "fr": "S’entraîner à nouveau",
+    "es": "Volver a practicar"
+  },
+  "Practise variations in this opening →": {
+    "fr": "Travailler les variantes de cette ouverture →",
+    "es": "Practicar variantes de esta apertura →"
+  },
+  "Choose another lesson →": {
+    "fr": "Choisir une autre leçon →",
+    "es": "Elegir otra lección →"
+  },
+  "See your practice & reviews →": {
+    "fr": "Voir vos entraînements et révisions →",
+    "es": "Ver tus prácticas y repasos →"
+  },
+  "{p0} is replying…": {
+    "fr": "Les {p0} répondent…",
+    "es": "Las {p0} están respondiendo…"
+  },
+  "Move {p0} of {p1} for you": {
+    "fr": "Votre coup {p0} sur {p1}",
+    "es": "Tu jugada {p0} de {p1}"
+  },
+  "Lesson progress": {
+    "fr": "Avancement de la leçon",
+    "es": "Progreso de la lección"
+  },
+  "Watch the reply, then it is your turn again.": {
+    "fr": "Observez la réponse, puis ce sera à nouveau à vous.",
+    "es": "Observa la respuesta y volverá a ser tu turno."
+  },
+  "Choose a piece and move it to a highlighted square. Need a nudge? Use Hint.": {
+    "fr": "Choisissez une pièce et déplacez-la vers une case en surbrillance. Besoin d’un coup de pouce ? Utilisez Indice.",
+    "es": "Elige una pieza y muévela a una casilla resaltada. ¿Necesitas ayuda? Usa Pista."
+  },
+  "Now tap the glowing destination.": {
+    "fr": "Touchez maintenant la case d’arrivée éclairée.",
+    "es": "Ahora toca la casilla de destino iluminada."
+  },
+  "Move hint": {
+    "fr": "Indice pour le coup",
+    "es": "Pista de movimiento"
+  },
+  "Take back my move": {
+    "fr": "Reprendre mon coup",
+    "es": "Deshacer mi movimiento"
+  },
+  "Start over": {
+    "fr": "Recommencer",
+    "es": "Volver a empezar"
+  },
+  "Cancel promotion": {
+    "fr": "Annuler la promotion",
+    "es": "Cancelar promoción"
+  },
+  "Enter a move with the keyboard": {
+    "fr": "Saisir un coup au clavier",
+    "es": "Introducir un movimiento con el teclado"
+  },
+  "Use the square labels on the board, for example from e2 to e4. For castling, enter the king’s starting and destination squares.": {
+    "fr": "Utilisez les coordonnées de l’échiquier, par exemple de e2 à e4. Pour roquer, saisissez les cases de départ et d’arrivée du roi.",
+    "es": "Usa las coordenadas del tablero, por ejemplo de e2 a e4. Para enrocar, introduce las casillas de origen y destino del rey."
+  },
+  "Enter a lesson move": {
+    "fr": "Saisir un coup de la leçon",
+    "es": "Introducir un movimiento de la lección"
+  },
+  "Lesson instructions": {
+    "fr": "Consignes de la leçon",
+    "es": "Instrucciones de la lección"
+  },
+  "Moves played (chess notation)": {
+    "fr": "Coups joués (notation échiquéenne)",
+    "es": "Movimientos jugados (notación de ajedrez)"
+  },
+  "Lesson move history": {
+    "fr": "Historique des coups de la leçon",
+    "es": "Historial de movimientos de la lección"
+  },
+  "You played": {
+    "fr": "Vous avez joué",
+    "es": "Has jugado"
+  },
+  "{p0} played": {
+    "fr": "Les {p0} ont joué",
+    "es": "Las {p0} han jugado"
+  },
+  "{p0} lesson · Chess Openings": {
+    "fr": "Leçon {p0} · Chess Openings",
+    "es": "Lección de {p0} · Chess Openings"
+  },
+  "This lesson could not be loaded. Check your connection and sign-in, then try again.": {
+    "fr": "Impossible de charger cette leçon. Vérifiez votre connexion et votre session, puis réessayez.",
+    "es": "No se ha podido cargar esta lección. Comprueba tu conexión y tu sesión y vuelve a intentarlo."
+  },
+  "You finished the line, but we could not save it. Keep this page open and try again.": {
+    "fr": "Vous avez terminé la ligne, mais l’enregistrement a échoué. Gardez cette page ouverte et réessayez.",
+    "es": "Has terminado la línea, pero no se ha podido guardar. Mantén esta página abierta y vuelve a intentarlo."
+  },
+  "{p0} played {p1}.": {
+    "fr": "Les {p0} ont joué {p1}.",
+    "es": "Las {p0} han jugado {p1}."
+  },
+  "Your turn.": {
+    "fr": "À vous de jouer.",
+    "es": "Tu turno."
+  },
+  "Watch the first White move.": {
+    "fr": "Observez le premier coup des Blancs.",
+    "es": "Observa el primer movimiento de las blancas."
+  },
+  "Lesson started. You play {p0}. {p1}": {
+    "fr": "Leçon commencée. Vous jouez les {p0}. {p1}",
+    "es": "Lección iniciada. Juegas con {p0}. {p1}"
+  },
+  "Watch the reply.": {
+    "fr": "Observez la réponse.",
+    "es": "Observa la respuesta."
+  },
+  "You played {p0}. {p1} {p2}": {
+    "fr": "Vous avez joué {p0}. {p1} {p2}",
+    "es": "Has jugado {p0}. {p1} {p2}"
+  },
+  "That move belongs to “{p0}”, another taught line. This exercise follows the selected line, so the board stays here. Try again or use a hint.": {
+    "fr": "Ce coup appartient à « {p0} », une autre ligne enseignée. Cet exercice suit la ligne choisie : la position reste inchangée. Réessayez ou utilisez un indice.",
+    "es": "Ese movimiento pertenece a «{p0}», otra línea enseñada. Este ejercicio sigue la línea elegida, así que la posición no cambia. Inténtalo de nuevo o usa una pista."
+  },
+  "That move is legal, but outside this lesson. The board stays here. Try again or use a hint.": {
+    "fr": "Ce coup est légal, mais sort de cette leçon. La position reste inchangée. Réessayez ou utilisez un indice.",
+    "es": "Ese movimiento es legal, pero no forma parte de esta lección. La posición no cambia. Inténtalo de nuevo o usa una pista."
+  },
+  "That piece cannot move there in this position. Try a highlighted square.": {
+    "fr": "Cette pièce ne peut pas aller là dans cette position. Essayez une case en surbrillance.",
+    "es": "Esa pieza no puede moverse ahí en esta posición. Prueba una casilla resaltada."
+  },
+  "{p0} Why: {p1}": {
+    "fr": "{p0} Pourquoi : {p1}",
+    "es": "{p0} Por qué: {p1}"
+  },
+  "Your last move and the reply were taken back. Your turn.": {
+    "fr": "Votre dernier coup et la réponse ont été repris. À vous de jouer.",
+    "es": "Se han deshecho tu último movimiento y la respuesta. Tu turno."
+  },
+  "A clearer start to your game": {
+    "fr": "Commencez la partie plus sereinement",
+    "es": "Empieza tu partida con más claridad"
+  },
+  "Learn the line.": {
+    "fr": "Apprenez la ligne.",
+    "es": "Aprende la línea."
+  },
+  "Recognise": {
+    "fr": "Reconnaissez",
+    "es": "Reconoce"
+  },
+  "the variation.": {
+    "fr": "la variante.",
+    "es": "la variante."
+  },
+  "First, make an opening feel familiar. Then learn to find your way when the moves change. Focused practice, one idea at a time.": {
+    "fr": "Familiarisez-vous d’abord avec une ouverture. Puis apprenez à vous adapter quand les coups changent. Un entraînement ciblé, une idée à la fois.",
+    "es": "Primero, familiarízate con una apertura. Después, aprende a orientarte cuando cambian los movimientos. Práctica centrada, una idea cada vez."
+  },
+  "Start your first lesson": {
+    "fr": "Commencer votre première leçon",
+    "es": "Empezar tu primera lección"
+  },
+  "Beginner friendly. Automatic replies. Hints whenever you need them.": {
+    "fr": "Accessible aux débutants. Réponses automatiques. Des indices à tout moment.",
+    "es": "Para principiantes. Respuestas automáticas. Pistas cuando las necesites."
+  },
+  "THE FIRST FEW MOVES": {
+    "fr": "LES PREMIERS COUPS",
+    "es": "LOS PRIMEROS MOVIMIENTOS"
+  },
+  "01 / OPENING THEORY": {
+    "fr": "01 / THÉORIE DES OUVERTURES",
+    "es": "01 / TEORÍA DE APERTURAS"
+  },
+  "Italian Game opening position": {
+    "fr": "Position d’ouverture de la partie italienne",
+    "es": "Posición de la apertura italiana"
+  },
+  "Every move has a place.": {
+    "fr": "Chaque coup a sa raison.",
+    "es": "Cada movimiento tiene su lugar."
+  },
+  "Build an understanding of the opening.": {
+    "fr": "Comprenez les idées de l’ouverture.",
+    "es": "Comprende las ideas de la apertura."
+  },
+  "ONE OPENING. TWO WAYS TO LEARN.": {
+    "fr": "UNE OUVERTURE. DEUX FAÇONS D’APPRENDRE.",
+    "es": "UNA APERTURA. DOS FORMAS DE APRENDER."
+  },
+  "From familiar moves to confident choices.": {
+    "fr": "Des coups familiers aux choix assurés.",
+    "es": "De movimientos conocidos a decisiones seguras."
+  },
+  "Follow the line": {
+    "fr": "Suivez la ligne",
+    "es": "Sigue la línea"
+  },
+  "Learn a precise opening sequence, with hints and explanations when you need them.": {
+    "fr": "Apprenez une suite précise de coups d’ouverture, avec des indices et des explications à la demande.",
+    "es": "Aprende una secuencia precisa de apertura, con pistas y explicaciones cuando las necesites."
+  },
+  "START A GUIDED LESSON →": {
+    "fr": "COMMENCER UNE LEÇON GUIDÉE →",
+    "es": "EMPEZAR UNA LECCIÓN GUIADA →"
+  },
+  "Find your response": {
+    "fr": "Trouvez votre réponse",
+    "es": "Encuentra tu respuesta"
+  },
+  "Mix the taught lines you choose and practise responding to different supported replies.": {
+    "fr": "Mélangez les lignes enseignées de votre choix et entraînez-vous à répondre aux différentes suites prévues.",
+    "es": "Combina las líneas enseñadas que elijas y practica tus respuestas a distintas continuaciones incluidas."
+  },
+  "CHOOSE LINES TO MIX →": {
+    "fr": "CHOISIR LES LIGNES À MÉLANGER →",
+    "es": "ELEGIR LÍNEAS PARA COMBINAR →"
+  },
+  "START HERE · GUIDED LESSONS": {
+    "fr": "COMMENCEZ ICI · LEÇONS GUIDÉES",
+    "es": "EMPIEZA AQUÍ · LECCIONES GUIADAS"
+  },
+  "Learn an opening.": {
+    "fr": "Apprenez une ouverture.",
+    "es": "Aprende una apertura."
+  },
+  "Pick an opening below. You move your pieces, we play the other side. A hint is always one click away. No chess notation needed.": {
+    "fr": "Choisissez une ouverture ci-dessous. Vous jouez vos pièces, nous jouons l’autre camp. Un indice est toujours à portée de clic. Pas besoin de connaître la notation.",
+    "es": "Elige una apertura. Tú mueves tus piezas y nosotros jugamos con el otro bando. Siempre tienes una pista a un clic. No necesitas conocer la notación."
+  },
+  "Learn one fixed line first. Then use": {
+    "fr": "Apprenez d’abord une ligne fixe. Utilisez ensuite",
+    "es": "Aprende primero una línea fija. Después, usa"
+  },
+  "Practise variations": {
+    "fr": "Travailler les variantes",
+    "es": "Practicar variantes"
+  },
+  "to mix the taught replies from lines you choose.": {
+    "fr": "pour mélanger les réponses enseignées dans les lignes de votre choix.",
+    "es": "para combinar las respuestas enseñadas de las líneas que elijas."
+  },
+  "Loading lessons…": {
+    "fr": "Chargement des leçons…",
+    "es": "Cargando lecciones…"
+  },
+  "Which pieces would you like to learn?": {
+    "fr": "Quel camp souhaitez-vous apprendre à jouer ?",
+    "es": "¿Con qué piezas quieres aprender?"
+  },
+  "Both sides": {
+    "fr": "Les deux camps",
+    "es": "Ambos bandos"
+  },
+  "White openings": {
+    "fr": "Ouvertures avec les Blancs",
+    "es": "Aperturas con blancas"
+  },
+  "Black defences": {
+    "fr": "Défenses avec les Noirs",
+    "es": "Defensas con negras"
+  },
+  "YOU PLAY BLACK": {
+    "fr": "VOUS JOUEZ LES NOIRS",
+    "es": "JUEGAS CON NEGRAS"
+  },
+  "YOU PLAY WHITE": {
+    "fr": "VOUS JOUEZ LES BLANCS",
+    "es": "JUEGAS CON BLANCAS"
+  },
+  "At your own pace · Hints included": {
+    "fr": "À votre rythme · Indices inclus",
+    "es": "A tu ritmo · Pistas incluidas"
+  },
+  "Learn the {p0}": {
+    "fr": "Apprendre : {p0}",
+    "es": "Aprender: {p0}"
+  },
+  "Practise variations in {p0} →": {
+    "fr": "Travailler les variantes : {p0} →",
+    "es": "Practicar variantes: {p0} →"
+  },
+  "The first guided lessons are being prepared. Please check back shortly.": {
+    "fr": "Les premières leçons guidées sont en préparation. Revenez bientôt.",
+    "es": "Se están preparando las primeras lecciones guiadas. Vuelve pronto."
+  },
+  "Looking for another opening?": {
+    "fr": "Vous cherchez une autre ouverture ?",
+    "es": "¿Buscas otra apertura?"
+  },
+  "The": {
+    "fr": "Le",
+    "es": "La"
+  },
+  "opening reference": {
+    "fr": "répertoire des ouvertures",
+    "es": "referencia de aperturas"
+  },
+  "lists names and recorded move sequences. The lessons above are ready to practise; reference entries are not automatically playable courses.": {
+    "fr": "rassemble les noms et les suites de coups répertoriées. Les leçons ci-dessus sont prêtes à jouer ; les références ne sont pas automatiquement des cours jouables.",
+    "es": "recoge nombres y secuencias registradas. Las lecciones anteriores están listas para practicar; las entradas de referencia no son cursos jugables automáticamente."
+  },
+  "Lessons could not be loaded. Please try again.": {
+    "fr": "Impossible de charger les leçons. Réessayez.",
+    "es": "No se han podido cargar las lecciones. Vuelve a intentarlo."
+  },
+  "PAGE NOT FOUND": {
+    "fr": "PAGE INTROUVABLE",
+    "es": "PÁGINA NO ENCONTRADA"
+  },
+  "Back to the opening.": {
+    "fr": "Retour à l’ouverture.",
+    "es": "Volver a la apertura."
+  },
+  "This page is not available.": {
+    "fr": "Cette page n’est pas disponible.",
+    "es": "Esta página no está disponible."
+  },
+  "Return home": {
+    "fr": "Retour à l’accueil",
+    "es": "Volver al inicio"
+  },
+  "Account privacy.": {
+    "fr": "Confidentialité des comptes.",
+    "es": "Privacidad de las cuentas."
+  },
+  "Manage your account": {
+    "fr": "Gérer votre compte",
+    "es": "Gestionar tu cuenta"
+  },
+  "A LITTLE PRACTICE, OFTEN": {
+    "fr": "UN PEU D’ENTRAÎNEMENT, SOUVENT",
+    "es": "UN POCO DE PRÁCTICA, A MENUDO"
+  },
+  "Your practice.": {
+    "fr": "Vos entraînements.",
+    "es": "Tus prácticas."
+  },
+  "See what you have practised and revisit a line when you are ready. Hints are always welcome.": {
+    "fr": "Consultez vos entraînements et reprenez une ligne quand vous le souhaitez. Les indices sont toujours les bienvenus.",
+    "es": "Consulta lo que has practicado y repasa una línea cuando quieras. Las pistas siempre son bienvenidas."
+  },
+  "Loading your practice…": {
+    "fr": "Chargement de vos entraînements…",
+    "es": "Cargando tus prácticas…"
+  },
+  "Your first line starts here.": {
+    "fr": "Votre première ligne commence ici.",
+    "es": "Tu primera línea empieza aquí."
+  },
+  "Finish a guided line to save your practice. Then come back to see what feels familiar and what to revisit.": {
+    "fr": "Terminez une ligne guidée pour enregistrer votre entraînement. Revenez ensuite voir les coups familiers et ceux à revoir.",
+    "es": "Termina una línea guiada para guardar tu práctica. Después vuelve para ver qué recuerdas y qué repasar."
+  },
+  "Start a guided lesson →": {
+    "fr": "Commencer une leçon guidée →",
+    "es": "Empezar una lección guiada →"
+  },
+  "Start practising": {
+    "fr": "Commencer à s’entraîner",
+    "es": "Empezar a practicar"
+  },
+  "Ready to review": {
+    "fr": "À réviser",
+    "es": "Listo para repasar"
+  },
+  "Up to 20 suggested reviews from your current course versions are shown here. A review is a suggestion; you can practise any time.": {
+    "fr": "Jusqu’à 20 révisions des versions actuelles de vos cours sont proposées ici. Ce sont des suggestions ; vous pouvez vous entraîner à tout moment.",
+    "es": "Aquí se muestran hasta 20 repasos sugeridos de las versiones actuales de tus cursos. Son sugerencias; puedes practicar cuando quieras."
+  },
+  "Nothing is ready for review yet. You can repeat a favourite line or learn another below.": {
+    "fr": "Aucune révision n’est encore prévue. Vous pouvez reprendre une ligne favorite ou en apprendre une autre ci-dessous.",
+    "es": "Todavía no hay repasos pendientes. Puedes repetir una línea favorita o aprender otra a continuación."
+  },
+  "Your reviews will appear here after you start practising.": {
+    "fr": "Vos révisions apparaîtront ici après vos premiers entraînements.",
+    "es": "Tus repasos aparecerán aquí cuando empieces a practicar."
+  },
+  "You play {p0}": {
+    "fr": "Vous jouez avec les {p0}",
+    "es": "Juegas con {p0}"
+  },
+  "Earlier practice recorded · recall not tracked yet": {
+    "fr": "Ancien entraînement enregistré · rappel non mesuré",
+    "es": "Práctica anterior guardada · recuerdo aún sin medir"
+  },
+  "Suggested review:": {
+    "fr": "Révision suggérée :",
+    "es": "Repaso sugerido:"
+  },
+  "Review this line": {
+    "fr": "Réviser cette ligne",
+    "es": "Repasar esta línea"
+  },
+  "Lines ready to review": {
+    "fr": "Lignes à réviser",
+    "es": "Líneas listas para repasar"
+  },
+  "Show fewer reviews": {
+    "fr": "Afficher moins de révisions",
+    "es": "Mostrar menos repasos"
+  },
+  "Show more suggestions": {
+    "fr": "Afficher plus de suggestions",
+    "es": "Mostrar más sugerencias"
+  },
+  "Your course progress": {
+    "fr": "Votre progression dans les cours",
+    "es": "Tu progreso en los cursos"
+  },
+  "Counts cover the current course version and the pieces shown. Practice with White and Black is recorded separately.": {
+    "fr": "Les compteurs concernent la version actuelle et le camp affiché. Les entraînements avec les Blancs et les Noirs sont enregistrés séparément.",
+    "es": "Los recuentos corresponden a la versión actual y las piezas mostradas. Las prácticas con blancas y negras se guardan por separado."
+  },
+  "Each course starts with its recommended pieces. Switch pieces to see your other practice.": {
+    "fr": "Chaque cours commence avec le camp recommandé. Changez de camp pour voir vos autres entraînements.",
+    "es": "Cada curso empieza con las piezas recomendadas. Cambia de piezas para ver tus otras prácticas."
+  },
+  "You play {p0} · Version {p1}": {
+    "fr": "Vous jouez les {p0} · Version {p1}",
+    "es": "Juegas con {p0} · Versión {p1}"
+  },
+  "Pieces for {p0}": {
+    "fr": "Pièces pour {p0}",
+    "es": "Piezas para {p0}"
+  },
+  "line": {
+    "fr": "ligne",
+    "es": "línea"
+  },
+  "lines": {
+    "fr": "lignes",
+    "es": "líneas"
+  },
+  "{p0} of {p1} current {p2} practised as {p3}": {
+    "fr": "{p0} sur {p1} {p2} actuelles travaillées avec les {p3}",
+    "es": "{p0} de {p1} {p2} actuales practicadas con {p3}"
+  },
+  "{p0}: current lines practised as {p1}": {
+    "fr": "{p0} : lignes actuelles travaillées avec les {p1}",
+    "es": "{p0}: líneas actuales practicadas con {p1}"
+  },
+  "View {p0} {p1}": {
+    "fr": "Voir {p0} {p1}",
+    "es": "Ver {p0} {p1}"
+  },
+  "saved practice": {
+    "fr": "entraînement enregistré",
+    "es": "práctica guardada"
+  },
+  "saved practices": {
+    "fr": "entraînements enregistrés",
+    "es": "prácticas guardadas"
+  },
+  "· Last practised": {
+    "fr": "· Dernier entraînement",
+    "es": "· Última práctica"
+  },
+  "Earlier practice was saved before recall tracking. Review to see what you remember.": {
+    "fr": "Cet entraînement précède le suivi du rappel. Révisez pour voir ce que vous avez retenu.",
+    "es": "Esta práctica se guardó antes de medir el recuerdo. Repasa para comprobar lo que recuerdas."
+  },
+  "Recall tracked in {p0} of {p1} saved practices. {p2} finished without help.": {
+    "fr": "Rappel mesuré dans {p0} entraînements sur {p1}. {p2} terminés sans aide.",
+    "es": "Recuerdo medido en {p0} de {p1} prácticas guardadas. {p2} completadas sin ayuda."
+  },
+  "Latest tracked practice: recalled without hints, retries or takebacks.": {
+    "fr": "Dernière séance mesurée : rappel sans indice, nouvel essai ni reprise.",
+    "es": "Última práctica medida: recordada sin pistas, reintentos ni movimientos deshechos."
+  },
+  "Latest tracked practice: used a hint, retry or takeback. Repetition helps these moves feel familiar.": {
+    "fr": "Dernière séance mesurée : utilisation d’un indice, d’un nouvel essai ou d’une reprise. La répétition aide à retenir ces coups.",
+    "es": "Última práctica medida: se usó una pista, un reintento o se deshizo un movimiento. Repetir ayuda a familiarizarte con estos movimientos."
+  },
+  "Moves to revisit": {
+    "fr": "Coups à revoir",
+    "es": "Movimientos para repasar"
+  },
+  "Recalled on first try without a hint in {p0} of {p1} tracked practices.": {
+    "fr": "Rappelé du premier coup sans indice dans {p0} séances mesurées sur {p1}.",
+    "es": "Recordado al primer intento sin pistas en {p0} de {p1} prácticas medidas."
+  },
+  "Hints used in {p0}.": {
+    "fr": "Indices utilisés dans {p0} séances.",
+    "es": "Se usaron pistas en {p0}."
+  },
+  "try": {
+    "fr": "essai",
+    "es": "intento"
+  },
+  "tries": {
+    "fr": "essais",
+    "es": "intentos"
+  },
+  "{p0} additional {p1} (including takebacks).": {
+    "fr": "{p0} {p1} supplémentaires (reprises comprises).",
+    "es": "{p0} {p1} adicionales (incluidos los movimientos deshechos)."
+  },
+  "Learn this line": {
+    "fr": "Apprendre cette ligne",
+    "es": "Aprender esta línea"
+  },
+  "Review": {
+    "fr": "Réviser",
+    "es": "Repasar"
+  },
+  "{p0} {p1}: {p2} as {p3}": {
+    "fr": "{p0} {p1} : {p2} avec les {p3}",
+    "es": "{p0} {p1}: {p2} con {p3}"
+  },
+  "{p0} lines as {p1}": {
+    "fr": "Lignes de {p0} avec les {p1}",
+    "es": "Líneas de {p0} con {p1}"
+  },
+  "Start with guidance →": {
+    "fr": "Commencer avec un guide →",
+    "es": "Empezar con guía →"
+  },
+  "{p0} practice": {
+    "fr": "Entraînement : {p0}",
+    "es": "Práctica de {p0}"
+  },
+  "Courses are being prepared.": {
+    "fr": "Les cours sont en préparation.",
+    "es": "Se están preparando los cursos."
+  },
+  "Browse lessons": {
+    "fr": "Parcourir les leçons",
+    "es": "Explorar lecciones"
+  },
+  "for the latest additions.": {
+    "fr": "pour découvrir les nouveautés.",
+    "es": "para ver las novedades."
+  },
+  "Earlier course versions": {
+    "fr": "Anciennes versions des cours",
+    "es": "Versiones anteriores de los cursos"
+  },
+  "Your earlier practice is kept here. Course updates start separate progress, so these records do not add to current line coverage.": {
+    "fr": "Vos anciens entraînements sont conservés ici. Les nouvelles versions ont leur propre progression ; ces séances ne s’ajoutent pas aux lignes travaillées de la version actuelle.",
+    "es": "Tus prácticas anteriores se conservan aquí. Las actualizaciones empiezan un progreso separado, así que estos registros no se suman a la cobertura actual."
+  },
+  "{p0} · Version {p1}": {
+    "fr": "{p0} · Version {p1}",
+    "es": "{p0} · Versión {p1}"
+  },
+  "{p0} · You played {p1}": {
+    "fr": "{p0} · Vous jouiez les {p1}",
+    "es": "{p0} · Jugaste con {p1}"
+  },
+  "{p0} {p1} · Last practised": {
+    "fr": "{p0} {p1} · Dernier entraînement",
+    "es": "{p0} {p1} · Última práctica"
+  },
+  "{p0} of {p1} tracked practices finished without help.": {
+    "fr": "{p0} séances mesurées sur {p1} terminées sans aide.",
+    "es": "{p0} de {p1} prácticas medidas completadas sin ayuda."
+  },
+  "Recall was not tracked for this practice.": {
+    "fr": "Le rappel n’a pas été mesuré pour cet entraînement.",
+    "es": "No se midió el recuerdo en esta práctica."
+  },
+  "Earlier course practice": {
+    "fr": "Entraînements des anciennes versions",
+    "es": "Prácticas de versiones anteriores"
+  },
+  "These records describe practice of the taught lines, not your overall chess strength. Hints and retries help you learn; a legal move outside an exercise is not automatically a chess mistake.": {
+    "fr": "Ces données décrivent votre entraînement sur les lignes enseignées, pas votre niveau général aux échecs. Les indices et essais vous aident à apprendre ; un coup légal hors exercice n’est pas forcément une erreur échiquéenne.",
+    "es": "Estos registros describen tu práctica de las líneas enseñadas, no tu nivel general de ajedrez. Las pistas y reintentos te ayudan a aprender; un movimiento legal fuera del ejercicio no es necesariamente un error de ajedrez."
+  },
+  "New line": {
+    "fr": "Nouvelle ligne",
+    "es": "Línea nueva"
+  },
+  "Practice recorded": {
+    "fr": "Entraînement enregistré",
+    "es": "Práctica guardada"
+  },
+  "Recalled without help": {
+    "fr": "Retenu sans aide",
+    "es": "Recordada sin ayuda"
+  },
+  "Practised with help": {
+    "fr": "Travaillé avec aide",
+    "es": "Practicada con ayuda"
+  },
+  "Showing {p0} progress for {p1}.": {
+    "fr": "Progression de {p0} avec les {p1}.",
+    "es": "Mostrando el progreso de {p0} con {p1}."
+  },
+  "Showing {p0} suggested reviews.": {
+    "fr": "Affichage de {p0} révisions suggérées.",
+    "es": "Se muestran {p0} repasos sugeridos."
+  },
+  "Your practice has loaded. No review suggestions are ready yet.": {
+    "fr": "Vos entraînements sont chargés. Aucune révision n’est encore prévue.",
+    "es": "Tus prácticas se han cargado. Todavía no hay repasos sugeridos."
+  },
+  "Your session has ended. Sign in to see your private practice.": {
+    "fr": "Votre session a expiré. Connectez-vous pour voir vos entraînements privés.",
+    "es": "Tu sesión ha caducado. Inicia sesión para ver tus prácticas privadas."
+  },
+  "Your practice could not be loaded. Check your connection and try again.": {
+    "fr": "Impossible de charger vos entraînements. Vérifiez votre connexion et réessayez.",
+    "es": "No se han podido cargar tus prácticas. Comprueba tu conexión y vuelve a intentarlo."
+  },
+  "Preparing your training…": {
+    "fr": "Préparation de votre entraînement…",
+    "es": "Preparando tu entrenamiento…"
+  },
+  "VARIATION TRAINING": {
+    "fr": "ENTRAÎNEMENT AUX VARIANTES",
+    "es": "ENTRENAMIENTO DE VARIANTES"
+  },
+  "{p0} · Move {p1} for you": {
+    "fr": "{p0} · Votre coup {p1}",
+    "es": "{p0} · Tu movimiento {p1}"
+  },
+  "{p0} training board, you play {p1}": {
+    "fr": "Échiquier d’entraînement {p0}, vous jouez les {p1}",
+    "es": "Tablero de entrenamiento de {p0}, juegas con {p1}"
+  },
+  "Choose your promotion piece.": {
+    "fr": "Choisissez votre pièce de promotion.",
+    "es": "Elige tu pieza de promoción."
+  },
+  "One supported move is shown. You can choose another taught reply too.": {
+    "fr": "Un coup enseigné est affiché. Vous pouvez aussi choisir une autre réponse enseignée.",
+    "es": "Se muestra un movimiento incluido. También puedes elegir otra respuesta enseñada."
+  },
+  "Choose your practice": {
+    "fr": "Choisissez votre entraînement",
+    "es": "Elige tu práctica"
+  },
+  "Mix the lines you have learned. We choose from their taught replies, and you can play any supported response.": {
+    "fr": "Mélangez les lignes apprises. Nous choisissons parmi leurs réponses enseignées, et vous pouvez jouer toute continuation prévue.",
+    "es": "Combina las líneas que has aprendido. Elegimos entre sus respuestas enseñadas y puedes jugar cualquier continuación incluida."
+  },
+  "Supported replies favour lines with less practice or a due review. Your selected lines set the scope.": {
+    "fr": "Les réponses privilégient les lignes moins travaillées ou à réviser. Les lignes choisies définissent le périmètre.",
+    "es": "Las respuestas favorecen las líneas menos practicadas o pendientes de repaso. Tus líneas elegidas marcan el alcance."
+  },
+  "This course currently has one taught line. Practise its fixed sequence without move-by-move guidance; hints are here when you need them.": {
+    "fr": "Ce cours propose actuellement une seule ligne. Travaillez sa suite fixe sans guidage coup par coup ; les indices restent disponibles.",
+    "es": "Este curso tiene una sola línea enseñada. Practica su secuencia fija sin guía paso a paso; tienes pistas cuando las necesites."
+  },
+  "You have not completed a line in this course revision with these pieces yet. Try a guided lesson first, or select the lines you want to practise below.": {
+    "fr": "Vous n’avez pas encore terminé de ligne dans cette version avec ce camp. Essayez une leçon guidée ou choisissez les lignes à travailler ci-dessous.",
+    "es": "Aún no has completado una línea de esta versión con estas piezas. Prueba una lección guiada o elige las líneas que quieres practicar."
+  },
+  "{p0} {p1} previously completed with these pieces. Use All learned to select them.": {
+    "fr": "{p0} {p1} déjà terminées avec ce camp. Utilisez Toutes les lignes apprises pour les sélectionner.",
+    "es": "{p0} {p1} completadas anteriormente con estas piezas. Usa Todas las aprendidas para seleccionarlas."
+  },
+  "Learn these moves with guidance →": {
+    "fr": "Apprendre ces coups avec un guide →",
+    "es": "Aprender estos movimientos con guía →"
+  },
+  "Training lines": {
+    "fr": "Lignes d’entraînement",
+    "es": "Líneas de entrenamiento"
+  },
+  "All learned": {
+    "fr": "Toutes les lignes apprises",
+    "es": "Todas las aprendidas"
+  },
+  "Main line only": {
+    "fr": "Ligne principale uniquement",
+    "es": "Solo la línea principal"
+  },
+  "Select all available": {
+    "fr": "Tout sélectionner",
+    "es": "Seleccionar todas"
+  },
+  "Previously completed with {p0}": {
+    "fr": "Déjà terminée avec les {p0}",
+    "es": "Completada anteriormente con {p0}"
+  },
+  "One line is selected: this is a fixed sequence.": {
+    "fr": "Une ligne est sélectionnée : c’est une suite fixe.",
+    "es": "Has seleccionado una línea: es una secuencia fija."
+  },
+  "Select more lines to mix supported choices.": {
+    "fr": "Sélectionnez d’autres lignes pour varier les choix enseignés.",
+    "es": "Selecciona más líneas para combinar las opciones incluidas."
+  },
+  "{p0} lines selected. Shared opening moves may stay the same before a supported choice appears.": {
+    "fr": "{p0} lignes sélectionnées. Les premiers coups communs peuvent rester identiques avant un choix enseigné.",
+    "es": "{p0} líneas seleccionadas. Los primeros movimientos compartidos pueden ser iguales antes de que aparezca una opción incluida."
+  },
+  "Select at least one training line to start.": {
+    "fr": "Sélectionnez au moins une ligne pour commencer.",
+    "es": "Selecciona al menos una línea para empezar."
+  },
+  "Select up to 32 lines for one session.": {
+    "fr": "Sélectionnez jusqu’à 32 lignes par séance.",
+    "es": "Selecciona hasta 32 líneas por sesión."
+  },
+  "Hide variation names during practice": {
+    "fr": "Masquer les noms des variantes pendant l’entraînement",
+    "es": "Ocultar nombres de variantes durante la práctica"
+  },
+  "You can reveal names at any time. Hint and Why that move? reveal names alongside the original explanations. Names are also shown when the line ends.": {
+    "fr": "Vous pouvez afficher les noms à tout moment. Indice et Pourquoi ce coup ? révèlent les noms avec les explications. Les noms apparaissent aussi en fin de ligne.",
+    "es": "Puedes mostrar los nombres cuando quieras. Pista y ¿Por qué ese movimiento? revelan los nombres junto con las explicaciones. También aparecen al terminar la línea."
+  },
+  "Start training": {
+    "fr": "Commencer l’entraînement",
+    "es": "Empezar entrenamiento"
+  },
+  "Practice complete.": {
+    "fr": "Entraînement terminé.",
+    "es": "Práctica completada."
+  },
+  "You played {p0} of your moves in": {
+    "fr": "Vous avez joué {p0} de vos coups dans",
+    "es": "Has jugado {p0} de tus movimientos en"
+  },
+  "Current variation": {
+    "fr": "Variante actuelle",
+    "es": "Variante actual"
+  },
+  "This is the end of the taught line. Saved practice records this line and revision; it does not mean you know the whole opening.": {
+    "fr": "C’est la fin de la ligne enseignée. L’entraînement enregistre cette ligne et sa révision ; cela ne signifie pas que vous connaissez toute l’ouverture.",
+    "es": "Este es el final de la línea enseñada. La práctica guarda esta línea y revisión; no significa que conozcas toda la apertura."
+  },
+  "Try a new mix": {
+    "fr": "Essayer un nouveau mélange",
+    "es": "Probar otra combinación"
+  },
+  "Repeat this mix": {
+    "fr": "Répéter ce mélange",
+    "es": "Repetir esta combinación"
+  },
+  "Variation practice": {
+    "fr": "Entraînement aux variantes",
+    "es": "Práctica de variantes"
+  },
+  "Training progress": {
+    "fr": "Avancement de l’entraînement",
+    "es": "Progreso del entrenamiento"
+  },
+  "One selected line · a fixed sequence.": {
+    "fr": "Une ligne sélectionnée · une suite fixe.",
+    "es": "Una línea seleccionada · una secuencia fija."
+  },
+  "{p0} selected lines · replies stay within these taught paths.": {
+    "fr": "{p0} lignes sélectionnées · les réponses suivent ces chemins enseignés.",
+    "es": "{p0} líneas seleccionadas · las respuestas se mantienen en estas secuencias enseñadas."
+  },
+  "Tap a piece, then a highlighted square, or drag it. Legal moves outside your selected lines stay on this position so you can retry.": {
+    "fr": "Touchez une pièce puis une case en surbrillance, ou faites-la glisser. Les coups légaux hors des lignes choisies laissent la position inchangée pour vous permettre de réessayer.",
+    "es": "Toca una pieza y después una casilla resaltada, o arrástrala. Los movimientos legales fuera de tus líneas mantienen la posición para que puedas reintentar."
+  },
+  "Possible {p0}:": {
+    "fr": "{p0} possibles :",
+    "es": "Posibles {p0}:"
+  },
+  "Variation names are hidden.": {
+    "fr": "Les noms des variantes sont masqués.",
+    "es": "Los nombres de las variantes están ocultos."
+  },
+  "Hints and explanations reveal variation names.": {
+    "fr": "Les indices et explications révèlent les noms des variantes.",
+    "es": "Las pistas y explicaciones revelan los nombres de las variantes."
+  },
+  "Reveal variation names": {
+    "fr": "Afficher les noms des variantes",
+    "es": "Mostrar nombres de variantes"
+  },
+  "Why that move?": {
+    "fr": "Pourquoi ce coup ?",
+    "es": "¿Por qué ese movimiento?"
+  },
+  "Change training lines": {
+    "fr": "Changer les lignes d’entraînement",
+    "es": "Cambiar líneas de entrenamiento"
+  },
+  "Use square labels, for example from e2 to e4. For castling, enter the king’s starting and destination squares.": {
+    "fr": "Utilisez les coordonnées, par exemple de e2 à e4. Pour roquer, saisissez les cases de départ et d’arrivée du roi.",
+    "es": "Usa las coordenadas, por ejemplo de e2 a e4. Para enrocar, introduce las casillas de origen y destino del rey."
+  },
+  "Enter a training move": {
+    "fr": "Saisir un coup d’entraînement",
+    "es": "Introducir un movimiento de entrenamiento"
+  },
+  "Variation training instructions": {
+    "fr": "Consignes d’entraînement aux variantes",
+    "es": "Instrucciones de entrenamiento de variantes"
+  },
+  "Training move history": {
+    "fr": "Historique des coups d’entraînement",
+    "es": "Historial de movimientos de entrenamiento"
+  },
+  "{p0} variation training · Chess Openings": {
+    "fr": "Entraînement aux variantes : {p0} · Chess Openings",
+    "es": "Entrenamiento de variantes de {p0} · Chess Openings"
+  },
+  "This course could not be loaded. Check your connection and sign-in, then try again.": {
+    "fr": "Impossible de charger ce cours. Vérifiez votre connexion et votre session, puis réessayez.",
+    "es": "No se ha podido cargar este curso. Comprueba tu conexión y tu sesión y vuelve a intentarlo."
+  },
+  "the selected line": {
+    "fr": "la ligne sélectionnée",
+    "es": "la línea seleccionada"
+  },
+  "Practice complete. You played {p0}.": {
+    "fr": "Entraînement terminé. Vous avez joué {p0}.",
+    "es": "Práctica completada. Has jugado {p0}."
+  },
+  "{p0} played {p1}. {p2}": {
+    "fr": "Les {p0} ont joué {p1}. {p2}",
+    "es": "Las {p0} han jugado {p1}. {p2}"
+  },
+  "Watch the first reply.": {
+    "fr": "Observez la première réponse.",
+    "es": "Observa la primera respuesta."
+  },
+  "Training started. You play {p0}. {p1}": {
+    "fr": "Entraînement commencé. Vous jouez les {p0}. {p1}",
+    "es": "Entrenamiento iniciado. Juegas con {p0}. {p1}"
+  },
+  "These training lines could not be prepared. Reload the course and try again.": {
+    "fr": "Impossible de préparer ces lignes. Rechargez le cours et réessayez.",
+    "es": "No se han podido preparar estas líneas. Vuelve a cargar el curso e inténtalo de nuevo."
+  },
+  "Choose your training lines and pieces.": {
+    "fr": "Choisissez vos lignes d’entraînement et votre camp.",
+    "es": "Elige tus líneas de entrenamiento y tus piezas."
+  },
+  "You played {p0}. {p1}": {
+    "fr": "Vous avez joué {p0}. {p1}",
+    "es": "Has jugado {p0}. {p1}"
+  },
+  "That move is legal, but outside the selected lines at this point. The board stays here. Try another move or use a hint.": {
+    "fr": "Ce coup est légal, mais sort des lignes choisies à cet endroit. La position reste inchangée. Essayez un autre coup ou utilisez un indice.",
+    "es": "Ese movimiento es legal, pero queda fuera de las líneas elegidas en este punto. La posición no cambia. Prueba otro movimiento o usa una pista."
+  },
+  "Variation names revealed. ": {
+    "fr": "Noms des variantes affichés. ",
+    "es": "Nombres de variantes revelados. "
+  },
+  "{p0}{p1} Why: {p2}": {
+    "fr": "{p0}{p1} Pourquoi : {p2}",
+    "es": "{p0}{p1} Por qué: {p2}"
+  },
+  "Your last move and its reply were taken back. Your turn.": {
+    "fr": "Votre dernier coup et sa réponse ont été repris. À vous de jouer.",
+    "es": "Se han deshecho tu último movimiento y su respuesta. Tu turno."
+  },
+  "Possible lines: {p0}.": {
+    "fr": "Lignes possibles : {p0}.",
+    "es": "Líneas posibles: {p0}."
+  },
+  "Starting position": {
+    "fr": "Position initiale",
+    "es": "Posición inicial"
+  },
+  "Previous move": {
+    "fr": "Coup précédent",
+    "es": "Movimiento anterior"
+  },
+  "Next move": {
+    "fr": "Coup suivant",
+    "es": "Movimiento siguiente"
+  },
+  "Final position": {
+    "fr": "Position finale",
+    "es": "Posición final"
+  },
+  "Moves in this sequence": {
+    "fr": "Coups de cette suite",
+    "es": "Movimientos de esta secuencia"
+  },
+  "Step through with the buttons, click any move, or use the arrow keys.": {
+    "fr": "Utilisez les boutons, cliquez sur un coup ou utilisez les touches fléchées.",
+    "es": "Usa los botones, haz clic en cualquier movimiento o utiliza las teclas de flecha."
+  },
+  "{p0} on a board": {
+    "fr": "{p0} sur un échiquier",
+    "es": "{p0} en un tablero"
+  },
+  "This sequence cannot be shown on a board.": {
+    "fr": "Cette suite ne peut pas être affichée sur un échiquier.",
+    "es": "Esta secuencia no se puede mostrar en un tablero."
+  },
+  "Position after {p0}": {
+    "fr": "Position après {p0}",
+    "es": "Posición tras {p0}"
+  },
+  "Why these moves": {
+    "fr": "Pourquoi ces coups",
+    "es": "Por qué estos movimientos"
+  },
+  "Why:": {
+    "fr": "Pourquoi :",
+    "es": "Por qué:"
+  },
+  "Language": {
+    "fr": "Langue",
+    "es": "Idioma"
+  },
+  "Chessboard": {
+    "fr": "Échiquier",
+    "es": "Tablero"
+  },
+  "Learn chess openings": {
+    "fr": "Apprendre les ouvertures d’échecs",
+    "es": "Aprende aperturas de ajedrez"
+  },
+  "Guided lessons": {
+    "fr": "Leçons guidées",
+    "es": "Lecciones guiadas"
+  },
+  "Opening lesson": {
+    "fr": "Leçon d’ouverture",
+    "es": "Lección de apertura"
+  },
+  "Variation training": {
+    "fr": "Entraînement aux variantes",
+    "es": "Entrenamiento de variantes"
+  },
+  "Opening reference": {
+    "fr": "Répertoire des ouvertures",
+    "es": "Referencia de aperturas"
+  },
+  "Reset your password": {
+    "fr": "Réinitialiser votre mot de passe",
+    "es": "Restablece tu contraseña"
+  },
+  "Verify your email": {
+    "fr": "Confirmer votre adresse e-mail",
+    "es": "Verifica tu correo"
+  },
+  "Choose a new password": {
+    "fr": "Choisir un nouveau mot de passe",
+    "es": "Elige una nueva contraseña"
+  },
+  "Your account": {
+    "fr": "Votre compte",
+    "es": "Tu cuenta"
+  },
+  "Your practice": {
+    "fr": "Vos entraînements",
+    "es": "Tus prácticas"
+  },
+  "Account privacy": {
+    "fr": "Confidentialité des comptes",
+    "es": "Privacidad de las cuentas"
+  },
+  "Page not found": {
+    "fr": "Page introuvable",
+    "es": "Página no encontrada"
+  },
+  "If this address is eligible, an email will arrive shortly. Check your inbox and spam folder.": {
+    "fr": "Si cette adresse est éligible, un e-mail arrivera bientôt. Vérifiez votre boîte de réception et vos courriers indésirables.",
+    "es": "Si esta dirección cumple los requisitos, recibirás un correo en breve. Revisa tu bandeja de entrada y la carpeta de spam."
+  },
+  "Done. You can now sign in.": {
+    "fr": "Terminé. Vous pouvez maintenant vous connecter.",
+    "es": "Hecho. Ya puedes iniciar sesión."
+  },
+  "Try again in about {minutes} minutes.": {
+    "fr": "Réessayez dans environ {minutes} minutes.",
+    "es": "Vuelve a intentarlo en unos {minutes} minutos."
+  },
+  "Email verification is required before sign-in.": {
+    "fr": "La confirmation de l’adresse e-mail est nécessaire pour se connecter.",
+    "es": "Debes verificar tu correo antes de iniciar sesión."
+  },
+  "The opening catalogue could not be loaded. Please try again.": {
+    "fr": "Impossible de charger le répertoire des ouvertures. Réessayez.",
+    "es": "No se ha podido cargar el catálogo de aperturas. Vuelve a intentarlo."
+  },
+  "This review link refers to an earlier course version. Your earlier practice is kept separately; choose a current line below.": {
+    "fr": "Ce lien de révision concerne une ancienne version du cours. Vos anciens entraînements sont conservés séparément ; choisissez une ligne actuelle ci-dessous.",
+    "es": "Este enlace de repaso corresponde a una versión anterior del curso. Tus prácticas anteriores se conservan por separado; elige una línea actual."
+  },
+  "The opening catalogue is unavailable. Please try again.": {
+    "fr": "Le répertoire des ouvertures est indisponible. Réessayez.",
+    "es": "El catálogo de aperturas no está disponible. Vuelve a intentarlo."
+  },
+  "This practice link is incomplete. Choose a line and your pieces below.": {
+    "fr": "Ce lien d’entraînement est incomplet. Choisissez une ligne et votre camp ci-dessous.",
+    "es": "Este enlace de práctica está incompleto. Elige una línea y tus piezas a continuación."
+  },
+  "This course has been updated. Your earlier practice is kept; choose a line in the latest version below.": {
+    "fr": "Ce cours a été mis à jour. Vos anciens entraînements sont conservés ; choisissez une ligne de la nouvelle version ci-dessous.",
+    "es": "Este curso se ha actualizado. Tus prácticas anteriores se conservan; elige una línea de la nueva versión a continuación."
+  },
+  "Unable to sign in. Check your credentials and verify your email.": {
+    "fr": "Connexion impossible. Vérifiez vos identifiants et confirmez votre adresse e-mail.",
+    "es": "No se puede iniciar sesión. Comprueba tus credenciales y verifica tu correo."
+  },
+  "Sign in to continue.": {
+    "fr": "Connectez-vous pour continuer.",
+    "es": "Inicia sesión para continuar."
+  },
+  "Check your current password and try again.": {
+    "fr": "Vérifiez votre mot de passe actuel et réessayez.",
+    "es": "Comprueba tu contraseña actual y vuelve a intentarlo."
+  },
+  "This link is invalid or expired. Request a new email.": {
+    "fr": "Ce lien est invalide ou a expiré. Demandez un nouvel e-mail.",
+    "es": "Este enlace no es válido o ha caducado. Solicita otro correo."
+  },
+  "Please try again.": {
+    "fr": "Veuillez réessayer.",
+    "es": "Vuelve a intentarlo."
+  },
+  "The download is unavailable. Please try again.": {
+    "fr": "Le téléchargement est indisponible. Réessayez.",
+    "es": "La descarga no está disponible. Vuelve a intentarlo."
+  },
+  "Could not confirm account deletion. Please try again.": {
+    "fr": "Impossible de confirmer la suppression du compte. Réessayez.",
+    "es": "No se ha podido confirmar la eliminación de la cuenta. Vuelve a intentarlo."
+  },
+  "Refresh the page and try again.": {
+    "fr": "Actualisez la page et réessayez.",
+    "es": "Actualiza la página y vuelve a intentarlo."
+  },
+  "{error} {retry}": {
+    "fr": "{error} {retry}",
+    "es": "{error} {retry}"
+  },
+  "{reply} {explanation} {status}": {
+    "fr": "{reply} {explanation} {status}",
+    "es": "{reply} {explanation} {status}"
+  },
+  "{name}: {status}": {
+    "fr": "{name} : {status}",
+    "es": "{name}: {status}"
+  },
+  "Language: {language}": {
+    "fr": "Langue : {language}",
+    "es": "Idioma: {language}"
+  },
+  "Choose language": {
+    "fr": "Choisir la langue",
+    "es": "Elegir idioma"
+  },
+  "{p0} recorded sequence ·": {
+    "fr": "{p0} suite répertoriée ·",
+    "es": "{p0} secuencia registrada ·"
+  },
+  "{p0} recorded sequences ·": {
+    "fr": "{p0} suites répertoriées ·",
+    "es": "{p0} secuencias registradas ·"
+  },
+  "{left}{separator}{right}": {
+    "fr": "{left}{separator}{right}",
+    "es": "{left}{separator}{right}"
+  },
+  "Not found.": {
+    "fr": "Introuvable.",
+    "es": "No encontrado."
+  },
+  "Method not allowed.": {
+    "fr": "Méthode non autorisée.",
+    "es": "Método no permitido."
+  },
+  "Check the supplied details and input limits.": {
+    "fr": "Vérifiez les informations saisies et les limites des champs.",
+    "es": "Comprueba los datos y los límites de los campos."
+  },
+  "Too many requests. Please try again later.": {
+    "fr": "Trop de demandes. Réessayez plus tard.",
+    "es": "Demasiadas solicitudes. Vuelve a intentarlo más tarde."
+  },
+  "Request could not be completed.": {
+    "fr": "Impossible de terminer la demande.",
+    "es": "No se ha podido completar la solicitud."
+  },
+  "{practised} of {total} current line practised as {color}": {
+    "fr": "{practised} ligne actuelle sur {total} travaillée avec les {color}",
+    "es": "{practised} de {total} línea actual practicada con {color}"
+  },
+  "{practised} of {total} current lines practised as {color}": {
+    "fr": "{practised} lignes actuelles sur {total} travaillées avec les {color}",
+    "es": "{practised} de {total} líneas actuales practicadas con {color}"
+  },
+  "{count} line previously completed with these pieces. Use All learned to select it.": {
+    "fr": "{count} ligne déjà terminée avec ce camp. Utilisez Toutes les lignes apprises pour la sélectionner.",
+    "es": "{count} línea completada con estas piezas. Usa Todas las aprendidas para seleccionarla."
+  },
+  "{count} lines previously completed with these pieces. Use All learned to select them.": {
+    "fr": "{count} lignes déjà terminées avec ce camp. Utilisez Toutes les lignes apprises pour les sélectionner.",
+    "es": "{count} líneas completadas con estas piezas. Usa Todas las aprendidas para seleccionarlas."
+  },
+  "PRIVACY NOTICE · UPDATED 16 OCTOBER 2026": {
+    "fr": "NOTICE DE CONFIDENTIALITÉ · MISE À JOUR LE 16 OCTOBRE 2026",
+    "es": "AVISO DE PRIVACIDAD · ACTUALIZADO EL 16 DE OCTUBRE DE 2026"
+  },
+  "Learn chess openings with a private account and saved practice. We use no advertising or analytics trackers and do not sell your personal data.": {
+    "fr": "Apprenez les ouvertures avec un compte privé et un suivi de vos entraînements. Nous n’utilisons aucun traceur publicitaire ou analytique et ne vendons pas vos données personnelles.",
+    "es": "Aprende aperturas con una cuenta privada y prácticas guardadas. No usamos rastreadores publicitarios ni analíticos y no vendemos tus datos personales."
+  },
+  "Who runs this service": {
+    "fr": "Qui gère ce service",
+    "es": "Quién gestiona este servicio"
+  },
+  "This notice covers": {
+    "fr": "Cette notice concerne",
+    "es": "Este aviso se aplica a"
+  },
+  "Loading publisher and retention details…": {
+    "fr": "Chargement des informations sur l’éditeur et la conservation…",
+    "es": "Cargando los datos del editor y los plazos de conservación…"
+  },
+  "We could not load the publisher and retention details. The account information below remains available.": {
+    "fr": "Impossible de charger les informations sur l’éditeur et la conservation. Les informations sur les comptes restent disponibles ci-dessous.",
+    "es": "No se han podido cargar los datos del editor y los plazos de conservación. La información sobre las cuentas sigue disponible a continuación."
+  },
+  "The publisher and data controller is {p0}.": {
+    "fr": "L’éditeur et responsable du traitement est {p0}.",
+    "es": "El editor y responsable del tratamiento es {p0}."
+  },
+  "For privacy questions or requests, email": {
+    "fr": "Pour toute question ou demande concernant vos données, écrivez à",
+    "es": "Para consultas o solicitudes sobre privacidad, escribe a"
+  },
+  "Some publisher, privacy-contact or email-provider details have not yet been configured. This notice will display them here when supplied.": {
+    "fr": "Certaines informations sur l’éditeur, le contact confidentialité ou le prestataire d’e-mail ne sont pas encore configurées. Elles seront affichées ici une fois renseignées.",
+    "es": "Algunos datos del editor, el contacto de privacidad o el proveedor de correo aún no están configurados. Se mostrarán aquí cuando se faciliten."
+  },
+  "You are using the local development version. Use test details; development email is captured by Mailpit and is visible to the developer.": {
+    "fr": "Vous utilisez la version de développement local. Utilisez des données de test ; les e-mails sont capturés par Mailpit et visibles par le développeur.",
+    "es": "Estás usando la versión de desarrollo local. Usa datos de prueba; Mailpit captura los correos y el desarrollador puede verlos."
+  },
+  "What we keep and why": {
+    "fr": "Les données conservées et leur utilité",
+    "es": "Qué guardamos y por qué"
+  },
+  "Accounts store an email address, password hash, internal ID, creation time and email-verification time. We need these to provide sign-in, account recovery and the private learning service you request. Providing those account features is based on performing our agreement with you. The course list and opening reference can be browsed without an account.": {
+    "fr": "Les comptes conservent une adresse e-mail, une empreinte du mot de passe, un identifiant interne, la date de création et celle de confirmation de l’e-mail. Ces données permettent la connexion, la récupération du compte et le service d’apprentissage privé demandé. Ces fonctionnalités reposent sur l’exécution de notre accord avec vous. La liste des cours et le répertoire des ouvertures sont accessibles sans compte.",
+    "es": "Las cuentas guardan un correo, un hash de la contraseña, un identificador interno y las fechas de creación y verificación. Los necesitamos para el acceso, la recuperación de la cuenta y el servicio privado de aprendizaje que solicitas. Estas funciones se basan en la ejecución de nuestro acuerdo contigo. Puedes consultar los cursos y la referencia de aperturas sin cuenta."
+  },
+  "Finished practices store the taught course, revision, line, colour, completion time, hint count and a random attempt identifier that prevents duplicate saves. New practices also record a compact summary of tries and hints at the taught decisions, and whether you used a hint, retry or takeback. These power your private practice history and review suggestions. Earlier completions have unknown recall; we do not invent a rating from them.": {
+    "fr": "Les séances terminées enregistrent le cours enseigné, sa révision, la ligne, la couleur, la date, le nombre d’indices et un identifiant aléatoire évitant les doublons. Les nouvelles séances enregistrent aussi un résumé des essais et indices aux décisions enseignées, et l’usage d’indices, de nouvelles tentatives ou de reprises. Ces données servent à votre historique privé et aux révisions suggérées. Le rappel des anciennes séances reste inconnu ; nous n’en déduisons aucun classement.",
+    "es": "Las prácticas terminadas guardan el curso enseñado, revisión, línea, color, fecha, número de pistas y un identificador aleatorio para evitar duplicados. Las nuevas prácticas también registran un resumen de intentos y pistas en las decisiones enseñadas y el uso de pistas, reintentos o movimientos deshechos. Estos datos permiten tu historial privado y los repasos sugeridos. El recuerdo de las prácticas anteriores es desconocido; no inventamos una puntuación a partir de ellas."
+  },
+  "Security limits and operational logs help prevent abuse and diagnose failures, based on our legitimate interest in keeping the service secure. Limits store keyed hashes of email and client-network addresses. Hosting access logs may contain IP addresses and requested paths. Passwords and email-link secrets stay out of request URLs. We do not collect a display name, date of birth or last-login history.": {
+    "fr": "Les limites de sécurité et journaux techniques aident à prévenir les abus et diagnostiquer les pannes, sur la base de notre intérêt légitime à sécuriser le service. Les limites conservent des empreintes à clé des adresses e-mail et réseaux clients. Les journaux d’hébergement peuvent contenir des adresses IP et chemins demandés. Les mots de passe et secrets des liens ne figurent pas dans les URL de requête. Nous ne recueillons ni pseudonyme, ni date de naissance, ni historique des dernières connexions.",
+    "es": "Los límites de seguridad y registros operativos ayudan a prevenir abusos y diagnosticar fallos, basándose en nuestro interés legítimo en mantener el servicio seguro. Los límites guardan hashes con clave de correos y direcciones de red de clientes. Los registros de alojamiento pueden contener direcciones IP y rutas solicitadas. Las contraseñas y secretos de enlaces no aparecen en las URL de solicitud. No recogemos nombres de perfil, fechas de nacimiento ni historiales de último acceso."
+  },
+  "How long we keep data": {
+    "fr": "Durées de conservation",
+    "es": "Cuánto tiempo conservamos los datos"
+  },
+  "Accounts and practice": {
+    "fr": "Comptes et entraînements",
+    "es": "Cuentas y prácticas"
+  },
+  "Until you delete your account. There is no automatic expiry based on inactivity and no automatic age-based deletion of unverified accounts. If necessary, verify your email first, then sign in and delete the account.": {
+    "fr": "Jusqu’à la suppression de votre compte. Il n’y a pas d’expiration automatique liée à l’inactivité ni de suppression automatique des comptes non confirmés selon leur ancienneté. Si nécessaire, confirmez d’abord votre e-mail, puis connectez-vous pour supprimer le compte.",
+    "es": "Hasta que elimines tu cuenta. No caduca automáticamente por inactividad ni se eliminan cuentas sin verificar por su antigüedad. Si es necesario, verifica primero tu correo, inicia sesión y elimina la cuenta."
+  },
+  "Email links": {
+    "fr": "Liens e-mail",
+    "es": "Enlaces de correo"
+  },
+  "Verification links expire after 24 hours; password-reset links after one hour. Used or replaced links are removed according to the account flow. Expired records are removed during requests and daily maintenance.": {
+    "fr": "Les liens de confirmation expirent après 24 heures ; ceux de réinitialisation après une heure. Les liens utilisés ou remplacés sont supprimés selon le parcours du compte. Les enregistrements expirés sont supprimés lors des requêtes et de la maintenance quotidienne.",
+    "es": "Los enlaces de verificación caducan a las 24 horas y los de restablecimiento a la hora. Los enlaces usados o sustituidos se eliminan según el flujo de la cuenta. Los registros caducados se eliminan durante las solicitudes y el mantenimiento diario."
+  },
+  "Request limits": {
+    "fr": "Limites de requêtes",
+    "es": "Límites de solicitudes"
+  },
+  "Usable for their 15-minute, hourly or daily security window. Expired records are removed during account requests and daily maintenance.": {
+    "fr": "Utilisables pendant leur fenêtre de sécurité de 15 minutes, une heure ou un jour. Les enregistrements expirés sont supprimés lors des requêtes de compte et de la maintenance quotidienne.",
+    "es": "Utilizables durante su ventana de seguridad de 15 minutos, una hora o un día. Los registros caducados se eliminan durante las solicitudes de cuenta y el mantenimiento diario."
+  },
+  "Application logs": {
+    "fr": "Journaux applicatifs",
+    "es": "Registros de la aplicación"
+  },
+  "Dated application log files become eligible for cleanup after {p0} days without new entries. Hosting access logs follow the hosting operator's separate log policy.": {
+    "fr": "Les fichiers journaux datés deviennent éligibles au nettoyage après {p0} jours sans nouvelle entrée. Les journaux d’accès de l’hébergeur suivent sa propre politique.",
+    "es": "Los archivos de registro fechados pueden limpiarse tras {p0} días sin nuevas entradas. Los registros de acceso del alojamiento siguen la política propia del proveedor."
+  },
+  "The configured application-log retention period is temporarily unavailable. Hosting access logs follow the hosting operator's separate log policy.": {
+    "fr": "La durée configurée de conservation des journaux applicatifs est temporairement indisponible. Les journaux d’accès suivent la politique distincte de l’hébergeur.",
+    "es": "El plazo configurado de los registros de la aplicación no está disponible temporalmente. Los registros de acceso siguen la política propia del proveedor."
+  },
+  "O2Switch recovery backups": {
+    "fr": "Sauvegardes de récupération O2Switch",
+    "es": "Copias de recuperación de O2Switch"
+  },
+  "Retained for {p0} days in the hosting backup cycle.": {
+    "fr": "Conservées pendant {p0} jours dans le cycle de sauvegarde de l’hébergeur.",
+    "es": "Conservadas durante {p0} días en el ciclo de copias de seguridad del alojamiento."
+  },
+  "Retained for 30 days in the hosting backup cycle, as confirmed by the publisher.": {
+    "fr": "Conservées pendant 30 jours dans le cycle de l’hébergeur, comme confirmé par l’éditeur.",
+    "es": "Conservadas durante 30 días en el ciclo del alojamiento, según ha confirmado el editor."
+  },
+  "Application deployment snapshots": {
+    "fr": "Instantanés de déploiement de l’application",
+    "es": "Instantáneas de despliegue de la aplicación"
+  },
+  "Up to three successful database snapshots. They become eligible for cleanup after {p0} days, separately from O2Switch's backups.": {
+    "fr": "Jusqu’à trois instantanés réussis de la base. Ils deviennent éligibles au nettoyage après {p0} jours, indépendamment des sauvegardes O2Switch.",
+    "es": "Hasta tres instantáneas correctas de la base de datos. Pueden limpiarse tras {p0} días, por separado de las copias de O2Switch."
+  },
+  "Separate from hosting backups; their configured retention details are temporarily unavailable.": {
+    "fr": "Distincts des sauvegardes d’hébergement ; les durées configurées sont temporairement indisponibles.",
+    "es": "Separadas de las copias del alojamiento; sus plazos configurados no están disponibles temporalmente."
+  },
+  "Eligible records are cleaned in daily batches. An outage, a backlog or a busy file can delay removal. Busy files are retried on a later run.": {
+    "fr": "Les données éligibles sont nettoyées par lots quotidiens. Une panne, un retard ou un fichier occupé peut différer la suppression. Les fichiers occupés sont réessayés lors d’une exécution ultérieure.",
+    "es": "Los registros elegibles se limpian en lotes diarios. Un fallo, una acumulación o un archivo en uso pueden retrasar su eliminación. Los archivos ocupados se vuelven a intentar más tarde."
+  },
+  "Cookies and browser preferences": {
+    "fr": "Cookies et préférences du navigateur",
+    "es": "Cookies y preferencias del navegador"
+  },
+  "A first-party session cookie is necessary for sign-in and request security. It is HttpOnly and SameSite=Lax, with Secure required in production. Sessions expire after two hours of inactivity or eight hours from sign-in. Stale session files become eligible for cleanup after eight hours without activity. Authentication tokens stay out of browser local storage. Sound and language preferences are stored only in your browser.": {
+    "fr": "Un cookie de session interne est nécessaire à la connexion et à la sécurité des requêtes. Il est HttpOnly et SameSite=Lax, avec Secure obligatoire en production. Les sessions expirent après deux heures d’inactivité ou huit heures après la connexion. Les fichiers de session obsolètes deviennent éligibles au nettoyage après huit heures sans activité. Les jetons d’authentification ne sont pas placés dans le stockage local du navigateur. Les préférences de son et de langue sont conservées uniquement dans votre navigateur.",
+    "es": "Una cookie propia de sesión es necesaria para iniciar sesión y proteger las solicitudes. Es HttpOnly y SameSite=Lax, con Secure obligatorio en producción. Las sesiones caducan tras dos horas de inactividad u ocho horas desde el acceso. Los archivos de sesión obsoletos pueden limpiarse tras ocho horas sin actividad. Los tokens de autenticación no se guardan en el almacenamiento local. Las preferencias de sonido e idioma se guardan solo en tu navegador."
+  },
+  "“Remember me” is optional. It adds a signed HttpOnly cookie valid for 30 days, renewed when it restores sign-in, with the same SameSite and production Secure protections. Signing out clears this browser's cookie. Changing your password invalidates existing remembered sign-ins on every device.": {
+    "fr": "« Se souvenir de moi » est facultatif. Cette option ajoute un cookie signé HttpOnly valable 30 jours, renouvelé au rétablissement de la connexion, avec les mêmes protections SameSite et Secure en production. La déconnexion efface le cookie de ce navigateur. Un changement de mot de passe invalide les connexions mémorisées sur tous les appareils.",
+    "es": "«Recordarme» es opcional. Añade una cookie firmada HttpOnly válida durante 30 días y renovada al restaurar la sesión, con las mismas protecciones SameSite y Secure en producción. Cerrar sesión elimina la cookie de este navegador. Cambiar la contraseña invalida los accesos recordados en todos los dispositivos."
+  },
+  "Hosting, email and access": {
+    "fr": "Hébergement, e-mail et accès",
+    "es": "Alojamiento, correo y acceso"
+  },
+  "The application is hosted by": {
+    "fr": "L’application est hébergée par",
+    "es": "La aplicación está alojada en"
+  },
+  "o2switch in France": {
+    "fr": "o2switch en France",
+    "es": "o2switch en Francia"
+  },
+  "Account email is delivered through {p0}. It receives the destination address and account-email content to deliver verification and recovery messages.": {
+    "fr": "Les e-mails de compte sont envoyés via {p0}. Ce prestataire reçoit l’adresse destinataire et le contenu des messages pour livrer les confirmations et récupérations de compte.",
+    "es": "Los correos de cuenta se envían a través de {p0}. El proveedor recibe la dirección de destino y el contenido para entregar los mensajes de verificación y recuperación."
+  },
+  "The account-email provider has not yet been supplied in the public configuration. Its name and any relevant international-transfer information must be confirmed by the publisher.": {
+    "fr": "Le prestataire d’e-mail n’a pas encore été renseigné dans la configuration publique. Son nom et les éventuelles informations de transfert international doivent être confirmés par l’éditeur.",
+    "es": "El proveedor de correo aún no se ha indicado en la configuración pública. El editor debe confirmar su nombre y cualquier información sobre transferencias internacionales que corresponda."
+  },
+  "There are no social accounts, advertising partners or third-party analytics. Review suggestions use your recorded practice; they do not make decisions with legal or similarly significant effects.": {
+    "fr": "Il n’y a ni comptes sociaux, ni partenaires publicitaires, ni outils d’analyse tiers. Les révisions suggérées utilisent vos entraînements enregistrés ; elles ne prennent pas de décisions ayant des effets juridiques ou des effets similaires importants.",
+    "es": "No hay cuentas sociales, socios publicitarios ni analítica de terceros. Los repasos sugeridos usan tus prácticas guardadas; no toman decisiones con efectos legales o de importancia similar."
+  },
+  "Your choices and rights": {
+    "fr": "Vos choix et vos droits",
+    "es": "Tus opciones y derechos"
+  },
+  "In Account, download your details, every saved practice and email-link metadata as JSON, or permanently delete the account, its email links and all practice. Both actions require your current password. Deletion signs you out; other browsers cannot restore the deleted account.": {
+    "fr": "Dans Compte, téléchargez vos informations, tous vos entraînements et les métadonnées des liens e-mail en JSON, ou supprimez définitivement le compte, ses liens et tous vos entraînements. Les deux actions exigent le mot de passe actuel. La suppression vous déconnecte ; les autres navigateurs ne peuvent plus restaurer le compte supprimé.",
+    "es": "En Cuenta puedes descargar tus datos, todas las prácticas y los metadatos de enlaces de correo en JSON, o eliminar permanentemente la cuenta, sus enlaces y todas las prácticas. Ambas acciones requieren la contraseña actual. La eliminación cierra tu sesión; otros navegadores no pueden restaurar la cuenta eliminada."
+  },
+  "You can request access, correction, deletion or restriction of your data, and portability or object to processing where applicable. Use the privacy-contact address above; we normally respond within one month. You can also": {
+    "fr": "Vous pouvez demander l’accès, la rectification, la suppression ou la limitation de vos données, leur portabilité ou vous opposer au traitement lorsque c’est applicable. Utilisez le contact confidentialité ci-dessus ; nous répondons normalement sous un mois. Vous pouvez aussi",
+    "es": "Puedes solicitar acceso, rectificación, eliminación o limitación de tus datos, portabilidad u oponerte al tratamiento cuando corresponda. Usa el contacto de privacidad anterior; normalmente respondemos en un mes. También puedes"
+  },
+  "contact the CNIL": {
+    "fr": "contacter la CNIL",
+    "es": "contactar con la CNIL"
+  },
+  "or your local data-protection authority.": {
+    "fr": "ou votre autorité locale de protection des données.",
+    "es": "o tu autoridad local de protección de datos."
+  },
+  "Deletion and backups": {
+    "fr": "Suppression et sauvegardes",
+    "es": "Eliminación y copias de seguridad"
+  },
+  "Account deletion removes live account and practice records immediately. It does not rewrite existing backups, logs or temporary security records. Recovery copies stay restricted to recovery. Account deletions made after a snapshot must be reapplied before a restored service reopens.": {
+    "fr": "La suppression du compte retire immédiatement les données actives du compte et des entraînements. Elle ne réécrit pas les sauvegardes, journaux ou données temporaires de sécurité. Les copies de récupération restent réservées à cet usage. Les suppressions de comptes postérieures à un instantané doivent être réappliquées avant la réouverture d’un service restauré.",
+    "es": "Eliminar la cuenta retira de inmediato los registros activos de la cuenta y las prácticas. No modifica las copias, registros ni datos temporales de seguridad. Las copias de recuperación quedan restringidas a ese uso. Las eliminaciones posteriores a una instantánea deben reaplicarse antes de reabrir un servicio restaurado."
+  },
+  "A hosting backup can contain an older deployment snapshot. These retention periods can add together, so we do not promise that every recovery copy disappears 30 days after account deletion. Captured development email is also outside live-account deletion.": {
+    "fr": "Une sauvegarde d’hébergement peut contenir un ancien instantané de déploiement. Ces durées peuvent se cumuler : nous ne promettons donc pas la disparition de toutes les copies 30 jours après suppression du compte. Les e-mails capturés en développement sont aussi hors de la suppression du compte actif.",
+    "es": "Una copia del alojamiento puede contener una instantánea de despliegue anterior. Los plazos pueden sumarse: por eso no prometemos que todas las copias desaparezcan 30 días después de eliminar la cuenta. Los correos capturados en desarrollo también quedan fuera de la eliminación activa."
+  },
+  ". The publisher and hosting operator can access data as needed to run and secure the service.": {
+    "fr": ". L’éditeur et l’hébergeur peuvent accéder aux données si nécessaire pour exploiter et sécuriser le service.",
+    "es": ". El editor y el proveedor de alojamiento pueden acceder a los datos cuando sea necesario para operar y proteger el servicio."
+  },
+  "Try again in about {minutes} minute.": {
+    "fr": "Réessayez dans environ {minutes} minute.",
+    "es": "Vuelve a intentarlo en aproximadamente {minutes} minuto."
+  },
+  "Chess Openings": {
+    "fr": "Chess Openings",
+    "es": "Chess Openings"
+  },
+  "Open source under GPLv3": {
+    "fr": "Code source sous GPLv3",
+    "es": "Código abierto bajo GPLv3"
+  },
+  "Choose a lesson": {
+    "fr": "Choisir une leçon",
+    "es": "Elegir una lección"
+  },
+  "Your practice and reviews": {
+    "fr": "Votre pratique et vos révisions",
+    "es": "Tu práctica y tus repasos"
+  },
+  "Development only": {
+    "fr": "Développement uniquement",
+    "es": "Solo para desarrollo"
+  },
+  "Browse a family": {
+    "fr": "Parcourir une famille",
+    "es": "Explorar una familia"
+  },
+  "Start a beginner lesson": {
+    "fr": "Commencer une leçon pour débutants",
+    "es": "Empezar una lección para principiantes"
+  },
+  "Guided lesson not available yet": {
+    "fr": "Leçon guidée pas encore disponible",
+    "es": "Lección guiada aún no disponible"
+  },
+  "Your line": {
+    "fr": "Votre variante",
+    "es": "Tu variante"
+  },
+  "Nice work": {
+    "fr": "Bien joué",
+    "es": "Buen trabajo"
+  },
+  "{p0} of {p1}": {
+    "fr": "{p0} sur {p1}",
+    "es": "{p0} de {p1}"
+  },
+  "taught decisions played on the first try without a hint.": {
+    "fr": "décisions enseignées jouées du premier coup sans indice.",
+    "es": "decisiones enseñadas jugadas al primer intento sin pistas."
+  },
+  "After this lesson": {
+    "fr": "Après cette leçon",
+    "es": "Después de esta lección"
+  },
+  "Practise variations in this opening": {
+    "fr": "Pratiquer les variantes de cette ouverture",
+    "es": "Practicar variantes de esta apertura"
+  },
+  "Choose another lesson": {
+    "fr": "Choisir une autre leçon",
+    "es": "Elegir otra lección"
+  },
+  "See your practice and reviews": {
+    "fr": "Voir votre pratique et vos révisions",
+    "es": "Ver tu práctica y tus repasos"
+  },
+  "Move {p0} for you": {
+    "fr": "Votre coup {p0}",
+    "es": "Tu jugada {p0}"
+  },
+  "Recognise the variation.": {
+    "fr": "Reconnaître la variante.",
+    "es": "Reconoce la variante."
+  },
+  "First, make an opening feel familiar. Then learn to find your way when the moves change. You move your pieces, we reply, and a hint is always one tap away.": {
+    "fr": "Familiarisez-vous d’abord avec une ouverture. Apprenez ensuite à vous repérer quand les coups changent. Vous jouez vos pièces, nous répondons, et un indice reste toujours à portée de main.",
+    "es": "Primero, familiarízate con una apertura. Después, aprende a orientarte cuando cambian las jugadas. Tú mueves tus piezas, nosotros respondemos y siempre tienes una pista a un toque."
+  },
+  "Look up an opening": {
+    "fr": "Rechercher une ouverture",
+    "es": "Buscar una apertura"
+  },
+  "Italian Game moves": {
+    "fr": "Coups de la partie italienne",
+    "es": "Jugadas de la apertura italiana"
+  },
+  "Both bishops aim at the square beside the enemy king.": {
+    "fr": "Les deux fous visent la case à côté du roi adverse.",
+    "es": "Ambos alfiles apuntan a la casilla junto al rey rival."
+  },
+  "Replay the moves": {
+    "fr": "Rejouer les coups",
+    "es": "Reproducir las jugadas"
+  },
+  "Two steps to a reliable opening": {
+    "fr": "Deux étapes pour une ouverture solide",
+    "es": "Dos pasos para una apertura sólida"
+  },
+  "Play one precise sequence. We answer each move and explain why it matters, with a hint whenever you need one.": {
+    "fr": "Jouez une suite précise. Nous répondons à chaque coup et expliquons son intérêt, avec un indice dès que vous en avez besoin.",
+    "es": "Juega una secuencia concreta. Respondemos a cada jugada y explicamos su sentido, con una pista siempre que la necesites."
+  },
+  "Start a guided lesson": {
+    "fr": "Commencer une leçon guidée",
+    "es": "Empezar una lección guiada"
+  },
+  "Mix the lines you have learned. We choose among their taught replies, and you find the response that fits.": {
+    "fr": "Mélangez les variantes apprises. Nous choisissons parmi les réponses enseignées, et vous trouvez le coup adapté.",
+    "es": "Combina las variantes que has aprendido. Elegimos entre sus respuestas enseñadas y tú encuentras la jugada adecuada."
+  },
+  "Choose lines to mix": {
+    "fr": "Choisir les variantes à mélanger",
+    "es": "Elegir variantes para combinar"
+  },
+  "in": {
+    "fr": "dans",
+    "es": "en"
+  },
+  "Counts cover the current course version and the pieces shown. Practice with White and Black is recorded separately. Each course starts with its recommended pieces; switch pieces to see your other practice.": {
+    "fr": "Les compteurs concernent la version actuelle du cours et la couleur affichée. La pratique avec les blancs et les noirs est enregistrée séparément. Chaque cours affiche d’abord sa couleur recommandée ; changez de couleur pour voir votre autre pratique.",
+    "es": "Los recuentos corresponden a la versión actual del curso y al color mostrado. La práctica con blancas y negras se registra por separado. Cada curso empieza con su color recomendado; cambia de color para ver tu otra práctica."
+  },
+  "Version {p0}": {
+    "fr": "Version {p0}",
+    "es": "Versión {p0}"
+  },
+  "{p0} of {p1} current line practised as {p2}": {
+    "fr": "{p0} variante actuelle sur {p1} pratiquée avec les {p2}",
+    "es": "{p0} de {p1} variante actual practicada con {p2}"
+  },
+  "{p0} of {p1} current lines practised as {p2}": {
+    "fr": "{p0} variantes actuelles sur {p1} pratiquées avec les {p2}",
+    "es": "{p0} de {p1} variantes actuales practicadas con {p2}"
+  },
+  "Start with guidance": {
+    "fr": "Commencer avec un guide",
+    "es": "Empezar con ayuda"
+  },
+  "Learn these moves with guidance": {
+    "fr": "Apprendre ces coups avec un guide",
+    "es": "Aprender estas jugadas con ayuda"
+  },
+  "One selected line, played as a fixed sequence.": {
+    "fr": "Une seule variante sélectionnée, jouée comme une suite fixe.",
+    "es": "Una sola variante seleccionada, jugada como una secuencia fija."
+  },
+  "{p0} selected lines. Replies stay within these taught paths.": {
+    "fr": "{p0} variantes sélectionnées. Les réponses restent dans ces suites enseignées.",
+    "es": "{p0} variantes seleccionadas. Las respuestas siguen estas secuencias enseñadas."
+  },
+  "Possible line": {
+    "fr": "Variante possible",
+    "es": "Variante posible"
+  },
+  "Possible lines": {
+    "fr": "Variantes possibles",
+    "es": "Variantes posibles"
+  },
+  "Variation names are hidden. Hints and explanations reveal them.": {
+    "fr": "Les noms des variantes sont masqués. Les indices et les explications les révèlent.",
+    "es": "Los nombres de las variantes están ocultos. Las pistas y las explicaciones los revelan."
+  },
+  "You play White": {
+    "fr": "Vous jouez avec les blancs",
+    "es": "Juegas con blancas"
+  },
+  "You play Black": {
+    "fr": "Vous jouez avec les noirs",
+    "es": "Juegas con negras"
+  }
+}

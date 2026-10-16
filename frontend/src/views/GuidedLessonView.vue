@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
+import { t, message, type Text } from '../i18n'
+import { computed, nextTick, onBeforeUnmount, ref, shallowRef, watch, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import ChessBoard from '../components/chess/ChessBoard.vue'
 import MoveNotes, { type MoveNote } from '../components/lesson/MoveNotes.vue'
@@ -17,6 +18,10 @@ import { usePreferencesStore } from '../stores/preferences'
 const route = useRoute()
 const preferences = usePreferencesStore()
 const payload = shallowRef<LessonPayload>()
+watchEffect(() => {
+  if (payload.value)
+    document.title = t('{p0} lesson · Chess Openings', { p0: payload.value.lesson.title })
+})
 const position = shallowRef<ChessSnapshot>()
 const trainer = shallowRef<GuidedTrainer>()
 const lineId = ref('')
@@ -32,7 +37,7 @@ const recalledDecisions = computed(() =>
         .length ?? 0),
 )
 const waiting = ref(false)
-const hint = ref('')
+const hint = ref<Text>('')
 const selectedSquare = ref<string>()
 const hintPieceSelected = computed(
   () => !!hintMove.value && selectedSquare.value === hintMove.value[0],
@@ -41,8 +46,8 @@ const hintMove = computed(() =>
   hint.value && playerTurn.value ? trainer.value?.hintSquares() : undefined,
 )
 const hintExplanation = computed(() => line.value?.steps[ply.value]?.explanation ?? '')
-const feedback = ref('')
-const announcement = ref('')
+const feedback = ref<Text>('')
+const announcement = ref<Text>('')
 const fromSquare = ref('')
 const toSquare = ref('')
 const pendingPromotion = ref<{ from: string; to: string; choices: PromotionPiece[] }>()
@@ -52,12 +57,12 @@ const promotionNames: Record<PromotionPiece, string> = {
   b: 'Bishop',
   n: 'Knight',
 }
-const error = ref('')
-const reviewNotice = ref('')
+const error = ref<Text>('')
+const reviewNotice = ref<Text>('')
 const loading = ref(false)
 const saving = ref(false)
 const saved = ref(false)
-const saveError = ref('')
+const saveError = ref<Text>('')
 const attemptId = ref('')
 const line = computed(() => payload.value?.lesson.lines.find((line) => line.id === lineId.value))
 const ownMoves = computed(
@@ -81,7 +86,10 @@ const recentNotes = computed<MoveNote[]>(() => {
     const white = index % 2 === 0
     const number = Math.floor(index / 2) + 1
     return {
-      who: white === (color.value === 'w') ? 'You played' : `${white ? 'White' : 'Black'} played`,
+      who:
+        white === (color.value === 'w')
+          ? 'You played'
+          : message('{p0} played', { p0: white ? 'White' : 'Black' }),
       label: `${number}${white ? '.' : '...'} ${step.san}`,
       explanation: step.explanation,
     }
@@ -158,7 +166,6 @@ async function load() {
     lineId.value = selection.lineId
     color.value = selection.playingColor
     reviewNotice.value = selection.notice
-    document.title = `${result.lesson.title} lesson · Chess Openings`
     prepare()
   } catch {
     if (generation === loadGeneration)
@@ -209,12 +216,19 @@ function next() {
       if (result?.kind === 'accepted') {
         preferences.moveSound()
         feedback.value = ''
-        announcement.value = `${color.value === 'w' ? 'Black' : 'White'} played ${result.move.san}.`
+        announcement.value = message('{p0} played {p1}.', {
+          p0: color.value === 'w' ? 'Black' : 'White',
+          p1: result.move.san,
+        })
       }
       waiting.value = false
       sync()
       if (result?.kind === 'accepted')
-        announcement.value += ` ${latestExplanation()} ${trainer.value?.complete ? 'Line complete.' : 'Your turn.'}`
+        announcement.value = message('{reply} {explanation} {status}', {
+          reply: announcement.value,
+          explanation: latestExplanation(),
+          status: trainer.value?.complete ? 'Line complete.' : 'Your turn.',
+        })
       next()
     }, 500)
   }
@@ -223,7 +237,10 @@ function start() {
   prepare()
   started.value = true
   next()
-  announcement.value = `Lesson started. You play ${color.value === 'w' ? 'White' : 'Black'}. ${waiting.value ? 'Watch the first White move.' : 'Your turn.'}`
+  announcement.value = message('Lesson started. You play {p0}. {p1}', {
+    p0: color.value === 'w' ? 'White' : 'Black',
+    p1: waiting.value ? 'Watch the first White move.' : 'Your turn.',
+  })
   if (window.matchMedia('(max-width: 850px)').matches) void nextTick(scrollToBoard)
 }
 function scrollToBoard() {
@@ -250,12 +267,19 @@ function play(from: string, to: string, promotion?: PromotionPiece) {
     toSquare.value = ''
     preferences.moveSound()
     sync()
-    announcement.value = `You played ${result.move.san}. ${latestExplanation()} ${trainer.value.complete ? 'Line complete.' : 'Watch the reply.'}`
+    announcement.value = message('You played {p0}. {p1} {p2}', {
+      p0: result.move.san,
+      p1: latestExplanation(),
+      p2: trainer.value.complete ? 'Line complete.' : 'Watch the reply.',
+    })
     next()
   } else {
     feedback.value =
       result.kind === 'alternative-line'
-        ? `That move belongs to “${result.title}”, another taught line. This exercise follows the selected line, so the board stays here. Try again or use a hint.`
+        ? message(
+            'That move belongs to “{p0}”, another taught line. This exercise follows the selected line, so the board stays here. Try again or use a hint.',
+            { p0: result.title },
+          )
         : result.kind === 'outside-line'
           ? 'That move is legal, but outside this lesson. The board stays here. Try again or use a hint.'
           : 'That piece cannot move there in this position. Try a highlighted square.'
@@ -265,7 +289,7 @@ function play(from: string, to: string, promotion?: PromotionPiece) {
 }
 function showHint() {
   hint.value = trainer.value?.hint() ?? ''
-  announcement.value = `${hint.value} Why: ${hintExplanation.value}`
+  announcement.value = message('{p0} Why: {p1}', { p0: hint.value, p1: hintExplanation.value })
   if (window.matchMedia('(max-width: 850px)').matches) scrollToBoard()
 }
 function cancelPromotion() {
@@ -298,30 +322,33 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <main id="main-content" class="page-width guided-main">
-    <p class="sr-only" aria-live="polite" aria-atomic="true">{{ announcement }}</p>
-    <RouterLink class="back-link" to="/learn">← All lessons</RouterLink>
-    <p v-if="loading" role="status">Preparing your lesson…</p>
+    <p class="sr-only" aria-live="polite" aria-atomic="true">{{ t(announcement) }}</p>
+    <RouterLink class="back-link" to="/learn">{{ t('← All lessons') }}</RouterLink>
+    <p v-if="loading" role="status">{{ t('Preparing your lesson…') }}</p>
     <div v-else-if="error" class="notice status-actions" role="alert">
-      <p>{{ error }}</p>
-      <button @click="load">Try again</button><RouterLink to="/login">Sign in</RouterLink>
+      <p>{{ t(error) }}</p>
+      <button @click="load">{{ t('Try again') }}</button
+      ><RouterLink to="/login">{{ t('Sign in') }}</RouterLink>
     </div>
     <template v-else-if="payload && position && line">
-      <p v-if="reviewNotice" role="status" class="notice">{{ reviewNotice }}</p>
+      <p v-if="reviewNotice" role="status" class="notice">{{ t(reviewNotice) }}</p>
       <div class="lesson-heading">
-        <h1>{{ payload.lesson.title }}</h1>
-        <span class="side-token" :class="{ 'is-black': color === 'b' }"
-          >You play {{ color === 'w' ? 'White' : 'Black' }}</span
-        >
+        <h1>{{ t(payload.lesson.title) }}</h1>
+        <span class="side-token" :class="{ 'is-black': color === 'b' }">{{
+          t('You play {p0}', { p0: color === 'w' ? 'White' : 'Black' })
+        }}</span>
       </div>
       <div class="guided-grid" :class="{ 'is-setting-up': !started }">
         <div class="guided-board">
           <div v-if="started && !complete" class="board-toolbar">
             <span
-              >{{ waiting ? 'Opponent replying…' : 'Your turn' }}
+              >{{ t(waiting ? 'Opponent replying…' : 'Your turn') }}
               <span class="move-count"
                 >{{ Math.min(ownPlayed + 1, ownMoves) }}/{{ ownMoves }}</span
               ></span
-            ><button class="marker-button" :disabled="!playerTurn" @click="showHint">Hint</button>
+            ><button class="marker-button" :disabled="!playerTurn" @click="showHint">
+              {{ t('Hint') }}
+            </button>
           </div>
           <ChessBoard
             :fen="position.fen"
@@ -333,175 +360,223 @@ onBeforeUnmount(() => {
             :interaction-disabled="!playerTurn || !!pendingPromotion"
             :hint-move="hintMove"
             :hint-piece-selected="hintPieceSelected"
-            :label="`${payload.lesson.title} lesson board, you play ${color === 'w' ? 'White' : 'Black'}`"
+            :label="
+              t('{p0} lesson board, you play {p1}', {
+                p0: t(payload.lesson.title),
+                p1: color === 'w' ? t('White') : t('Black'),
+              })
+            "
             @select="selectedSquare = $event"
             @move="play"
           />
           <div v-if="hint && !complete" class="mobile-board-hint hint">
             <strong>{{
-              hintPieceSelected ? 'Tap the glowing destination.' : 'Pick up the glowing piece.'
+              hintPieceSelected
+                ? t('Tap the glowing destination.')
+                : t('Pick up the glowing piece.')
             }}</strong>
-            <p>{{ hint }}</p>
-            <p><strong>Why:</strong> {{ hintExplanation }}</p>
+            <p>{{ t(hint) }}</p>
+            <p>
+              <strong>{{ t('Why:') }}</strong> {{ t(hintExplanation) }}
+            </p>
           </div>
-          <p v-if="feedback" class="mobile-feedback notice">{{ feedback }}</p>
+          <p v-if="feedback" class="mobile-feedback notice">{{ t(feedback) }}</p>
           <MoveNotes
             v-if="started"
             class="mobile-move-notes"
             :notes="recentNotes"
-            :heading="complete ? 'How the line ends' : undefined"
+            :heading="complete ? t('How the line ends') : undefined"
           />
         </div>
-        <section class="guided-panel" aria-label="Lesson instructions">
+        <section class="guided-panel" :aria-label="t('Lesson instructions')">
           <template v-if="!started">
-            <p class="panel-kicker">Your line</p>
-            <h2>{{ line.title }}</h2>
-            <p>{{ payload.lesson.introduction }}</p>
+            <p class="panel-kicker">{{ t('Your line') }}</p>
+            <h2>{{ t(line.title) }}</h2>
+            <p>{{ t(payload.lesson.introduction) }}</p>
             <p class="how-to-play">
-              Tap a piece, then a highlighted square. You can also drag it. We reply automatically.
-              Select <strong>Hint</strong> whenever you need help.
+              {{
+                t(
+                  'Tap a piece, then a highlighted square. You can also drag it. We reply automatically. Select',
+                )
+              }}
+              <strong>{{ t('Hint') }}</strong> {{ t('whenever you need help.') }}
             </p>
             <p v-if="previouslyCompleted" class="notice">
-              You have practised this line before. Repetition helps it feel familiar.
+              {{ t('You have practised this line before. Repetition helps it feel familiar.') }}
             </p>
             <details class="lesson-options">
-              <summary>Other lesson options</summary>
+              <summary>{{ t('Other lesson options') }}</summary>
               <label
-                >Line<select v-model="lineId" aria-label="Line" @change="prepare">
+                >{{ t('Line')
+                }}<select v-model="lineId" :aria-label="t('Line')" @change="prepare">
                   <option
                     v-for="choice in payload.lesson.lines"
                     :key="choice.id"
                     :value="choice.id"
                   >
-                    {{ choice.title }}
+                    {{ t(choice.title) }}
                   </option>
                 </select></label
               >
               <label
-                >Your pieces<select v-model="color" aria-label="Your pieces" @change="prepare">
+                >{{ t('Your pieces')
+                }}<select v-model="color" :aria-label="t('Your pieces')" @change="prepare">
                   <option value="w">
-                    White{{ payload.lesson.recommendedColor === 'w' ? ' (recommended)' : '' }}
+                    {{ t('White')
+                    }}{{ payload.lesson.recommendedColor === 'w' ? t(' (recommended)') : '' }}
                   </option>
                   <option value="b">
-                    Black{{ payload.lesson.recommendedColor === 'b' ? ' (recommended)' : '' }}
+                    {{ t('Black')
+                    }}{{ payload.lesson.recommendedColor === 'b' ? t(' (recommended)') : '' }}
                   </option>
                 </select></label
               >
             </details>
-            <button class="primary-link start-button" @click="start">Start lesson</button>
+            <button class="primary-link start-button" @click="start">
+              {{ t('Start lesson') }}
+            </button>
           </template>
           <template v-else-if="complete">
-            <p class="panel-kicker">Nice work</p>
-            <h2>Line complete.</h2>
+            <p class="panel-kicker">{{ t('Nice work') }}</p>
+            <h2>{{ t('Line complete.') }}</h2>
             <p>
-              You played all {{ ownMoves }} of your moves in “{{ line.title }}”. You can repeat it
-              or try another lesson.
+              {{
+                t(
+                  'You played all {p0} of your moves in “{p1}”. You can repeat it or try another lesson.',
+                  { p0: ownMoves, p1: t(line.title) },
+                )
+              }}
             </p>
             <p v-if="assessment?.usedUndo" class="recall-summary">
-              Takebacks used. This practice is recorded with help; try a fresh attempt to check your
-              recall.
+              {{
+                t(
+                  'Takebacks used. This practice is recorded with help; try a fresh attempt to check your recall.',
+                )
+              }}
             </p>
             <p v-else-if="assessment" class="recall-summary">
-              <strong class="recall-count"
-                >{{ recalledDecisions }} of {{ assessment.decisions.length }}</strong
-              >
-              taught decisions played on the first try without a hint.
+              <strong class="recall-count">{{
+                t('{p0} of {p1}', { p0: recalledDecisions, p1: assessment.decisions.length })
+              }}</strong>
+              {{ t('taught decisions played on the first try without a hint.') }}
             </p>
             <MoveNotes class="panel-move-notes" heading="How the line ends" :notes="recentNotes" />
-            <p v-if="saving" role="status">Saving your practice…</p>
+            <p v-if="saving" role="status">{{ t('Saving your practice…') }}</p>
             <p v-else-if="saved" role="status" class="saved-notice">
-              Practice saved to your account.
+              {{ t('Practice saved to your account.') }}
             </p>
             <div v-if="saveError" class="notice status-actions" role="alert">
-              <p>{{ saveError }}</p>
-              <button @click="save">Try saving again</button
-              ><RouterLink to="/login" target="_blank">Sign in in another tab</RouterLink>
+              <p>{{ t(saveError) }}</p>
+              <button @click="save">{{ t('Try saving again') }}</button
+              ><RouterLink to="/login" target="_blank">{{
+                t('Sign in in another tab')
+              }}</RouterLink>
             </div>
-            <button class="primary-link start-button" @click="start">Practise again</button>
-            <nav class="next-steps" aria-label="After this lesson">
-              <RouterLink v-if="payload.lesson.lines.length > 1" :to="`/train/${payload.lesson.id}`"
-                >Practise variations in this opening</RouterLink
+            <button class="primary-link start-button" @click="start">
+              {{ t('Practise again') }}
+            </button>
+            <nav class="next-steps" :aria-label="t('After this lesson')">
+              <RouterLink
+                v-if="payload.lesson.lines.length > 1"
+                :to="`/train/${payload.lesson.id}`"
+                >{{ t('Practise variations in this opening') }}</RouterLink
               >
-              <RouterLink to="/learn">Choose another lesson</RouterLink>
-              <RouterLink to="/progress">See your practice and reviews</RouterLink>
+              <RouterLink to="/learn">{{ t('Choose another lesson') }}</RouterLink>
+              <RouterLink to="/progress">{{ t('See your practice and reviews') }}</RouterLink>
             </nav>
           </template>
           <template v-else>
             <div class="turn-strip">
               <p class="lesson-phase" role="status">
-                {{ waiting ? `${color === 'w' ? 'Black' : 'White'} is replying…` : 'Your turn' }}
+                {{
+                  waiting
+                    ? t('{p0} is replying…', { p0: color === 'w' ? 'Black' : 'White' })
+                    : t('Your turn')
+                }}
               </p>
-              <span class="move-count"
-                >Move {{ Math.min(ownPlayed + 1, ownMoves) }} of {{ ownMoves }} for you</span
-              >
+              <span class="move-count">{{
+                t('Move {p0} of {p1} for you', {
+                  p0: Math.min(ownPlayed + 1, ownMoves),
+                  p1: ownMoves,
+                })
+              }}</span>
             </div>
             <progress
               :value="ownPlayed"
               :max="ownMoves"
               :style="{ '--segments': ownMoves }"
-              aria-label="Lesson progress"
+              :aria-label="t('Lesson progress')"
             />
-            <h2>{{ line.title }}</h2>
+            <h2>{{ t(line.title) }}</h2>
             <MoveNotes class="panel-move-notes" :notes="recentNotes" />
             <p class="how-to-play">
               {{
                 waiting
-                  ? 'Watch the reply, then it is your turn again.'
-                  : 'Choose a piece and move it to a highlighted square. Need a nudge? Use Hint.'
+                  ? t('Watch the reply, then it is your turn again.')
+                  : t('Choose a piece and move it to a highlighted square. Need a nudge? Use Hint.')
               }}
             </p>
-            <p v-if="feedback" role="alert" class="lesson-feedback notice">{{ feedback }}</p>
-            <div v-if="hint" class="hint" role="note" aria-label="Move hint">
+            <p v-if="feedback" role="alert" class="lesson-feedback notice">{{ t(feedback) }}</p>
+            <div v-if="hint" class="hint" role="note" :aria-label="t('Move hint')">
               <strong>{{
                 hintPieceSelected
-                  ? 'Now tap the glowing destination.'
-                  : 'Pick up the glowing piece.'
+                  ? t('Now tap the glowing destination.')
+                  : t('Pick up the glowing piece.')
               }}</strong>
-              <p>{{ hint }}</p>
-              <p><strong>Why:</strong> {{ hintExplanation }}</p>
+              <p>{{ t(hint) }}</p>
+              <p>
+                <strong>{{ t('Why:') }}</strong> {{ t(hintExplanation) }}
+              </p>
             </div>
             <button class="hint-button marker-button" :disabled="!playerTurn" @click="showHint">
-              Hint
+              {{ t('Hint') }}
             </button>
           </template>
           <div v-if="started" class="lesson-controls">
             <button :disabled="ply <= (color === 'w' ? 0 : 1) || complete" @click="undo">
-              Take back my move</button
-            ><button @click="start">Start over</button>
+              {{ t('Take back my move') }}</button
+            ><button @click="start">{{ t('Start over') }}</button>
           </div>
           <div
             v-if="pendingPromotion"
             class="promotion-picker"
             role="group"
-            aria-label="Choose promotion piece"
+            :aria-label="t('Choose promotion piece')"
           >
             <button
               v-for="choice in pendingPromotion.choices"
               :key="choice"
               @click="play(pendingPromotion.from, pendingPromotion.to, choice)"
             >
-              {{ promotionNames[choice] }}
+              {{ t(promotionNames[choice]) }}
             </button>
-            <button @click="cancelPromotion">Cancel promotion</button>
+            <button @click="cancelPromotion">{{ t('Cancel promotion') }}</button>
           </div>
           <div class="panel-footer">
             <button
               class="sound-button"
-              aria-label="Move sound"
+              :aria-label="t('Move sound')"
               :aria-pressed="preferences.soundEnabled"
               @click="preferences.toggleSound"
             >
-              Sound {{ preferences.soundEnabled ? 'on' : 'off' }}
+              {{ t('Sound {p0}', { p0: preferences.soundEnabled ? 'on' : 'off' }) }}
             </button>
             <details v-if="started && !complete" class="keyboard-moves">
-              <summary>Enter a move with the keyboard</summary>
+              <summary>{{ t('Enter a move with the keyboard') }}</summary>
               <p>
-                Use the square labels on the board, for example from e2 to e4. For castling, enter
-                the king’s starting and destination squares.
+                {{
+                  t(
+                    'Use the square labels on the board, for example from e2 to e4. For castling, enter the king’s starting and destination squares.',
+                  )
+                }}
               </p>
-              <form aria-label="Enter a lesson move" @submit.prevent="play(fromSquare, toSquare)">
+              <form
+                :aria-label="t('Enter a lesson move')"
+                @submit.prevent="play(fromSquare, toSquare)"
+              >
                 <label
-                  >From square<input
+                  >{{ t('From square')
+                  }}<input
                     v-model="fromSquare"
                     pattern="[a-h][1-8]"
                     maxlength="2"
@@ -509,22 +584,23 @@ onBeforeUnmount(() => {
                     required
                 /></label>
                 <label
-                  >To square<input
+                  >{{ t('To square')
+                  }}<input
                     v-model="toSquare"
                     pattern="[a-h][1-8]"
                     maxlength="2"
                     autocomplete="off"
                     required
                 /></label>
-                <button :disabled="!playerTurn || !!pendingPromotion">Play move</button>
+                <button :disabled="!playerTurn || !!pendingPromotion">{{ t('Play move') }}</button>
               </form>
             </details>
           </div>
         </section>
       </div>
       <details v-if="started" class="lesson-notation">
-        <summary>Moves played (chess notation)</summary>
-        <ol aria-label="Lesson move history">
+        <summary>{{ t('Moves played (chess notation)') }}</summary>
+        <ol :aria-label="t('Lesson move history')">
           <li v-for="(move, index) in position.history" :key="index">{{ move }}</li>
         </ol>
       </details>

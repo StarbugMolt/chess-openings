@@ -8,6 +8,7 @@ monolog:
             path: '%kernel.logs_dir%/openings.log'
             max_files: 12
             file_permission: 384 # 0600
+            use_locking: true
             level: info
             channels: [opening_catalogue]
             formatter: monolog.formatter.json
@@ -54,6 +55,7 @@ when@prod:
                 path: '%kernel.logs_dir%/prod.log'
                 max_files: 14
                 file_permission: 384 # 0600
+                use_locking: true
                 level: debug
                 formatter: monolog.formatter.json
             console:

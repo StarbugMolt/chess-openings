@@ -655,3 +655,41 @@ progress::-moz-progress-bar {
     display: none;
   }
 }
+
+/* Navigation must wrap when translated labels need more room. */
+.site-header {
+  min-height: 112px;
+  height: auto;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding-block: 20px;
+}
+.site-header nav {
+  position: relative;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px 20px;
+}
+@media (max-width: 680px) {
+  .site-header {
+    min-height: 84px;
+    padding-block: 14px;
+  }
+  .site-header nav {
+    justify-content: flex-start;
+    gap: 8px 14px;
+  }
+}
+
+.hero > * {
+  min-width: 0;
+}
+.preview-heading {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+@media (max-width: 400px) {
+  html[lang='fr'] .hero h1 {
+    font-size: clamp(44px, 14vw, 61px);
+  }
+}

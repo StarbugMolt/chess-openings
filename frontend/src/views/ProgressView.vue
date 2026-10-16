@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { t, message, formatDate, type Text } from '../i18n'
 import { computed, onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
 import {
   getPractice,
@@ -14,11 +15,11 @@ import { useAccountStore } from '../stores/account'
 const account = useAccountStore()
 const overview = shallowRef<PracticeOverview>()
 const loading = ref(true)
-const error = ref('')
+const error = ref<Text>('')
 const sessionEnded = ref(false)
 const pieces = ref<Record<string, PlayingColor>>({})
 const showAllReviews = ref(false)
-const announcement = ref('')
+const announcement = ref<Text>('')
 let controller: AbortController | undefined
 let generation = 0
 const reviews = computed(() =>
@@ -80,11 +81,7 @@ function lineStatus(line: PracticeLine): string {
   if (line.lastOutcome === 'unknown') return 'Practice recorded'
   return line.lastOutcome === 'recalled' ? 'Recalled without help' : 'Practised with help'
 }
-function formatDate(value: string): string {
-  return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(
-    new Date(value),
-  )
-}
+
 function focusPositions(line: PracticeLine) {
   return line.positions.filter(
     (position) =>
@@ -96,7 +93,10 @@ function changePieces(course: PracticeCourse, event: Event) {
   const color = (event.target as HTMLSelectElement).value
   if (color !== 'w' && color !== 'b') return
   pieces.value = { ...pieces.value, [course.id]: color }
-  announcement.value = `Showing ${course.title} progress for ${colorName(color)}.`
+  announcement.value = message('Showing {p0} progress for {p1}.', {
+    p0: course.title,
+    p1: colorName(color),
+  })
 }
 async function load() {
   controller?.abort()
@@ -110,7 +110,7 @@ async function load() {
     if (requestGeneration !== generation) return
     overview.value = result
     announcement.value = result.reviewQueue.length
-      ? `Showing ${result.reviewQueue.length} suggested reviews.`
+      ? message('Showing {p0} suggested reviews.', { p0: result.reviewQueue.length })
       : 'Your practice has loaded. No review suggestions are ready yet.'
   } catch (cause) {
     if (requestGeneration !== generation) return
@@ -141,65 +141,81 @@ onBeforeUnmount(() => {
 
 <template>
   <main id="main-content" class="page-width progress-main">
-    <p class="sr-only" aria-live="polite" aria-atomic="true">{{ announcement }}</p>
+    <p class="sr-only" aria-live="polite" aria-atomic="true">{{ t(announcement) }}</p>
     <header class="progress-heading">
-      <h1>Your practice.</h1>
-      <RouterLink class="choose-lessons" to="/learn">Choose a lesson</RouterLink>
+      <h1>{{ t('Your practice.') }}</h1>
+      <RouterLink class="choose-lessons" to="/learn">{{ t('Choose a lesson') }}</RouterLink>
     </header>
     <p class="progress-intro">
-      See what you have practised and revisit a line when you are ready. Hints are always welcome.
+      {{
+        t(
+          'See what you have practised and revisit a line when you are ready. Hints are always welcome.',
+        )
+      }}
     </p>
-    <p v-if="loading" role="status">Loading your practice…</p>
+    <p v-if="loading" role="status">{{ t('Loading your practice…') }}</p>
     <div v-else-if="error" class="notice status-actions progress-error" role="alert">
-      <p>{{ error }}</p>
-      <RouterLink v-if="sessionEnded" class="primary-link" to="/login?next=/progress"
-        >Sign in again</RouterLink
-      >
-      <button v-else @click="load">Try again</button>
+      <p>{{ t(error) }}</p>
+      <RouterLink v-if="sessionEnded" class="primary-link" to="/login?next=/progress">{{
+        t('Sign in again')
+      }}</RouterLink>
+      <button v-else @click="load">{{ t('Try again') }}</button>
     </div>
     <template v-else-if="overview">
-      <section v-if="!hasPractice" class="first-practice" aria-label="Start practising">
-        <h2>Your first line starts here.</h2>
+      <section v-if="!hasPractice" class="first-practice" :aria-label="t('Start practising')">
+        <h2>{{ t('Your first line starts here.') }}</h2>
         <p>
-          Finish a guided line to save your practice. Then come back to see what feels familiar and
-          what to revisit.
+          {{
+            t(
+              'Finish a guided line to save your practice. Then come back to see what feels familiar and what to revisit.',
+            )
+          }}
         </p>
-        <RouterLink class="primary-link" to="/learn">Start a guided lesson</RouterLink>
+        <RouterLink class="primary-link" to="/learn">{{ t('Start a guided lesson') }}</RouterLink>
       </section>
-      <section class="review-section" aria-label="Ready to review">
-        <h2 id="review-heading">Ready to review</h2>
+      <section class="review-section" :aria-label="t('Ready to review')">
+        <h2 id="review-heading">{{ t('Ready to review') }}</h2>
         <p v-if="reviews.length" class="muted">
-          Up to 20 suggested reviews from your current course versions are shown here. A review is a
-          suggestion; you can practise any time.
+          {{
+            t(
+              'Up to 20 suggested reviews from your current course versions are shown here. A review is a suggestion; you can practise any time.',
+            )
+          }}
         </p>
         <p v-else-if="hasPractice" class="muted">
-          Nothing is ready for review yet. You can repeat a favourite line or learn another below.
+          {{
+            t(
+              'Nothing is ready for review yet. You can repeat a favourite line or learn another below.',
+            )
+          }}
         </p>
-        <p v-else class="muted">Your reviews will appear here after you start practising.</p>
-        <ul v-if="reviews.length" class="review-list" aria-label="Lines ready to review">
+        <p v-else class="muted">
+          {{ t('Your reviews will appear here after you start practising.') }}
+        </p>
+        <ul v-if="reviews.length" class="review-list" :aria-label="t('Lines ready to review')">
           <li
             v-for="review in visibleReviews"
             :key="`${review.reference.lessonId}/${review.reference.revision}/${review.reference.lineId}/${review.reference.playingColor}`"
           >
             <div>
-              <span class="side-token" :class="{ 'is-black': review.line.playingColor === 'b' }"
-                >You play {{ colorName(review.line.playingColor) }}</span
-              >
-              <h3>{{ review.course.title }}</h3>
-              <p class="review-line">{{ review.line.title }}</p>
+              <span class="side-token" :class="{ 'is-black': review.line.playingColor === 'b' }">{{
+                t('You play {p0}', { p0: colorName(review.line.playingColor) })
+              }}</span>
+              <h3>{{ t(review.course.title) }}</h3>
+              <p class="review-line">{{ t(review.line.title) }}</p>
               <p v-if="review.line.lastOutcome === 'unknown'" class="muted">
-                Earlier practice recorded · recall not tracked yet
+                {{ t('Earlier practice recorded · recall not tracked yet') }}
               </p>
               <p v-else-if="review.line.nextReviewAt" class="muted">
-                Suggested review:
+                {{ t('Suggested review:') }}
                 <time :datetime="review.line.nextReviewAt">{{
                   formatDate(review.line.nextReviewAt)
                 }}</time>
               </p>
             </div>
-            <RouterLink class="primary-link" :to="reviewLink(review.reference)"
-              >Review this line</RouterLink
-            >
+            <RouterLink class="primary-link" :to="reviewLink(review.reference)">{{
+              t('Review this line')
+            }}</RouterLink>
           </li>
         </ul>
         <button
@@ -208,15 +224,17 @@ onBeforeUnmount(() => {
           :aria-expanded="showAllReviews"
           @click="showAllReviews = !showAllReviews"
         >
-          {{ showAllReviews ? 'Show fewer reviews' : 'Show more suggestions' }}
+          {{ showAllReviews ? t('Show fewer reviews') : t('Show more suggestions') }}
         </button>
       </section>
       <section class="course-section" aria-labelledby="course-progress-heading">
-        <h2 id="course-progress-heading">Your course progress</h2>
+        <h2 id="course-progress-heading">{{ t('Your course progress') }}</h2>
         <p class="muted">
-          Counts cover the current course version and the pieces shown. Practice with White and
-          Black is recorded separately. Each course starts with its recommended pieces; switch
-          pieces to see your other practice.
+          {{
+            t(
+              'Counts cover the current course version and the pieces shown. Practice with White and Black is recorded separately. Each course starts with its recommended pieces; switch pieces to see your other practice.',
+            )
+          }}
         </p>
         <div class="course-progress-grid">
           <article
@@ -224,98 +242,145 @@ onBeforeUnmount(() => {
             :key="course.id"
             class="course-progress-card"
             role="region"
-            :aria-label="`${course.title} practice`"
+            :aria-label="t('{p0} practice', { p0: t(course.title) })"
           >
             <div class="card-meta">
-              <span class="side-token" :class="{ 'is-black': courseColor(course) === 'b' }"
-                >You play {{ colorName(courseColor(course)) }}</span
-              >
-              <span class="version-tag">Version {{ course.revision }}</span>
+              <span class="side-token" :class="{ 'is-black': courseColor(course) === 'b' }">{{
+                t('You play {p0}', { p0: colorName(courseColor(course)) })
+              }}</span>
+              <span class="version-tag">{{ t('Version {p0}', { p0: course.revision }) }}</span>
             </div>
-            <h3>{{ course.title }}</h3>
+            <h3>{{ t(course.title) }}</h3>
             <p class="coverage-count">
-              {{ practisedCount(course) }} of {{ course.lineCount }} current
-              {{ course.lineCount === 1 ? 'line' : 'lines' }} practised as
-              {{ colorName(courseColor(course)) }}
+              {{
+                t(
+                  course.lineCount === 1
+                    ? '{p0} of {p1} current line practised as {p2}'
+                    : '{p0} of {p1} current lines practised as {p2}',
+                  {
+                    p0: practisedCount(course),
+                    p1: course.lineCount,
+                    p2: colorName(courseColor(course)),
+                  },
+                )
+              }}
             </p>
             <progress
               :value="practisedCount(course)"
               :max="course.lineCount"
               :style="{ '--segments': course.lineCount }"
-              :aria-label="`${course.title}: current lines practised as ${colorName(courseColor(course))}`"
+              :aria-label="
+                t('{p0}: current lines practised as {p1}', {
+                  p0: course.title,
+                  p1: colorName(courseColor(course)),
+                })
+              "
             />
             <label class="pieces-label"
-              >Your pieces<select
+              >{{ t('Your pieces')
+              }}<select
                 :value="courseColor(course)"
-                :aria-label="`Pieces for ${course.title}`"
+                :aria-label="t('Pieces for {p0}', { p0: t(course.title) })"
                 @change="changePieces(course, $event)"
               >
                 <option value="w">
-                  White{{ course.recommendedColor === 'w' ? ' (recommended)' : '' }}
+                  {{ t('White') }}{{ course.recommendedColor === 'w' ? t(' (recommended)') : '' }}
                 </option>
                 <option value="b">
-                  Black{{ course.recommendedColor === 'b' ? ' (recommended)' : '' }}
+                  {{ t('Black') }}{{ course.recommendedColor === 'b' ? t(' (recommended)') : '' }}
                 </option>
               </select></label
             >
             <details class="course-lines">
               <summary>
-                View {{ course.lineCount }} {{ course.lineCount === 1 ? 'line' : 'lines' }}
+                {{
+                  t('View {p0} {p1}', {
+                    p0: course.lineCount,
+                    p1: course.lineCount === 1 ? t('line') : t('lines'),
+                  })
+                }}
               </summary>
-              <ul :aria-label="`${course.title} lines as ${colorName(courseColor(course))}`">
+              <ul
+                :aria-label="
+                  t('{p0} lines as {p1}', {
+                    p0: t(course.title),
+                    p1: colorName(courseColor(course)),
+                  })
+                "
+              >
                 <li
                   v-for="line in courseLines(course)"
                   :key="`${line.lineId}/${line.playingColor}`"
                 >
-                  <h4>{{ line.title }}</h4>
-                  <p class="line-status">{{ lineStatus(line) }}</p>
+                  <h4>{{ t(line.title) }}</h4>
+                  <p class="line-status">{{ t(lineStatus(line)) }}</p>
                   <p v-if="line.completions">
                     {{ line.completions }}
-                    {{ line.completions === 1 ? 'saved practice' : 'saved practices'
+                    {{ line.completions === 1 ? t('saved practice') : t('saved practices')
                     }}<template v-if="line.lastPractisedAt">
-                      · Last practised
+                      {{ t('· Last practised') }}
                       <time :datetime="line.lastPractisedAt">{{
                         formatDate(line.lastPractisedAt)
                       }}</time></template
                     >
                   </p>
                   <p v-if="line.completions && !line.assessedCompletions" class="muted">
-                    Earlier practice was saved before recall tracking. Review to see what you
-                    remember.
+                    {{
+                      t(
+                        'Earlier practice was saved before recall tracking. Review to see what you remember.',
+                      )
+                    }}
                   </p>
                   <template v-else-if="line.assessedCompletions">
                     <p>
-                      Recall tracked in {{ line.assessedCompletions }} of
-                      {{ line.completions }} saved practices.
-                      {{ line.unassistedCompletions }} finished without help.
+                      {{
+                        t(
+                          'Recall tracked in {p0} of {p1} saved practices. {p2} finished without help.',
+                          {
+                            p0: line.assessedCompletions,
+                            p1: line.completions,
+                            p2: line.unassistedCompletions,
+                          },
+                        )
+                      }}
                     </p>
                     <p v-if="line.lastOutcome === 'recalled'">
-                      Latest tracked practice: recalled without hints, retries or takebacks.
+                      {{
+                        t('Latest tracked practice: recalled without hints, retries or takebacks.')
+                      }}
                     </p>
                     <p v-else>
-                      Latest tracked practice: used a hint, retry or takeback. Repetition helps
-                      these moves feel familiar.
+                      {{
+                        t(
+                          'Latest tracked practice: used a hint, retry or takeback. Repetition helps these moves feel familiar.',
+                        )
+                      }}
                     </p>
                   </template>
                   <p v-if="line.nextReviewAt">
-                    Suggested review:
+                    {{ t('Suggested review:') }}
                     <time :datetime="line.nextReviewAt">{{ formatDate(line.nextReviewAt) }}</time>
                   </p>
                   <details v-if="focusPositions(line).length" class="decision-notes">
-                    <summary>Moves to revisit</summary>
+                    <summary>{{ t('Moves to revisit') }}</summary>
                     <ul>
                       <li v-for="position in focusPositions(line)" :key="position.ply">
-                        <p>{{ position.hint }}</p>
+                        <p>{{ t(position.hint) }}</p>
                         <p class="muted">
-                          Recalled on first try without a hint in {{ position.recalled }} of
-                          {{ position.practices }} tracked practices.<template
-                            v-if="position.hints"
-                          >
-                            Hints used in {{ position.hints }}.</template
+                          {{
+                            t(
+                              'Recalled on first try without a hint in {p0} of {p1} tracked practices.',
+                              { p0: position.recalled, p1: position.practices },
+                            )
+                          }}<template v-if="position.hints">
+                            {{ t('Hints used in {p0}.', { p0: position.hints }) }}</template
                           ><template v-if="position.retries">
-                            {{ position.retries }}
-                            additional {{ position.retries === 1 ? 'try' : 'tries' }} (including
-                            takebacks).</template
+                            {{
+                              t('{p0} additional {p1} (including takebacks).', {
+                                p0: position.retries,
+                                p1: position.retries === 1 ? t('try') : t('tries'),
+                              })
+                            }}</template
                           >
                         </p>
                       </li>
@@ -324,52 +389,83 @@ onBeforeUnmount(() => {
                   <RouterLink
                     class="line-action"
                     :to="lineLink(course, line)"
-                    :aria-label="`${line.completions ? 'Review' : 'Learn'} ${course.title}: ${line.title} as ${colorName(line.playingColor)}`"
-                    >{{ line.completions ? 'Review this line' : 'Learn this line' }}</RouterLink
+                    :aria-label="
+                      t('{p0} {p1}: {p2} as {p3}', {
+                        p0: line.completions ? 'Review' : 'Learn',
+                        p1: course.title,
+                        p2: line.title,
+                        p3: colorName(line.playingColor),
+                      })
+                    "
+                    >{{ t(line.completions ? 'Review this line' : 'Learn this line') }}</RouterLink
                   >
                 </li>
               </ul>
             </details>
-            <RouterLink v-if="!practisedCount(course)" class="line-action" :to="startLink(course)"
-              >Start with guidance</RouterLink
+            <RouterLink
+              v-if="!practisedCount(course)"
+              class="line-action"
+              :to="startLink(course)"
+              >{{ t('Start with guidance') }}</RouterLink
             >
           </article>
         </div>
         <p v-if="!overview.courses.length">
-          Courses are being prepared. <RouterLink to="/learn">Browse lessons</RouterLink> for the
-          latest additions.
+          {{ t('Courses are being prepared.') }}
+          <RouterLink to="/learn">{{ t('Browse lessons') }}</RouterLink>
+          {{ t('for the latest additions.') }}
         </p>
       </section>
       <details v-if="overview.history.length" class="earlier-practice">
-        <summary>Earlier course versions</summary>
+        <summary>{{ t('Earlier course versions') }}</summary>
         <p class="muted">
-          Your earlier practice is kept here. Course updates start separate progress, so these
-          records do not add to current line coverage.
+          {{
+            t(
+              'Your earlier practice is kept here. Course updates start separate progress, so these records do not add to current line coverage.',
+            )
+          }}
         </p>
-        <ul aria-label="Earlier course practice">
+        <ul :aria-label="t('Earlier course practice')">
           <li
             v-for="entry in overview.history"
             :key="`${entry.lessonId}/${entry.revision}/${entry.lineId}/${entry.playingColor}`"
           >
-            <h3>{{ entry.title }} · Version {{ entry.revision }}</h3>
-            <p>{{ entry.lineTitle }} · You played {{ colorName(entry.playingColor) }}</p>
+            <h3>{{ t('{p0} · Version {p1}', { p0: t(entry.title), p1: entry.revision }) }}</h3>
             <p>
-              {{ entry.completions }}
-              {{ entry.completions === 1 ? 'saved practice' : 'saved practices' }} · Last practised
+              {{
+                t('{p0} · You played {p1}', {
+                  p0: entry.lineTitle,
+                  p1: colorName(entry.playingColor),
+                })
+              }}
+            </p>
+            <p>
+              {{
+                t('{p0} {p1} · Last practised', {
+                  p0: entry.completions,
+                  p1: entry.completions === 1 ? t('saved practice') : t('saved practices'),
+                })
+              }}
               <time :datetime="entry.lastPractisedAt">{{ formatDate(entry.lastPractisedAt) }}</time>
             </p>
             <p v-if="entry.assessedCompletions" class="muted">
-              {{ entry.unassistedCompletions }} of {{ entry.assessedCompletions }} tracked practices
-              finished without help.
+              {{
+                t('{p0} of {p1} tracked practices finished without help.', {
+                  p0: entry.unassistedCompletions,
+                  p1: entry.assessedCompletions,
+                })
+              }}
             </p>
-            <p v-else class="muted">Recall was not tracked for this practice.</p>
+            <p v-else class="muted">{{ t('Recall was not tracked for this practice.') }}</p>
           </li>
         </ul>
       </details>
       <p class="progress-note">
-        These records describe practice of the taught lines, not your overall chess strength. Hints
-        and retries help you learn; a legal move outside an exercise is not automatically a chess
-        mistake.
+        {{
+          t(
+            'These records describe practice of the taught lines, not your overall chess strength. Hints and retries help you learn; a legal move outside an exercise is not automatically a chess mistake.',
+          )
+        }}
       </p>
     </template>
   </main>

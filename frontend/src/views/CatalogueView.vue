@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { t, formatNumber } from '../i18n'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCatalogueStore } from '../stores/catalogue'
@@ -88,14 +89,17 @@ function browse(name: string) {
 <template>
   <main id="main-content" class="page-width catalogue-main">
     <header class="catalogue-header">
-      <h1>Look up an opening.</h1>
+      <h1>{{ t('Look up an opening.') }}</h1>
       <p class="catalogue-intro">
-        Search names and compare recorded sequences. Some sequences stop earlier or reach a setup in
-        a different order, so we group identical names together.
+        {{
+          t(
+            'Search names and compare recorded sequences. Some sequences stop earlier or reach a setup in a different order, so we group identical names together.',
+          )
+        }}
       </p>
     </header>
-    <form class="catalogue-search" aria-label="Search openings" @submit.prevent="navigate()">
-      <label class="search-field" for="opening-search">Opening name</label>
+    <form class="catalogue-search" :aria-label="t('Search openings')" @submit.prevent="navigate()">
+      <label class="search-field" for="opening-search">{{ t('Opening name') }}</label>
       <div class="search-row">
         <input
           id="opening-search"
@@ -103,60 +107,68 @@ function browse(name: string) {
           type="search"
           maxlength="100"
           placeholder="Italian Game"
-        /><button type="submit" class="primary-link">Search openings</button>
+        /><button type="submit" class="primary-link">{{ t('Search openings') }}</button>
       </div>
       <details class="advanced-search">
-        <summary>Optional search filters</summary>
+        <summary>{{ t('Optional search filters') }}</summary>
         <label
-          >ECO code<input
+          >{{ t('ECO code')
+          }}<input
             v-model="eco"
             maxlength="3"
             pattern="[A-Ea-e][0-9]{0,2}"
             placeholder="C50" /></label
-        ><small>This is a reference code. You do not need it to learn an opening.</small>
+        ><small>{{ t('This is a reference code. You do not need it to learn an opening.') }}</small>
       </details>
     </form>
-    <nav class="family-links" aria-label="Browse opening families">
-      <span>Browse a family</span>
+    <nav class="family-links" :aria-label="t('Browse opening families')">
+      <span>{{ t('Browse a family') }}</span>
       <button v-for="family in families" :key="family" type="button" @click="browse(family)">
-        {{ family }}
+        {{ t(family) }}
       </button>
     </nav>
     <p class="play-first notice">
-      <strong>Want to play?</strong> <RouterLink to="/learn">Start a beginner lesson</RouterLink>.
-      We play the other side and guide your next move.
+      <strong>{{ t('Want to play?') }}</strong>
+      <RouterLink to="/learn">{{ t('Start a beginner lesson') }}</RouterLink
+      >. {{ t('We play the other side and guide your next move.') }}
     </p>
     <p class="result-count" role="status" aria-live="polite">
       {{
         catalogue.loading
-          ? 'Loading openings…'
+          ? t('Loading openings…')
           : catalogue.page
-            ? `${catalogue.page.total.toLocaleString()} named variations found`
+            ? t('{p0} named variations found', { p0: formatNumber(catalogue.page.total) })
             : ''
       }}
     </p>
     <div v-if="catalogue.error" class="notice status-actions" role="alert">
-      <p>{{ catalogue.error }}</p>
-      <button type="button" @click="catalogue.open(query)">Try again</button>
+      <p>{{ t(catalogue.error) }}</p>
+      <button type="button" @click="catalogue.open(query)">{{ t('Try again') }}</button>
     </div>
     <section
       v-if="catalogue.page"
       :aria-busy="catalogue.loading"
-      aria-label="Opening search results"
+      :aria-label="t('Opening search results')"
     >
       <p v-if="!catalogue.status?.sourceSha" role="status">
-        The opening library is being prepared.
+        {{ t('The opening library is being prepared.') }}
       </p>
       <template v-else>
-        <ul class="opening-results" aria-label="Named openings">
+        <ul class="opening-results" :aria-label="t('Named openings')">
           <li v-for="opening in catalogue.page.items" :key="opening.sourceId">
             <details @toggle="toggle(opening, $event)">
               <summary>
                 <strong>{{ opening.name }}</strong
                 ><span class="result-meta"
-                  >{{ opening.sequenceCount ?? 1 }} recorded
-                  {{ (opening.sequenceCount ?? 1) === 1 ? 'sequence' : 'sequences' }} ·
-                  <span class="view-moves">View moves on a board</span></span
+                  >{{
+                    t(
+                      (opening.sequenceCount ?? 1) === 1
+                        ? '{p0} recorded sequence ·'
+                        : '{p0} recorded sequences ·',
+                      { p0: opening.sequenceCount ?? 1 },
+                    )
+                  }}
+                  <span class="view-moves">{{ t('View moves on a board') }}</span></span
                 >
               </summary>
               <div class="result-detail">
@@ -168,8 +180,11 @@ function browse(name: string) {
                     :name="opening.name"
                   />
                   <p class="detail-note">
-                    These are reference sequences, not separate lessons. Longer sequences can
-                    continue a shorter one.
+                    {{
+                      t(
+                        'These are reference sequences, not separate lessons. Longer sequences can continue a shorter one.',
+                      )
+                    }}
                   </p>
                   <ol class="reference-sequences">
                     <li v-for="(sequence, position) in opening.sequences" :key="sequence.pgn">
@@ -179,16 +194,22 @@ function browse(name: string) {
                         @click="expanded.set(opening.sourceId, position)"
                       >
                         <code>{{ sequence.pgn }}</code
-                        ><small>Reference code {{ sequence.eco }} · Show on the board</small>
+                        ><small>{{
+                          t('Reference code {p0} · Show on the board', { p0: sequence.eco })
+                        }}</small>
                       </button>
                     </li>
                   </ol>
                 </template>
                 <p v-else class="detail-note">
-                  Move sequences are unavailable in this cached result. Search again to refresh it.
+                  {{
+                    t(
+                      'Move sequences are unavailable in this cached result. Search again to refresh it.',
+                    )
+                  }}
                 </p>
                 <p v-if="(opening.sequenceCount ?? 1) > 3" class="detail-note">
-                  Showing the three shortest sequences.
+                  {{ t('Showing the three shortest sequences.') }}
                 </p>
               </div>
             </details>
@@ -196,23 +217,23 @@ function browse(name: string) {
               v-if="courseFor(opening)"
               class="lesson-entry"
               :to="`/learn/${courseFor(opening)?.id}`"
-              >{{ courseFor(opening)?.title }} beginner lesson →</RouterLink
+              >{{ t('{p0} beginner lesson →', { p0: courseFor(opening)?.title }) }}</RouterLink
             >
-            <span v-else class="reference-label">Guided lesson not available yet</span>
+            <span v-else class="reference-label">{{ t('Guided lesson not available yet') }}</span>
           </li>
         </ul>
         <p v-if="!catalogue.page.items.length" class="notice">
-          No matching openings. Try a shorter name or another ECO code.
+          {{ t('No matching openings. Try a shorter name or another ECO code.') }}
         </p>
-        <nav class="catalogue-pages" aria-label="Catalogue pages">
+        <nav class="catalogue-pages" :aria-label="t('Catalogue pages')">
           <button
             type="button"
             :aria-disabled="currentPage <= 1 || catalogue.loading"
             @click="currentPage > 1 && !catalogue.loading && navigate(currentPage - 1)"
           >
-            Previous
+            {{ t('Previous') }}
           </button>
-          <span>Page {{ currentPage }}</span>
+          <span>{{ t('Page {p0}', { p0: currentPage }) }}</span>
           <button
             type="button"
             :aria-disabled="
@@ -224,11 +245,13 @@ function browse(name: string) {
               navigate(currentPage + 1)
             "
           >
-            Next
+            {{ t('Next') }}
           </button>
         </nav>
         <p class="catalogue-source">
-          Opening names from the Lichess CC0 catalogue. Course content is curated separately.
+          {{
+            t('Opening names from the Lichess CC0 catalogue. Course content is curated separately.')
+          }}
         </p>
       </template>
     </section>
