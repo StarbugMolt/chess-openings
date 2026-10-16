@@ -214,7 +214,7 @@ test('variation practice keeps chosen paths, supports Black, hints, name reveal,
   const italian = ((await (await page.request.get('/api/lessons/italian')).json()) as LessonPayload)
     .lesson
   await page.getByRole('button', { name: 'Select all available', exact: true }).click()
-  // Keep the introductory pair while deeper curriculum remains available to select.
+  // Train the first two lines while the remaining curriculum stays available to select.
   for (const line of italian.lines.slice(2))
     await page.getByRole('checkbox', { name: line.title, exact: true }).uncheck()
   await page.getByRole('button', { name: 'Start training', exact: true }).click()
@@ -230,7 +230,8 @@ test('variation practice keeps chosen paths, supports Black, hints, name reveal,
     0,
   )
   await page.getByText('Moves played (chess notation)', { exact: true }).click()
-  const quieter = italian.lines.find((line) => line.id === 'quiet-plan')
+  // The learner deliberately chooses the second line's branch; the trainer must credit that line.
+  const quieter = italian.lines[1]
   expect(quieter).toBeTruthy()
   try {
     const italianCompleted = await playScope(
@@ -239,7 +240,7 @@ test('variation practice keeps chosen paths, supports Black, hints, name reveal,
       italian,
       italian.lines.slice(0, 2),
       false,
-      'quiet-plan',
+      quieter!.id,
     )
     expect(italianCompleted.id).toBe(quieter!.id)
     await expect.poll(() => italianSaveWaiting).toBe(true)

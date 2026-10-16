@@ -17,6 +17,10 @@ use AppMigrations\LessonData\Version20261015011100;
 use AppMigrations\LessonData\Version20261015011200;
 use AppMigrations\LessonData\Version20261015011300;
 use AppMigrations\LessonData\Version20261015011400;
+use AppMigrations\LessonData\Version20261015011500;
+use AppMigrations\LessonData\Version20261015011600;
+use AppMigrations\LessonData\Version20261015011700;
+use AppMigrations\LessonData\Version20261015011800;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -54,6 +58,10 @@ final class FrozenLessonPathsTest extends TestCase
         'kings-indian/1/fianchetto-panno' => [26, 'd4 Nf6 c4 g6 Nf3 Bg7 g3 O-O Bg2 d6 O-O Nc6 Nc3 a6 d5 Na5 Nd2 c5 Qc2 Rb8 b3 b5 Bb2 bxc4 bxc4 Bh6'],
         'slav/1/czech-main-line' => [17, 'd4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5 e3 e6 Bxc4 Bb4 O-O O-O Qe2'],
         'slav/1/semi-slav-meran' => [29, 'd4 d5 c4 c6 Nc3 Nf6 Nf3 e6 e3 Nbd7 Bd3 dxc4 Bxc4 b5 Bd3 a6 e4 c5 e5 cxd4 Nxb5 Nxe5 Nxe5 axb5 O-O Qd5 Qe2 Ba6 Bg5'],
+        'italian/3/giuoco-piano-moller' => [27, 'e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Bxc3 d5 Bf6 Re1 Ne7 Rxe4 d6 Bg5 Bxg5 Nxg5 O-O Nxh7'],
+        'caro-kann/3/panov-development' => [19, 'e4 c6 d4 d5 exd5 cxd5 c4 Nc6 Nc3 Nf6 Nf3 e6 cxd5 exd5 Bb5 Bd6 Bg5 O-O O-O'],
+        'french/3/tarrasch-chistyakov' => [20, 'e4 e6 d4 d5 Nd2 c5 exd5 Qxd5 Ngf3 cxd4 Bc4 Qd6 O-O Nf6 Nb3 Nc6 Nbxd4 Nxd4 Nxd4 a6'],
+        'slav/2/czech-main-line' => [19, 'd4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5 e3 e6 Bxc4 Bb4 O-O O-O Qe2 Ne4 g4'],
     ];
 
     /** @return iterable<string, array{list<array{uci: string, san: string, fromKey: string, toKey: string}>, int, string}> */
@@ -130,6 +138,10 @@ final class FrozenLessonPathsTest extends TestCase
         require_once $migrationRoot.'/LessonData/Version20261015011200.php';
         require_once $migrationRoot.'/LessonData/Version20261015011300.php';
         require_once $migrationRoot.'/LessonData/Version20261015011400.php';
+        require_once $migrationRoot.'/LessonData/Version20261015011500.php';
+        require_once $migrationRoot.'/LessonData/Version20261015011600.php';
+        require_once $migrationRoot.'/LessonData/Version20261015011700.php';
+        require_once $migrationRoot.'/LessonData/Version20261015011800.php';
 
         /** @var array<string, list<array{uci: string, san: string, fromKey: string, toKey: string}>> $paths */
         $paths = require $migrationRoot.'/Support/Paths20261015.php';
@@ -159,6 +171,10 @@ final class FrozenLessonPathsTest extends TestCase
             'kings-indian/1/fianchetto-panno' => [Version20261015011300::class, 'PANNO_FACTS'],
             'slav/1/czech-main-line' => [Version20261015011400::class, 'CZECH_FACTS'],
             'slav/1/semi-slav-meran' => [Version20261015011400::class, 'MERAN_FACTS'],
+            'italian/3/giuoco-piano-moller' => [Version20261015011500::class, 'MOLLER_FACTS'],
+            'caro-kann/3/panov-development' => [Version20261015011600::class, 'PANOV_FACTS'],
+            'french/3/tarrasch-chistyakov' => [Version20261015011700::class, 'TARRASCH_FACTS'],
+            'slav/2/czech-main-line' => [Version20261015011800::class, 'CZECH_FACTS'],
         ];
         foreach ($constants as $id => [$class, $constant]) {
             /** @var list<array{uci: string, san: string, fromKey: string, toKey: string}> $facts */

@@ -37,10 +37,10 @@ try {
     $cli(['app:database:prepare',...($full ? [] : ['--source-directory=/app/backend/tests/Fixtures/Lessons/source'])]);
     if ($full) { $assert(3865 === (int)$db->fetchOne('SELECT COUNT(*) FROM opening_entry'),'Full pinned bootstrap source was not imported.'); }
     $assert(10 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson'),'Fresh bootstrap did not publish courses.');
-    $assert(35 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson_line') && 645 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson_line_step'),'Finite curriculum path count wrong.');
-    $assert(15 === (int)$db->fetchOne('SELECT COUNT(*) FROM doctrine_lesson_versions'),'Lesson history missing.');
+    $assert(46 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson_line') && 880 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson_line_step'),'Finite curriculum path count wrong.');
+    $assert(19 === (int)$db->fetchOne('SELECT COUNT(*) FROM doctrine_lesson_versions'),'Lesson history missing.');
     $cli(['app:database:prepare','--source-directory=/missing/retained-catalogue']);
-    $assert(1 === (int)$db->fetchOne('SELECT COUNT(*) FROM opening_import_batch') && 645 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson_line_step'),'Bootstrap rerun changed source or lessons.');
+    $assert(1 === (int)$db->fetchOne('SELECT COUNT(*) FROM opening_import_batch') && 880 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson_line_step'),'Bootstrap rerun changed source or lessons.');
     $graphWriter = new LessonGraphV1($db);
     $counts = $db->fetchAllKeyValue('SELECT \'positions\',COUNT(*) FROM authored_chess_position UNION ALL SELECT \'moves\',COUNT(*) FROM authored_chess_move');
     $assert((int)$counts['positions'] > 0 && (int)$counts['moves'] > 0,'London continuation has no separate authored provenance.');
@@ -94,23 +94,26 @@ try {
     $a=$client(); $b=$client();
     foreach ([$a,$b] as $i=>$browser) { $post($browser,'/api/auth/login',['email'=>'lesson'.($i+1).'@example.test','password'=>$password]); $assert(200 === $browser->getResponse()->getStatusCode(),'Test account login failed.'); }
     $graph = $get($a,'/api/lessons/italian');
-    $assert(2 === $graph['lesson']['revision'] && 1 === $graph['catalogueRevision'] && ['centre-plan','quiet-plan','pianissimo-main-line','two-knights-knorre'] === array_column($graph['lesson']['lines'],'id'),'Lesson identities or lines wrong.');
-    $assert(17 === count($graph['lesson']['lines'][2]['steps']) && 23 === count($graph['lesson']['lines'][3]['steps']),'Complete named Italian lines were not published.');
+    $assert(3 === $graph['lesson']['revision'] && 1 === $graph['catalogueRevision'] && ['pianissimo-main-line','giuoco-piano-moller','two-knights-knorre'] === array_column($graph['lesson']['lines'],'id'),'Lesson identities or lines wrong.');
+    $assert([17,27,23] === array_map(static fn(array $l): int => count($l['steps']),$graph['lesson']['lines']),'Complete named Italian lines were not published.');
+    // Owner requirement: every current line teaches at least nine of the learner's own moves. London is the documented exception: the pinned catalogue has no deeper London record.
+    $short = $db->fetchFirstColumn("SELECT CONCAT(l.id,'/',n.id) FROM lesson l JOIN lesson_revision r ON r.lesson_id=l.id AND r.revision=l.current_revision JOIN lesson_line n ON n.lesson_id=l.id AND n.revision=l.current_revision WHERE l.id<>'london' AND IF(r.recommended_color='w',CEIL(n.ply_count/2),FLOOR(n.ply_count/2))<9");
+    $assert([] === $short,'Current lines are too short: '.implode(', ',$short));
     $assert($a->getResponse()->headers->hasCacheControlDirective('private') && $a->getResponse()->headers->hasCacheControlDirective('no-store'),'User-specific lesson response could be shared.');
     $assert([] === $graph['progress'],'Fresh user had invented progress.');
     $londonLesson = $get($a,'/api/lessons/london')['lesson'];
     $assert(3 === $londonLesson['revision'] && 15 === count($londonLesson['lines'][0]['steps']) && 'O-O' === $londonLesson['lines'][0]['steps'][14]['san'],'Full London through White castling was not published.');
     $caro = $get($a,'/api/lessons/caro-kann')['lesson'];
-    $assert('b' === $caro['recommendedColor'] && 4 === count($caro['lines']) && 18 === count($caro['lines'][1]['steps']) && 24 === count($caro['lines'][2]['steps']),'Black Caro-Kann setup/continuation unavailable.');
+    $assert('b' === $caro['recommendedColor'] && 3 === $caro['revision'] && [24,19,19] === array_map(static fn(array $l): int => count($l['steps']),$caro['lines']) && 'O-O' === $caro['lines'][2]['steps'][18]['san'],'Black Caro-Kann lines unavailable.');
     $queensGambit = $get($a,'/api/lessons/queens-gambit')['lesson'];
     $assert(2 === $queensGambit['revision'] && [19,28,26] === array_map(static fn(array $l): int => count($l['steps']),$queensGambit['lines']) && 'Qxe5' === $queensGambit['lines'][1]['steps'][27]['san'],'Complete named Queen\'s Gambit lines were not published.');
-    $newCourses = ['ruy-lopez'=>['w',[28,24,36]],'catalan'=>['w',[23,20]],'sicilian'=>['b',[18,24,20]],'kings-indian'=>['b',[27,26]],'slav'=>['b',[17,29]]];
-    foreach ($newCourses as $courseId => [$color,$lengths]) {
+    $newCourses = ['ruy-lopez'=>['w',[28,24,36],1],'catalan'=>['w',[23,20],1],'sicilian'=>['b',[18,24,20],1],'kings-indian'=>['b',[27,26],1],'slav'=>['b',[19,29],2]];
+    foreach ($newCourses as $courseId => [$color,$lengths,$revision]) {
         $course = $get($a,'/api/lessons/'.$courseId)['lesson'];
-        $assert(1 === $course['revision'] && $color === $course['recommendedColor'] && $lengths === array_map(static fn(array $l): int => count($l['steps']),$course['lines']),'Complete named lines missing for '.$courseId.'.');
+        $assert($revision === $course['revision'] && $color === $course['recommendedColor'] && $lengths === array_map(static fn(array $l): int => count($l['steps']),$course['lines']),'Complete named lines missing for '.$courseId.'.');
     }
     $french = $get($a,'/api/lessons/french')['lesson'];
-    $assert(2 === $french['revision'] && [14,20,18] === array_map(static fn(array $l): int => count($l['steps']),$french['lines']),'Complete named French lines were not published.');
+    $assert(3 === $french['revision'] && [20,18,20] === array_map(static fn(array $l): int => count($l['steps']),$french['lines']),'Complete named French lines were not published.');
     $line = $graph['lesson']['lines'][0];
     $body = ['attemptId'=>'01234567-89ab-4cde-8fab-0123456789ab','lessonId'=>'italian','revision'=>$graph['lesson']['revision'],'lineId'=>$line['id'],'playingColor'=>'w','hintCount'=>1,'path'=>array_column($line['steps'],'uci')];
     $post($a,'/api/me/completions',$body,false); $assert(403 === $a->getResponse()->getStatusCode(),'Completion lacked CSRF.');
@@ -126,14 +129,14 @@ try {
     $assert([] === $get($b,'/api/me/progress?userId=1')['progress'],'Second user could access first user progress.');
     $post($b,'/api/me/completions',$body); $assert(200 === $b->getResponse()->getStatusCode() && 2 === (int)$db->fetchOne('SELECT COUNT(*) FROM user_line_completion'),'Idempotency keys incorrectly shared between accounts.');
     // A new authored revision does not overwrite or reinterpret an attempt pinned to the previous revision.
-    $db->executeStatement('INSERT INTO lesson_revision (lesson_id,revision,title,introduction,start_position_id,published_at) SELECT lesson_id,3,title,introduction,start_position_id,published_at FROM lesson_revision WHERE lesson_id=\'italian\' AND revision=2');
-    $db->executeStatement('INSERT INTO lesson_line (lesson_id,revision,id,title,description,sort_order,ply_count) SELECT lesson_id,3,id,title,description,sort_order,ply_count FROM lesson_line WHERE lesson_id=\'italian\' AND revision=2');
-    $db->executeStatement('INSERT INTO lesson_line_step (lesson_id,revision,line_id,ply,chess_move_id,hint,explanation) SELECT lesson_id,3,line_id,ply,chess_move_id,hint,explanation FROM lesson_line_step WHERE lesson_id=\'italian\' AND revision=2');
-    $db->executeStatement("UPDATE lesson SET current_revision=3 WHERE id='italian'");
+    $db->executeStatement('INSERT INTO lesson_revision (lesson_id,revision,title,introduction,start_position_id,published_at) SELECT lesson_id,4,title,introduction,start_position_id,published_at FROM lesson_revision WHERE lesson_id=\'italian\' AND revision=3');
+    $db->executeStatement('INSERT INTO lesson_line (lesson_id,revision,id,title,description,sort_order,ply_count) SELECT lesson_id,4,id,title,description,sort_order,ply_count FROM lesson_line WHERE lesson_id=\'italian\' AND revision=3');
+    $db->executeStatement('INSERT INTO lesson_line_step (lesson_id,revision,line_id,ply,chess_move_id,hint,explanation) SELECT lesson_id,4,line_id,ply,chess_move_id,hint,explanation FROM lesson_line_step WHERE lesson_id=\'italian\' AND revision=3');
+    $db->executeStatement("UPDATE lesson SET current_revision=4 WHERE id='italian'");
     $post($a,'/api/me/completions',[...$body,'attemptId'=>'11234567-89ab-4cde-8fab-0123456789ab','playingColor'=>'b']);
     $assert(200 === $a->getResponse()->getStatusCode(),'Retained old revision rejected during new publication.');
-    $assert(3 === $get($a,'/api/lessons/italian')['lesson']['revision'],'New lesson navigation did not see new revision.');
-    $assert(2 === (int)$db->fetchOne('SELECT revision FROM user_line_completion WHERE attempt_id=? AND user_id=1',[$body['attemptId']]),'Old progress changed revision.');
+    $assert(4 === $get($a,'/api/lessons/italian')['lesson']['revision'],'New lesson navigation did not see new revision.');
+    $assert(3 === (int)$db->fetchOne('SELECT revision FROM user_line_completion WHERE attempt_id=? AND user_id=1',[$body['attemptId']]),'Old progress changed revision.');
     $db->executeStatement('UPDATE opening_catalogue_state SET catalogue_revision=2');
     $post($a,'/api/me/completions',$body); $assert(200 === $a->getResponse()->getStatusCode(),'Catalogue update invalidated pinned authored path.');
     $assert(372 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson_line_step WHERE revision=1'),'Source change mutated authored steps.');

@@ -108,7 +108,7 @@ try {
     $expect($a, [...$variation, 'path' => $quietPath], 400, 'Alternative was credited as an unplayed target line.');
     $upstreamOnly = $mainPath;
     $upstreamOnly[6] = 'e1g1';
-    $assert(false !== $db->fetchOne('SELECT id FROM chess_move WHERE uci=? AND from_position_id=(SELECT from_position_id FROM chess_move WHERE id=(SELECT chess_move_id FROM lesson_line_step WHERE lesson_id=? AND revision=1 AND line_id=? AND ply=7))', ['e1g1', 'italian', $main['id']]), 'Upstream-only castling fixture is absent.');
+    $assert(false !== $db->fetchOne('SELECT id FROM chess_move WHERE uci=? AND from_position_id=(SELECT from_position_id FROM chess_move WHERE id=(SELECT chess_move_id FROM lesson_line_step WHERE lesson_id=? AND revision=? AND line_id=? AND ply=7))', ['e1g1', 'italian', $lesson['revision'], $main['id']]), 'Upstream-only castling fixture is absent.');
     $expect($a, [...$variation, 'path' => $upstreamOnly], 400, 'A source-only continuation was credited.');
     foreach ([[], array_slice($mainPath, 0, -1), array_fill(0, 65, 'g1f3'), array_fill(0, 64, 'g1f3'), ['first' => 'e2e4'], ['e2e4', 12]] as $path) {
         $expect($a, [...$variation, 'path' => $path], 400, 'Malformed, incomplete or overlong path accepted.');

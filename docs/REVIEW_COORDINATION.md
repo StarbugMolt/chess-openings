@@ -280,3 +280,36 @@ I reserve `frontend/src/views/GuidedLessonView.vue`, `frontend/src/views/Variati
 - **Shared dev DB:** one throwaway verified account was created via Mailpit (`claude-ui-check-…@example.test`). No schema, lesson or catalogue changes.
 
 My reservations above are released.
+
+## Curriculum phase 3: no short lines — Claude (Opus), started 2026-10-16
+
+Owner: "make sure that the openings have enough moves", then commit and push. Six current lines give the learner fewer than 9 moves: Italian `centre-plan`/`quiet-plan` (4), Caro-Kann `exchange-setup` (5), French `advance-centre` (7), Slav `czech-main-line` (8) and London (8). Italian, Caro-Kann and French also *default* to their short line.
+
+Plan, using only complete pinned named records and no authored facts:
+- Italian rev 3: drop the two intros; add the complete Giuoco Piano c3–d4 record (Therkatz-Herzog, 27 plies).
+- Caro-Kann rev 3: drop Exchange (the data stops at 11 plies); Panov becomes its full 19-ply record.
+- French rev 3: Advance is replaced by Tarrasch Chistyakov Modern (20); the data has no Advance line with 9+ Black moves.
+- Slav rev 2: Czech extends to the Sämisch record (19).
+- London is unchanged (the data stops at 11 plies).
+
+In every course the deepest mainstream line becomes `lines[0]`. I reserve lesson migrations `Version20261015011500`–`011800`, the lesson fixtures and tests as before, and the line-position assumptions in `tests/import/variation-test.php` and `practice-test.php`. Then I'll commit the working tree and push it to a branch. **Other sessions: please record here if you have uncommitted in-progress work that must not be included in that commit.**
+
+### Curriculum phase 3 — Claude (Opus): complete and verified (2026-10-16)
+
+`Version20261015011500`–`011800` are added: Italian, Caro-Kann and French revision 3, and Slav revision 2.
+
+**Current lines** (each course's first line is now a deep main line):
+- Italian: `pianissimo-main-line`, `giuoco-piano-moller`, `two-knights-knorre`
+- Caro-Kann: `classical-main-line`, `karpov-main-line`, `panov-development` (now 19 plies)
+- French: `classical-stahlberg`, `winawer-positional`, `tarrasch-chistyakov`
+- Slav: `czech-main-line` (now 19 plies), `semi-slav-meran`
+
+Dropped from current revisions, retained in earlier ones: `centre-plan`, `quiet-plan`, `exchange-setup`, `advance-centre`.
+
+**Totals:** 25 current lines / 46 stored / 880 steps / 19 lesson migrations. The lesson integration test now fails if any non-London current line has fewer than 9 learner moves.
+
+**Test updates:** `variation-test.php` reads the current Italian revision instead of `revision=1`, and `variation.spec.ts` prefers the second current Italian line instead of the removed `quiet-plan`.
+
+**Verified:** the full `CHECK_REUSE_SERVICES=1 bash scripts/check.sh` exited 0. Results: 203 PHP / 4,810 assertions, 227 Vitest, 49 browser passes with 1 intentional skip, and disposable suites 18/81/108/93/84/62/109/146. `full-lessons-test.sh` passed 63 checks and pinned-lessons 31. Practice's 150 → 146 follows its per-line × colour loop.
+
+The shared dev DB has not been migrated to 011800; run `app:lessons:migrate` to see the new revisions. Reservations released.

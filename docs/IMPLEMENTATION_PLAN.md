@@ -1,6 +1,6 @@
 # Chess Openings — Implementation Plan
 
-> **Status (2026-10-16): M0–M5 and M6a are implemented and verified locally.** Both modes, ten courses/27 current finite lines, accounts, measured private progress and scheduled reviews are available. The combined suite passes 199 PHP tests/4,276 assertions, 227 frontend units and 49 browser checks, plus one intentional mobile mouse-drag skip. [GitHub CI](https://github.com/Starbugstone/chess-openings/actions/runs/38861773058) passed for `4e484ef` on 2026-10-16; O2Switch is not provisioned. M6a account download/deletion is implemented; public-launch privacy, retention and hosting verification remain pending. See [PROGRESS.md](PROGRESS.md), [M4_IMPLEMENTATION.md](M4_IMPLEMENTATION.md) and [earlier review fixes](REVIEW_FIXES.md).
+> **Status (2026-10-16): M0–M5 and M6a are implemented and verified locally.** Both modes, ten courses/25 current finite lines, accounts, measured private progress and scheduled reviews are available. The combined suite passes 199 PHP tests/4,276 assertions, 227 frontend units and 49 browser checks, plus one intentional mobile mouse-drag skip. [GitHub CI](https://github.com/Starbugstone/chess-openings/actions/runs/38861773058) passed for `4e484ef` on 2026-10-16; O2Switch is not provisioned. M6a account download/deletion is implemented; public-launch privacy, retention and hosting verification remain pending. See [PROGRESS.md](PROGRESS.md), [M4_IMPLEMENTATION.md](M4_IMPLEMENTATION.md) and [earlier review fixes](REVIEW_FIXES.md).
 >
 > **Agent start here.** Treat the "Accepted decisions" as requirements. The owner approved the imported keys/tables/lifecycle in [IMPORTER_REVIEW.md](IMPORTER_REVIEW.md), London authored provenance in [CURRICULUM_REVIEW.md](CURRICULUM_REVIEW.md) and private M5b progress design in [M5B_REVIEW.md](M5B_REVIEW.md); do not request these approvals again. Curated content and independently authored graph provenance have their own review requirements. Keep changes small and testable, and update this document when a decision changes. Do not quietly replace the chosen stack or expand scope.
 >
@@ -254,14 +254,18 @@ backend/migrations/LessonData/Version20261015010300.php # Caro-Kann, recommended
 backend/migrations/LessonData/Version20261015010400.php # French, recommended Black
 backend/migrations/LessonData/Version20261015010500.php # Queen's Gambit, recommended White
 backend/migrations/LessonData/Version20261015010600.php # Italian revision 2
-backend/migrations/LessonData/Version20261015010700.php # Caro-Kann revision 2
-backend/migrations/LessonData/Version20261015010800.php # French revision 2
-backend/migrations/LessonData/Version20261015010900.php # Queen's Gambit revision 2
+backend/migrations/LessonData/Version20261015010700.php # Queen's Gambit revision 2
+backend/migrations/LessonData/Version20261015010800.php # Caro-Kann revision 2
+backend/migrations/LessonData/Version20261015010900.php # French revision 2
 backend/migrations/LessonData/Version20261015011000.php # Ruy Lopez
 backend/migrations/LessonData/Version20261015011100.php # Catalan
 backend/migrations/LessonData/Version20261015011200.php # Sicilian
 backend/migrations/LessonData/Version20261015011300.php # King's Indian
 backend/migrations/LessonData/Version20261015011400.php # Slav
+backend/migrations/LessonData/Version20261015011500.php # Italian revision 3 (no short lines)
+backend/migrations/LessonData/Version20261015011600.php # Caro-Kann revision 3
+backend/migrations/LessonData/Version20261015011700.php # French revision 3
+backend/migrations/LessonData/Version20261015011800.php # Slav revision 2
 ```
 
 **Verified bootstrapping:** `app:database:prepare` executes **schema migrations -> first pinned Lichess catalogue import -> separate lesson data migrations** under the shared DB lock. Each stream has its own discovery/history, and lesson execution refuses pending schema. A full pinned-source fresh-DB test runs separately from the offline fixtures in CI; plain Doctrine migration execution is blocked. See [MIGRATIONS.md](MIGRATIONS.md).
@@ -660,7 +664,7 @@ The first browser run encountered another run deleting its shared trace director
 
 ## 13. Next implementation handoff
 
-**Next implementation task: finish M6 privacy/retention and release verification.** M0–M5 are locally verified, including both modes, ten courses/27 current lines and private revision-bound recall/review. Read [PROGRESS.md](PROGRESS.md), [ACCOUNTS.md](ACCOUNTS.md) and [REVIEW_COORDINATION.md](REVIEW_COORDINATION.md) before concurrent edits. Imported-layer, London provenance and M5b private architecture approvals are settled; additional architecture remains separate review work. Account download/deletion is implemented in M6a without schema changes. Public-launch publisher/contact, retention and real O2Switch/SMTP/HTTPS/deployment/cron verification remain pending. [GitHub CI](https://github.com/Starbugstone/chess-openings/actions/runs/38861773058) passed for `4e484ef`; subsequent pushes require a new successful result.
+**Next implementation task: finish M6 privacy/retention and release verification.** M0–M5 are locally verified, including both modes, ten courses/25 current lines and private revision-bound recall/review. Read [PROGRESS.md](PROGRESS.md), [ACCOUNTS.md](ACCOUNTS.md) and [REVIEW_COORDINATION.md](REVIEW_COORDINATION.md) before concurrent edits. Imported-layer, London provenance and M5b private architecture approvals are settled; additional architecture remains separate review work. Account download/deletion is implemented in M6a without schema changes. Public-launch publisher/contact, retention and real O2Switch/SMTP/HTTPS/deployment/cron verification remain pending. [GitHub CI](https://github.com/Starbugstone/chess-openings/actions/runs/38861773058) passed for `4e484ef`; subsequent pushes require a new successful result.
 
 **Already approved by owner:** the chosen stack, three independent data layers, Doctrine PHP lesson migrations, Symfony/PHP weekly sync through cPanel cron, a complete Docker development environment, automatic O2Switch host-pull deployment after successful main push CI, the M2a review package's canonical keys/imported tables/update lifecycle, London authored provenance and the one-column M5b assessment/review design. No YAML lesson synchroniser, Node importer or scheduled GitHub Actions importer. Do not reopen these decisions without a specific implementation problem.
 
@@ -674,7 +678,7 @@ The first browser run encountered another run deleting its shared trace director
 | Relational constraints | Approved seven-table DDL implemented and tested against exact reference; source-path continuity and immutable edge destination remain importer invariants |
 | Bootstrap/migrations | Separate discovery/history, guarded lesson execution, shared lock and real pinned sync bootstrap verified; deployment hook uses the complete PHP preparation command |
 | Lesson/session revisions | Implemented immutable revisions, pinned browser payloads and exact old-revision completion; changed lines do not inherit completion automatically. M5b keeps old practice as separate history and legacy recall unknown; no inferred carry-forward. |
-| Current curriculum | Ten courses/27 finite current lines; London revision 3, four courses revision 2 and five new courses revision 1. Frozen imported named-path membership and separately approved London facts are validated against PHP/chess.js and the full pinned source. Additional teaching requires deliberate migrations. |
+| Current curriculum | Ten courses/25 finite current lines, each with at least nine learner moves except London (eight, the pinned-data limit); London and Italian/Caro-Kann/French revision 3, Queen's Gambit and Slav revision 2, Ruy Lopez/Catalan/Sicilian/King's Indian revision 1. Frozen imported named-path membership and separately approved London facts are validated against PHP/chess.js and the full pinned source. Additional teaching requires deliberate migrations. |
 | Host compatibility | Verify web/CLI PHP, extensions, real MariaDB version, SSH access, symlink cutover, document root and cron timezone; resolve any mismatch with the 10.11+ target |
 
 Variation practice defaults to learned lines, with explicit selection of enabled course lines. Keep the first curriculum small enough to review accurately. Future datasets require their own licence review.
