@@ -1,6 +1,6 @@
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vitest/config'
-import { writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync } from 'node:fs'
 import { dependencyNotices } from './scripts/dependencyNotices'
 
 export default defineConfig({
@@ -17,7 +17,12 @@ export default defineConfig({
                 .map(([id]) => id)
             : [],
         )
-        const source = dependencyNotices(modules)
+        // The self-hosted font is a CSS asset rather than a module, so append its licence.
+        const font = readFileSync(
+          new URL('./src/assets/fonts/Archivo-OFL.txt', import.meta.url),
+          'utf8',
+        )
+        const source = `${dependencyNotices(modules)}\n\n--------------------\n\nArchivo variable font, latin and latin-ext subsets from @fontsource-variable/archivo 5.3.0 (OFL-1.1)\n\n${font}`
         this.emitFile({ type: 'asset', fileName: 'third-party-notices.txt', source })
         // Also make the last verified build's notices reachable from the local Vite preview.
         writeFileSync(new URL('./public/third-party-notices.txt', import.meta.url), source)

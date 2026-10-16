@@ -14,7 +14,7 @@ withDefaults(defineProps<{ notes: MoveNote[]; heading?: string | undefined }>(),
 
 <template>
   <section v-if="notes.length" class="move-notes" :aria-label="heading">
-    <span class="eyebrow">{{ heading.toUpperCase() }}</span>
+    <p class="move-notes-heading">{{ heading }}</p>
     <article
       v-for="(note, index) in notes"
       :key="note.label"
@@ -31,33 +31,41 @@ withDefaults(defineProps<{ notes: MoveNote[]; heading?: string | undefined }>(),
 <style scoped>
 .move-notes {
   display: grid;
-  gap: 10px;
-  margin-block: 18px;
+  gap: 14px;
+  margin-block: 16px;
+  padding-block: 14px;
+  border-block: 1px solid var(--rule);
+}
+.move-notes-heading {
+  margin: 0;
+  color: var(--pencil);
+  font-weight: 600;
 }
 .move-notes article {
-  padding: 12px 14px;
-  border-left: 3px solid #c9cfb8;
-  background: #f1f2e8;
-  border-radius: 0 6px 6px 0;
+  padding-left: 14px;
+  border-left: 3px solid var(--rule);
 }
 .move-notes article.latest {
-  border-left-color: var(--green, #4f6b45);
-  background: #e9eddc;
+  border-left-color: var(--ink);
 }
 .move-notes-move {
   margin: 0 0 4px;
-  font-size: 12px;
-  color: var(--muted);
+  color: var(--pencil);
+  font-size: 15px;
 }
 .move-notes-move strong {
+  padding: 1px 5px;
   color: var(--ink);
-  font-family: ui-monospace, monospace;
-  font-size: 13px;
+  font-size: 16px;
+  font-weight: 750;
+}
+.latest .move-notes-move strong {
+  background: var(--marker);
 }
 .move-notes-text {
   margin: 0;
-  font-size: 15px;
-  line-height: 1.65;
+  font-size: 16px;
+  line-height: 1.55;
   color: var(--ink);
 }
 </style>

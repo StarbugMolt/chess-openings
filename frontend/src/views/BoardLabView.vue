@@ -77,7 +77,7 @@ function promotionPosition() {
   <main id="main-content" class="page-width lab-main">
     <div class="lab-heading">
       <div>
-        <span class="eyebrow">DEVELOPMENT ONLY</span>
+        <p class="eyebrow">Development only</p>
         <h1>Board & rules lab</h1>
         <p>
           This is a manual developer tool. For automatic replies and hints,
@@ -176,75 +176,67 @@ function promotionPosition() {
 
 <style scoped>
 .lab-main {
-  padding-block: 36px 70px;
+  padding-block: 36px 24px;
 }
 .lab-heading {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: end;
   gap: 20px;
-  margin-bottom: 35px;
+  margin-bottom: 28px;
 }
 .lab-heading h1 {
-  font-size: 40px;
-  letter-spacing: -1px;
-  margin-block: 14px 0;
+  font-size: clamp(30px, 3.4vw, 40px);
+  margin: 0 0 8px;
+}
+.lab-heading p {
+  color: var(--pencil);
 }
 .lab-heading a {
-  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
 }
 .lab-grid {
   display: grid;
   grid-template-columns: minmax(280px, 600px) minmax(250px, 1fr);
-  gap: 50px;
+  gap: 40px;
+  align-items: start;
 }
 .lab-board {
-  margin: 12px 22px 20px 6px;
+  padding: 3px;
 }
 .lab-panel {
   padding: 24px;
-  background: #eeefe5;
-  border: 1px solid var(--line);
-  border-radius: 6px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--sheet);
 }
 .turn-indicator {
-  font-weight: 650;
+  font-size: 19px;
+  font-weight: 800;
+  font-stretch: var(--semi-wide);
   text-transform: capitalize;
 }
 .move-feedback {
-  font-size: 13px;
-  line-height: 1.6;
   min-height: 42px;
+  color: var(--pencil);
 }
 .coordinate-form {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   align-items: end;
   flex-wrap: wrap;
 }
 .coordinate-form label {
   display: grid;
-  gap: 7px;
-  font-size: 12px;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 600;
 }
 .coordinate-form input {
-  width: 78px;
-  padding: 10px;
-  border: 1px solid #b5bea9;
-  border-radius: 4px;
-  background: #fafbf5;
-}
-.lab-panel button {
-  padding: 10px 14px;
-  border: 1px solid #aab79f;
-  border-radius: 4px;
-  color: var(--ink);
-  background: #fafbf5;
-  font-size: 12px;
-}
-.lab-panel button:disabled {
-  opacity: 0.45;
-  cursor: default;
+  width: 84px;
 }
 .lab-actions {
   display: flex;
@@ -253,58 +245,55 @@ function promotionPosition() {
   margin-block: 20px;
 }
 .lab-panel h2 {
-  font-size: 14px;
-  margin-top: 30px;
+  font-size: 17px;
+  margin-top: 28px;
 }
 .move-history {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 16px;
+  gap: 6px 14px;
   list-style: none;
   padding: 0;
-  font-size: 14px;
   min-height: 20px;
+  font-weight: 650;
 }
 .muted {
-  font-size: 12px;
-  color: var(--muted);
+  color: var(--pencil);
+  font-size: 15px;
 }
 details {
-  border-top: 1px solid var(--line);
-  margin-top: 22px;
-  padding-top: 16px;
-  font-size: 12px;
+  border-top: 1px solid var(--rule);
+  margin-top: 20px;
+  padding-top: 8px;
 }
 summary {
-  cursor: pointer;
-  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
 }
 code {
   overflow-wrap: anywhere;
-  font-size: 11px;
-  line-height: 1.7;
+  font-size: 14px;
+  font-weight: 500;
 }
 .promotion-picker {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
 }
 @media (max-width: 800px) {
   .lab-grid {
-    grid-template-columns: 1fr;
-    gap: 25px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
   }
   .lab-board {
+    width: 100%;
     max-width: 570px;
-    width: calc(100% - 28px);
     margin-inline: auto;
   }
-  .lab-heading h1 {
-    font-size: 32px;
-  }
   .lab-heading {
-    align-items: end;
+    flex-wrap: wrap;
   }
 }
 </style>

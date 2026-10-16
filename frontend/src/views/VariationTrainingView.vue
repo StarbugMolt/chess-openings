@@ -446,30 +446,33 @@ onBeforeUnmount(() => {
     <p class="sr-only" aria-live="polite" aria-atomic="true">{{ announcement }}</p>
     <RouterLink class="back-link" to="/learn">← All lessons</RouterLink>
     <p v-if="loading" role="status">Preparing your training…</p>
-    <div v-else-if="error" role="alert">
+    <div v-else-if="error" class="notice status-actions" role="alert">
       <p>{{ error }}</p>
       <button @click="load">Try again</button>
       <RouterLink to="/login">Sign in</RouterLink>
     </div>
     <template v-else-if="payload && position">
       <header class="training-heading">
-        <div>
-          <span class="eyebrow">VARIATION TRAINING</span>
-          <h1>{{ payload.lesson.title }}</h1>
-        </div>
-        <p>
-          You play {{ color === 'w' ? 'White' : 'Black' }} · We play
-          {{ color === 'w' ? 'Black' : 'White' }}
-        </p>
+        <h1>{{ payload.lesson.title }}</h1>
+        <span class="mode-tag">Variation training</span>
+        <span class="side-token" :class="{ 'is-black': color === 'b' }"
+          >You play {{ color === 'w' ? 'White' : 'Black' }}</span
+        >
       </header>
       <div class="training-grid" :class="{ 'is-setting-up': !started }">
         <div ref="boardRegion" class="training-board">
           <div v-if="started && !complete" class="board-toolbar">
             <span
-              >{{ waiting ? 'Opponent replying…' : 'Your turn' }} · Move {{ ownPlayed + 1 }} for
-              you</span
+              >{{ waiting ? 'Opponent replying…' : 'Your turn' }}
+              <span class="move-count">Move {{ ownPlayed + 1 }} for you</span></span
             >
-            <button :disabled="!playerTurn || !!pendingPromotion" @click="showHint">Hint</button>
+            <button
+              class="marker-button"
+              :disabled="!playerTurn || !!pendingPromotion"
+              @click="showHint"
+            >
+              Hint
+            </button>
           </div>
           <ChessBoard
             :fen="position.fen"
@@ -511,7 +514,7 @@ onBeforeUnmount(() => {
               One supported move is shown. You can choose another taught reply too.
             </p>
           </div>
-          <p v-if="feedback" class="training-feedback" role="status">{{ feedback }}</p>
+          <p v-if="feedback" class="training-feedback notice" role="status">{{ feedback }}</p>
         </div>
         <section class="training-panel" aria-label="Variation training instructions">
           <template v-if="!started">
@@ -520,7 +523,7 @@ onBeforeUnmount(() => {
               Mix the lines you have learned. We choose from their taught replies, and you can play
               any supported response.
             </p>
-            <p v-if="payload.lesson.lines.length > 1" class="scope-notice">
+            <p v-if="payload.lesson.lines.length > 1" class="muted">
               Supported replies favour lines with less practice or a due review. Your selected lines
               set the scope.
             </p>
@@ -539,16 +542,16 @@ onBeforeUnmount(() => {
                 </option>
               </select>
             </label>
-            <p v-if="!learnedLineIds.length" class="scope-notice">
+            <p v-if="!learnedLineIds.length" class="scope-notice notice">
               You have not completed a line in this course revision with these pieces yet. Try a
               guided lesson first, or select the lines you want to practise below.
             </p>
-            <p v-else class="scope-notice">
+            <p v-else class="scope-notice notice">
               {{ learnedLineIds.length }} {{ learnedLineIds.length === 1 ? 'line' : 'lines' }}
               previously completed with these pieces. Use All learned to select them.
             </p>
-            <RouterLink :to="`/learn/${payload.lesson.id}`"
-              >Learn these moves with guidance →</RouterLink
+            <RouterLink class="guided-link" :to="`/learn/${payload.lesson.id}`"
+              >Learn these moves with guidance</RouterLink
             >
             <fieldset class="line-choices">
               <legend>Training lines</legend>
@@ -568,23 +571,23 @@ onBeforeUnmount(() => {
                 <span
                   ><strong>{{ line.title }}</strong
                   ><small>{{ line.description }}</small
-                  ><small v-if="learnedLineIds.includes(line.id)"
+                  ><small v-if="learnedLineIds.includes(line.id)" class="learned-tag"
                     >Previously completed with {{ color === 'w' ? 'White' : 'Black' }}</small
                   ></span
                 >
               </label>
             </fieldset>
-            <p v-if="selectedLines.length === 1" class="scope-notice">
+            <p v-if="selectedLines.length === 1" class="selection-summary">
               One line is selected: this is a fixed sequence.
               <template v-if="payload.lesson.lines.length > 1"
                 >Select more lines to mix supported choices.</template
               >
             </p>
-            <p v-else-if="selectedLines.length > 1" class="scope-notice">
+            <p v-else-if="selectedLines.length > 1" class="selection-summary">
               {{ selectedLines.length }} lines selected. Shared opening moves may stay the same
               before a supported choice appears.
             </p>
-            <p v-else class="scope-notice">Select at least one training line to start.</p>
+            <p v-else class="selection-summary">Select at least one training line to start.</p>
             <p v-if="payload.lesson.lines.length > 32">Select up to 32 lines for one session.</p>
             <label class="checkbox-label"
               ><input v-model="hideNames" type="checkbox" />Hide variation names during
@@ -594,58 +597,67 @@ onBeforeUnmount(() => {
               You can reveal names at any time. Hint and Why that move? reveal names alongside the
               original explanations. Names are also shown when the line ends.
             </p>
-            <p v-if="setupError" role="alert">{{ setupError }}</p>
-            <button class="primary-link" :disabled="!validSelection" @click="start">
-              Start training <span aria-hidden="true">→</span>
+            <p v-if="setupError" class="notice" role="alert">{{ setupError }}</p>
+            <button class="primary-link start-button" :disabled="!validSelection" @click="start">
+              Start training
             </button>
           </template>
           <template v-else-if="complete && completedLine">
-            <span class="eyebrow">NICE WORK</span>
+            <p class="panel-kicker">Nice work</p>
             <h2>Practice complete.</h2>
-            <div role="region" aria-label="Current variation">
+            <div class="completed-line" role="region" aria-label="Current variation">
               <p>
                 You played {{ ownPlayed }} of your moves in
                 <strong>{{ completedLine.title }}</strong
                 >.
               </p>
             </div>
-            <p>{{ completedLine.description }}</p>
-            <p v-if="assessment?.usedUndo">
+            <p class="muted">{{ completedLine.description }}</p>
+            <p v-if="assessment?.usedUndo" class="recall-summary">
               Takebacks used. This practice is recorded with help; try a fresh attempt to check your
               recall.
             </p>
-            <p v-else-if="assessment">
-              {{ recalledDecisions }} of {{ assessment.decisions.length }} taught decisions played
-              on the first try without a hint.
+            <p v-else-if="assessment" class="recall-summary">
+              <strong class="recall-count"
+                >{{ recalledDecisions }} of {{ assessment.decisions.length }}</strong
+              >
+              taught decisions played on the first try without a hint.
             </p>
-            <p>
+            <p class="muted">
               This is the end of the taught line. Saved practice records this line and revision; it
               does not mean you know the whole opening.
             </p>
             <p v-if="saving" role="status">Saving your practice…</p>
-            <p v-else-if="saved" role="status" class="scope-notice">
+            <p v-else-if="saved" role="status" class="saved-notice">
               Practice saved to your account.
             </p>
-            <div v-if="saveError" role="alert">
+            <div v-if="saveError" class="notice status-actions" role="alert">
               <p>{{ saveError }}</p>
               <button @click="save">Try saving again</button>
               <RouterLink to="/login" target="_blank">Sign in in another tab</RouterLink>
             </div>
-            <button class="primary-link" @click="newMix">Try a new mix</button>
-            <button @click="start">Repeat this mix</button>
+            <div class="completion-actions">
+              <button class="primary-link" @click="newMix">Try a new mix</button>
+              <button @click="start">Repeat this mix</button>
+            </div>
             <RouterLink class="practice-link" to="/progress"
-              >See your practice &amp; reviews →</RouterLink
+              >See your practice and reviews</RouterLink
             >
           </template>
           <template v-else>
-            <h2>Variation practice</h2>
-            <p role="status">
-              {{ waiting ? `${color === 'w' ? 'Black' : 'White'} is replying…` : 'Your turn' }}
-            </p>
+            <div class="turn-strip">
+              <p class="lesson-phase" role="status">
+                {{ waiting ? `${color === 'w' ? 'Black' : 'White'} is replying…` : 'Your turn' }}
+              </p>
+              <span class="move-count">Move {{ ownPlayed + 1 }} for you</span>
+            </div>
             <progress :value="ply" :max="maximumPlies" aria-label="Training progress" />
-            <p v-if="selectedLines.length === 1">One selected line · a fixed sequence.</p>
-            <p v-else>
-              {{ selectedLines.length }} selected lines · replies stay within these taught paths.
+            <h2>Variation practice</h2>
+            <p v-if="selectedLines.length === 1" class="muted">
+              One selected line, played as a fixed sequence.
+            </p>
+            <p v-else class="muted">
+              {{ selectedLines.length }} selected lines. Replies stay within these taught paths.
             </p>
             <p>
               Tap a piece, then a highlighted square, or drag it. Legal moves outside your selected
@@ -657,12 +669,13 @@ onBeforeUnmount(() => {
               role="region"
               aria-label="Current variation"
             >
-              <strong>Possible {{ eligibleLines.length === 1 ? 'line' : 'lines' }}:</strong>
-              {{ eligibleLines.map((line) => line.title).join(' · ') }}
+              <strong>Possible {{ eligibleLines.length === 1 ? 'line' : 'lines' }}</strong>
+              <ul>
+                <li v-for="line in eligibleLines" :key="line.id">{{ line.title }}</li>
+              </ul>
             </div>
             <div v-else class="name-controls">
-              <p>Variation names are hidden.</p>
-              <p>Hints and explanations reveal variation names.</p>
+              <p>Variation names are hidden. Hints and explanations reveal them.</p>
               <button @click="revealNames">Reveal variation names</button>
             </div>
           </template>
@@ -681,42 +694,44 @@ onBeforeUnmount(() => {
             </template>
             <button @click="changeSetup">Change training lines</button>
           </div>
-          <button
-            class="sound-button"
-            aria-label="Move sound"
-            :aria-pressed="preferences.soundEnabled"
-            @click="preferences.toggleSound"
-          >
-            Sound {{ preferences.soundEnabled ? 'on' : 'off' }}
-          </button>
-          <details v-if="started && !complete" class="keyboard-moves">
-            <summary>Enter a move with the keyboard</summary>
-            <p>
-              Use square labels, for example from e2 to e4. For castling, enter the king’s starting
-              and destination squares.
-            </p>
-            <form aria-label="Enter a training move" @submit.prevent="play(fromSquare, toSquare)">
-              <label
-                >From square<input
-                  v-model="fromSquare"
-                  pattern="[a-h][1-8]"
-                  maxlength="2"
-                  autocomplete="off"
-                  autocapitalize="none"
-                  required
-              /></label>
-              <label
-                >To square<input
-                  v-model="toSquare"
-                  pattern="[a-h][1-8]"
-                  maxlength="2"
-                  autocomplete="off"
-                  autocapitalize="none"
-                  required
-              /></label>
-              <button :disabled="!playerTurn || !!pendingPromotion">Play move</button>
-            </form>
-          </details>
+          <div class="panel-footer">
+            <button
+              class="sound-button"
+              aria-label="Move sound"
+              :aria-pressed="preferences.soundEnabled"
+              @click="preferences.toggleSound"
+            >
+              Sound {{ preferences.soundEnabled ? 'on' : 'off' }}
+            </button>
+            <details v-if="started && !complete" class="keyboard-moves">
+              <summary>Enter a move with the keyboard</summary>
+              <p>
+                Use square labels, for example from e2 to e4. For castling, enter the king’s
+                starting and destination squares.
+              </p>
+              <form aria-label="Enter a training move" @submit.prevent="play(fromSquare, toSquare)">
+                <label
+                  >From square<input
+                    v-model="fromSquare"
+                    pattern="[a-h][1-8]"
+                    maxlength="2"
+                    autocomplete="off"
+                    autocapitalize="none"
+                    required
+                /></label>
+                <label
+                  >To square<input
+                    v-model="toSquare"
+                    pattern="[a-h][1-8]"
+                    maxlength="2"
+                    autocomplete="off"
+                    autocapitalize="none"
+                    required
+                /></label>
+                <button :disabled="!playerTurn || !!pendingPromotion">Play move</button>
+              </form>
+            </details>
+          </div>
         </section>
       </div>
       <details v-if="started" class="training-notation">
@@ -730,256 +745,369 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-.practice-link {
-  display: block;
-  min-height: 44px;
-  padding-block: 12px;
-  margin-block: 12px;
+.variation-main {
+  padding-block: 16px 8px;
+}
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  color: var(--pencil);
+  font-weight: 600;
+  text-decoration: none;
+}
+.back-link:hover {
+  color: var(--ink);
   text-decoration: underline;
 }
-.variation-main {
-  padding-block: 32px 65px;
-  min-height: 75vh;
-}
-.back-link,
 .muted {
-  color: var(--muted);
-  font-size: 13px;
+  color: var(--pencil);
 }
 .training-heading {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  margin-block: 28px;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 20px;
+  margin: 2px 0 18px;
 }
 .training-heading h1 {
-  font-size: 42px;
-  letter-spacing: -1.5px;
-  margin: 12px 0;
+  font-size: clamp(28px, 3vw, 38px);
+  margin: 0;
 }
-.training-heading > p {
-  color: var(--muted);
-  font-size: 13px;
+.mode-tag {
+  padding: 2px 10px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 650;
 }
+/* The board takes the height the viewport allows, so training fits on a laptop screen. */
 .training-grid {
+  --board: clamp(300px, calc(100vh - var(--header-height) - 150px), 700px);
   display: grid;
-  grid-template-columns: minmax(260px, 600px) minmax(270px, 1fr);
+  grid-template-columns: var(--board) minmax(300px, 460px);
   gap: 40px;
   align-items: start;
 }
 .training-board {
   min-width: 0;
-  margin: 8px 20px 20px 6px;
+  padding: 3px;
   scroll-margin-block: 12px;
 }
 .training-panel {
   min-width: 0;
-  border: 1px solid var(--line);
-  border-radius: 8px;
   padding: 24px;
-  background: #faf9f4;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--sheet);
 }
 h2 {
-  font:
-    28px Georgia,
-    serif;
-  margin: 0 0 16px;
+  font-size: 22px;
+  font-stretch: var(--semi-wide);
+  margin: 6px 0 12px;
 }
-p {
-  font-size: 14px;
-  line-height: 1.7;
-}
-button,
-select {
-  min-height: 44px;
-  border: 1px solid #aeb9a4;
-  border-radius: 4px;
-  padding: 10px 14px;
-  background: #fbfaf5;
-  color: var(--ink);
-}
-button:disabled {
-  opacity: 0.55;
-  cursor: default;
-}
-button.primary-link {
-  background: var(--ink);
-  color: #fff;
-  margin-block: 14px;
+.panel-kicker {
+  margin: 0;
+  color: var(--pencil);
+  font-weight: 600;
 }
 .pieces-label {
   display: grid;
-  gap: 7px;
-  font-size: 14px;
+  gap: 6px;
   margin-block: 18px;
+  font-weight: 600;
 }
-.scope-notice,
-.board-hint,
-.training-feedback {
-  padding: 12px 14px;
-  background: #edf0e4;
-  border-radius: 4px;
+.scope-notice {
+  margin-block: 12px;
+}
+.guided-link,
+.practice-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
 }
 .line-choices {
   min-width: 0;
-  margin: 22px 0 14px;
-  border: 1px solid var(--line);
-  padding: 12px;
-  border-radius: 5px;
+  margin: 18px 0 12px;
+  padding: 0;
+  border: 0;
 }
 .line-choices legend {
-  padding-inline: 6px;
-  font-size: 15px;
-  font-weight: 600;
+  padding: 0;
+  margin-bottom: 10px;
+  font-size: 17px;
+  font-weight: 750;
 }
 .scope-presets,
 .training-controls,
-.promotion-picker {
+.promotion-picker,
+.completion-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
+.scope-presets {
+  margin-bottom: 10px;
+}
 .scope-presets button {
   flex: 1 1 auto;
-  font-size: 12px;
-  padding-inline: 8px;
-}
-.line-choice,
-.checkbox-label {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  padding-block: 12px;
+  min-height: 40px;
+  padding-inline: 10px;
   font-size: 14px;
+}
+/* Each line is a selectable row; the checked row gets an ink edge. */
+.line-choice {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius);
   cursor: pointer;
 }
 .line-choice + .line-choice {
-  border-top: 1px solid var(--line);
+  margin-top: 8px;
+}
+.line-choice:hover {
+  border-color: var(--rule-strong);
+}
+.line-choice:has(input:checked) {
+  border-color: var(--ink);
+  box-shadow: inset 4px 0 0 var(--ink);
 }
 .line-choice input,
 .checkbox-label input {
   width: 20px;
   height: 20px;
-  margin: 0;
+  margin: 2px 0 0;
   flex: 0 0 auto;
-  accent-color: var(--green);
 }
 .line-choice small {
   display: block;
-  line-height: 1.6;
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 5px;
+  margin-top: 4px;
+  color: var(--pencil);
+  font-size: 14px;
+  line-height: 1.5;
 }
+.line-choice .learned-tag {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 0 4px;
+  background: var(--marker-soft);
+  color: var(--ink);
+  font-weight: 600;
+}
+.selection-summary {
+  font-weight: 600;
+}
+.checkbox-label {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  min-height: 44px;
+  padding-top: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.start-button {
+  width: 100%;
+  margin-top: 8px;
+}
+.turn-strip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin-bottom: 10px;
+}
+.lesson-phase {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 800;
+  font-stretch: var(--semi-wide);
+}
+.move-count {
+  color: var(--pencil);
+  font-size: 15px;
+  font-weight: 600;
+}
+.training-panel progress {
+  margin-bottom: 18px;
+}
+.variation-names {
+  padding: 12px 16px;
+  background: var(--paper);
+  overflow-wrap: anywhere;
+}
+.variation-names ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+.name-controls p {
+  color: var(--pencil);
+}
+.completed-line p {
+  font-size: 17px;
+}
+.recall-summary {
+  padding: 14px 16px;
+  background: var(--paper);
+}
+.recall-count {
+  display: block;
+  font-size: 28px;
+  font-weight: 850;
+  font-stretch: var(--wide);
+  line-height: 1.1;
+}
+.saved-notice {
+  font-weight: 600;
+}
+.completion-actions {
+  margin-top: 8px;
+}
+.completion-actions button {
+  flex: 1 1 auto;
+}
+/* The board-adjacent Hint stays beside the board on every screen size. */
 .board-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  min-height: 58px;
-  font-size: 13px;
-  margin-top: -8px;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+.board-toolbar .move-count {
+  margin-left: 6px;
 }
 .board-toolbar button {
   flex: 0 0 auto;
+  min-width: 112px;
 }
 .board-hint {
   margin-top: 18px;
+  padding: 14px 16px;
+  background: var(--marker-soft);
+  border-left: 3px solid var(--ink);
 }
 .board-hint p {
-  margin-block: 8px;
+  margin: 6px 0 0;
 }
-.training-feedback {
-  margin-block: 14px 0;
+.move-explanation {
+  margin-top: 16px;
 }
-.name-controls,
-.training-controls,
-.move-explanation,
-.keyboard-moves {
-  margin-top: 20px;
+.move-explanation summary,
+.keyboard-moves summary,
+.training-notation summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+}
+.keyboard-moves summary,
+.training-notation summary {
+  color: var(--pencil);
 }
 .training-controls {
-  border-top: 1px solid var(--line);
-  padding-top: 18px;
+  margin-top: 16px;
 }
-summary {
-  cursor: pointer;
-  min-height: 44px;
-  padding-block: 12px;
-  font-size: 13px;
-}
-.sound-button {
-  margin-top: 18px;
-  border-color: transparent;
-  background: transparent;
+.training-controls button {
+  flex: 1 1 auto;
 }
 .promotion-picker {
   margin-top: 18px;
-  border: 2px solid var(--green);
   padding: 12px;
-  border-radius: 5px;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
 }
 .promotion-picker p {
   width: 100%;
   margin: 0;
 }
+.panel-footer {
+  margin-top: 18px;
+  padding-top: 8px;
+  border-top: 1px solid var(--rule);
+}
+.sound-button {
+  padding-inline: 0;
+  border: 0;
+  background: none;
+  color: var(--pencil);
+}
+/* A small switch drawn beside the label; aria-pressed carries the state. */
+.sound-button::before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 16px;
+  margin-right: 10px;
+  vertical-align: -3px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 8px 50%, #fff 0 5px, transparent 5.5px) var(--rule-strong);
+}
+.sound-button[aria-pressed='true']::before {
+  background: radial-gradient(circle at 20px 50%, #fff 0 5px, transparent 5.5px) var(--ink);
+}
+.sound-button:hover {
+  color: var(--ink);
+}
+.keyboard-moves p {
+  color: var(--pencil);
+  font-size: 15px;
+}
 .keyboard-moves form {
   display: flex;
   align-items: end;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 }
 .keyboard-moves label {
   display: grid;
   gap: 6px;
-  font-size: 13px;
+  font-size: 15px;
+  font-weight: 600;
 }
 .keyboard-moves input {
-  width: 85px;
-  min-height: 44px;
-  border: 1px solid #aeb9a4;
-  border-radius: 4px;
-  background: #fff;
-  padding: 8px;
-}
-progress {
-  width: 100%;
-  height: 5px;
-  accent-color: var(--green);
+  width: 84px;
 }
 .training-notation {
-  margin-top: 22px;
+  margin-top: 20px;
 }
 .training-notation ol {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px 25px;
-  font-size: 13px;
+  gap: 6px 4px;
+  padding: 0;
+  margin: 8px 0 0;
+  list-style: none;
+  counter-reset: move;
+  font-weight: 650;
 }
-.variation-names {
-  overflow-wrap: anywhere;
+.training-notation li {
+  padding: 2px 6px;
 }
-@media (max-width: 850px) {
-  .variation-main {
-    padding-inline: 20px;
-    padding-block: 22px 45px;
-  }
-  .training-heading {
-    display: block;
-    margin-block: 22px;
-  }
-  .training-heading h1 {
-    font-size: 35px;
-  }
+.training-notation li:nth-child(odd)::before {
+  content: counter(move) '. ';
+  counter-increment: move;
+  color: var(--pencil);
+  font-weight: 500;
+}
+.training-notation li:last-child {
+  background: var(--marker);
+}
+@media (max-width: 900px) {
   .training-grid {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 20px;
   }
   .training-board {
-    width: calc(100% - 12px);
-    margin: 6px 6px 16px;
+    width: 100%;
+    max-width: 560px;
+    margin-inline: auto;
   }
   .training-panel {
     width: 100%;
@@ -987,9 +1115,6 @@ progress {
   }
   .is-setting-up .training-panel {
     order: -1;
-  }
-  .training-heading > p {
-    margin-block: 8px;
   }
 }
 </style>

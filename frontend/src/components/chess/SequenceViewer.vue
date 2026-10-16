@@ -58,7 +58,7 @@ function key(event: KeyboardEvent) {
       <p class="sequence-status" aria-live="polite">{{ status }}</p>
       <div class="sequence-controls" @keydown="key">
         <button type="button" :disabled="index === 0" aria-label="Starting position" @click="go(0)">
-          ⏮
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2h2v12H3zM14 2v12L6 8z" /></svg>
         </button>
         <button
           type="button"
@@ -66,7 +66,7 @@ function key(event: KeyboardEvent) {
           aria-label="Previous move"
           @click="go(index - 1)"
         >
-          ◀
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M12 2v12L4 8z" /></svg>
         </button>
         <button
           type="button"
@@ -74,7 +74,7 @@ function key(event: KeyboardEvent) {
           aria-label="Next move"
           @click="go(index + 1)"
         >
-          ▶
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2v12l8-6z" /></svg>
         </button>
         <button
           type="button"
@@ -82,7 +82,9 @@ function key(event: KeyboardEvent) {
           aria-label="Final position"
           @click="go(last)"
         >
-          ⏭
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M11 2h2v12h-2zM2 2v12l8-6z" />
+          </svg>
         </button>
       </div>
       <ol class="sequence-moves" aria-label="Moves in this sequence" @keydown="key">
@@ -108,27 +110,32 @@ function key(event: KeyboardEvent) {
 .sequence-viewer {
   display: grid;
   grid-template-columns: minmax(220px, 340px) minmax(200px, 1fr);
-  gap: 24px;
-  margin-block: 16px;
+  gap: 28px;
+  margin-bottom: 16px;
 }
 .sequence-board {
   width: 100%;
+  padding: 3px;
 }
 .sequence-status {
-  font-weight: 650;
-  font-size: 14px;
   margin: 0 0 10px;
-  color: var(--ink);
+  font-size: 17px;
+  font-weight: 750;
 }
 .sequence-controls {
   display: flex;
   gap: 6px;
 }
 .sequence-controls button {
-  min-width: 44px;
-  min-height: 44px;
-  padding: 8px;
-  font-size: 15px;
+  display: grid;
+  place-items: center;
+  min-width: 48px;
+  padding: 0;
+}
+.sequence-controls svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
 }
 .sequence-moves {
   display: flex;
@@ -138,27 +145,25 @@ function key(event: KeyboardEvent) {
   margin: 14px 0 0;
   list-style: none;
 }
-.sequence-moves li {
-  padding: 0;
-  border: 0;
-}
 .sequence-moves button {
-  padding: 6px 8px;
   min-height: 36px;
-  font-size: 13px;
-  font-family: ui-monospace, monospace;
+  padding: 4px 8px;
+  border-color: transparent;
   background: transparent;
-  border: 1px solid transparent;
+  font-size: 15px;
+  font-weight: 650;
+}
+.sequence-moves button:hover {
+  border-color: var(--rule-strong);
 }
 .sequence-moves button[aria-current='step'] {
-  background: var(--ink);
   border-color: var(--ink);
-  color: white;
+  background: var(--marker);
 }
 .sequence-tip,
 .sequence-unavailable {
-  font-size: 12px;
-  color: var(--muted);
+  color: var(--pencil);
+  font-size: 14px;
 }
 @media (max-width: 640px) {
   .sequence-viewer {

@@ -87,31 +87,24 @@ function browse(name: string) {
 
 <template>
   <main id="main-content" class="page-width catalogue-main">
-    <span class="eyebrow">OPENING REFERENCE</span>
-    <h1>Look up an opening.</h1>
-    <p class="catalogue-intro">
-      Search names and compare recorded sequences. Some sequences stop earlier or reach a setup in a
-      different order, so we group identical names together.
-    </p>
-    <nav class="family-links" aria-label="Browse opening families">
-      <span>Browse a family:</span
-      ><button v-for="family in families" :key="family" @click="browse(family)">
-        {{ family }}
-      </button>
-    </nav>
-    <p class="play-first">
-      <strong>Want to play?</strong>
-      <RouterLink to="/learn">Start a beginner lesson →</RouterLink> We play the other side and
-      guide your next move.
-    </p>
+    <header class="catalogue-header">
+      <h1>Look up an opening.</h1>
+      <p class="catalogue-intro">
+        Search names and compare recorded sequences. Some sequences stop earlier or reach a setup in
+        a different order, so we group identical names together.
+      </p>
+    </header>
     <form class="catalogue-search" aria-label="Search openings" @submit.prevent="navigate()">
-      <label
-        >Opening name<input
+      <label class="search-field" for="opening-search">Opening name</label>
+      <div class="search-row">
+        <input
+          id="opening-search"
           v-model="search"
           type="search"
           maxlength="100"
           placeholder="Italian Game"
-      /></label>
+        /><button type="submit" class="primary-link">Search openings</button>
+      </div>
       <details class="advanced-search">
         <summary>Optional search filters</summary>
         <label
@@ -122,9 +115,18 @@ function browse(name: string) {
             placeholder="C50" /></label
         ><small>This is a reference code. You do not need it to learn an opening.</small>
       </details>
-      <button type="submit">Search openings</button>
     </form>
-    <p role="status" aria-live="polite">
+    <nav class="family-links" aria-label="Browse opening families">
+      <span>Browse a family</span>
+      <button v-for="family in families" :key="family" type="button" @click="browse(family)">
+        {{ family }}
+      </button>
+    </nav>
+    <p class="play-first notice">
+      <strong>Want to play?</strong> <RouterLink to="/learn">Start a beginner lesson</RouterLink>.
+      We play the other side and guide your next move.
+    </p>
+    <p class="result-count" role="status" aria-live="polite">
       {{
         catalogue.loading
           ? 'Loading openings…'
@@ -133,7 +135,7 @@ function browse(name: string) {
             : ''
       }}
     </p>
-    <div v-if="catalogue.error" role="alert">
+    <div v-if="catalogue.error" class="notice status-actions" role="alert">
       <p>{{ catalogue.error }}</p>
       <button type="button" @click="catalogue.open(query)">Try again</button>
     </div>
@@ -151,40 +153,44 @@ function browse(name: string) {
             <details @toggle="toggle(opening, $event)">
               <summary>
                 <strong>{{ opening.name }}</strong
-                ><span
+                ><span class="result-meta"
                   >{{ opening.sequenceCount ?? 1 }} recorded
                   {{ (opening.sequenceCount ?? 1) === 1 ? 'sequence' : 'sequences' }} ·
                   <span class="view-moves">View moves on a board</span></span
                 >
               </summary>
-              <template v-if="opening.sequences?.length">
-                <SequenceViewer
-                  v-if="expanded.has(opening.sourceId)"
-                  :key="selectedPgn(opening)"
-                  :pgn="selectedPgn(opening)"
-                  :name="opening.name"
-                />
-                <p>
-                  These are reference sequences, not separate lessons. Longer sequences can continue
-                  a shorter one.
+              <div class="result-detail">
+                <template v-if="opening.sequences?.length">
+                  <SequenceViewer
+                    v-if="expanded.has(opening.sourceId)"
+                    :key="selectedPgn(opening)"
+                    :pgn="selectedPgn(opening)"
+                    :name="opening.name"
+                  />
+                  <p class="detail-note">
+                    These are reference sequences, not separate lessons. Longer sequences can
+                    continue a shorter one.
+                  </p>
+                  <ol class="reference-sequences">
+                    <li v-for="(sequence, position) in opening.sequences" :key="sequence.pgn">
+                      <button
+                        type="button"
+                        :aria-pressed="(expanded.get(opening.sourceId) ?? 0) === position"
+                        @click="expanded.set(opening.sourceId, position)"
+                      >
+                        <code>{{ sequence.pgn }}</code
+                        ><small>Reference code {{ sequence.eco }} · Show on the board</small>
+                      </button>
+                    </li>
+                  </ol>
+                </template>
+                <p v-else class="detail-note">
+                  Move sequences are unavailable in this cached result. Search again to refresh it.
                 </p>
-                <ol class="reference-sequences">
-                  <li v-for="(sequence, position) in opening.sequences" :key="sequence.pgn">
-                    <button
-                      type="button"
-                      :aria-pressed="(expanded.get(opening.sourceId) ?? 0) === position"
-                      @click="expanded.set(opening.sourceId, position)"
-                    >
-                      <code>{{ sequence.pgn }}</code
-                      ><small>Reference code {{ sequence.eco }} · Show on the board</small>
-                    </button>
-                  </li>
-                </ol>
-              </template>
-              <p v-else>
-                Move sequences are unavailable in this cached result. Search again to refresh it.
-              </p>
-              <p v-if="(opening.sequenceCount ?? 1) > 3">Showing the three shortest sequences.</p>
+                <p v-if="(opening.sequenceCount ?? 1) > 3" class="detail-note">
+                  Showing the three shortest sequences.
+                </p>
+              </div>
             </details>
             <RouterLink
               v-if="courseFor(opening)"
@@ -192,12 +198,10 @@ function browse(name: string) {
               :to="`/learn/${courseFor(opening)?.id}`"
               >{{ courseFor(opening)?.title }} beginner lesson →</RouterLink
             >
-            <span v-else class="reference-label"
-              >Reference entry · Guided lesson not available yet</span
-            >
+            <span v-else class="reference-label">Guided lesson not available yet</span>
           </li>
         </ul>
-        <p v-if="!catalogue.page.items.length">
+        <p v-if="!catalogue.page.items.length" class="notice">
           No matching openings. Try a shorter name or another ECO code.
         </p>
         <nav class="catalogue-pages" aria-label="Catalogue pages">
@@ -233,193 +237,223 @@ function browse(name: string) {
 
 <style scoped>
 .catalogue-main {
-  padding-block: 52px 80px;
-  min-height: 70vh;
+  padding-block: 56px 24px;
 }
-h1 {
-  font-size: clamp(34px, 5vw, 54px);
-  letter-spacing: -1.4px;
-  margin-block: 18px;
+.catalogue-header {
+  max-width: 760px;
 }
 .catalogue-intro {
-  max-width: 640px;
-  line-height: 1.8;
-  color: var(--muted);
+  color: var(--pencil);
+  font-size: 17px;
 }
 .catalogue-search {
+  margin-block: 28px 20px;
+  max-width: 760px;
+}
+.search-field {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 650;
+}
+.search-row {
   display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  gap: 16px;
-  margin-block: 32px;
 }
-label {
+.search-row input {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 52px;
+  border: 2px solid var(--ink);
+  border-right: 0;
+  border-radius: var(--radius) 0 0 var(--radius);
+  font-size: 18px;
+}
+.search-row .primary-link {
+  min-height: 52px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  flex: 0 0 auto;
+}
+.advanced-search {
+  margin-top: 6px;
+}
+.advanced-search summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--pencil);
+  font-size: 15px;
+}
+.advanced-search label {
   display: grid;
-  gap: 8px;
-  font-size: 13px;
+  gap: 6px;
+  margin-block: 6px;
+  font-size: 15px;
+  font-weight: 600;
 }
-input {
-  width: min(280px, 70vw);
-  padding: 12px;
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  background: #fafbf5;
+.advanced-search input {
+  width: 110px;
 }
-label:nth-child(2) input {
-  width: 90px;
-}
-button {
-  padding: 12px 18px;
-  border: 1px solid #aab79f;
-  border-radius: 4px;
-  background: #eeefe5;
-  color: var(--ink);
-  font-size: 13px;
-}
-button:disabled,
-button[aria-disabled='true'] {
-  opacity: 0.45;
-  cursor: default;
+.advanced-search small {
+  display: block;
+  color: var(--pencil);
+  font-size: 14px;
 }
 .family-links {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
-  margin-block: 24px;
-  font-size: 13px;
+  margin-block: 8px 20px;
+}
+.family-links span {
+  margin-right: 6px;
+  font-weight: 650;
 }
 .family-links button {
-  padding: 10px 12px;
-  min-height: 44px;
+  min-height: 40px;
+  padding-inline: 14px;
+  border-radius: 999px;
+  font-size: 14px;
 }
-.catalogue-count,
-.catalogue-source {
-  font-size: 12px;
-  color: var(--muted);
+.play-first {
+  max-width: 760px;
+}
+.play-first a {
+  font-weight: 650;
+}
+.result-count {
+  margin: 28px 0 10px;
+  color: var(--pencil);
+  font-weight: 600;
 }
 .opening-results {
   padding: 0;
+  margin: 0;
   list-style: none;
-  border-top: 1px solid var(--line);
+  border-top: 2px solid var(--ink);
 }
-.opening-results li {
-  display: block;
-  padding: 20px 8px;
-  border-bottom: 1px solid var(--line);
-  line-height: 1.6;
+.opening-results > li {
+  padding: 4px 4px 16px;
+  border-bottom: 1px solid var(--rule);
 }
 .opening-results summary {
-  cursor: pointer;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 20px;
   align-items: baseline;
+  gap: 4px 18px;
+  min-height: 44px;
+  padding-top: 12px;
   list-style: none;
+  font-weight: 400;
+}
+.opening-results summary::-webkit-details-marker {
+  display: none;
 }
 .opening-results summary strong {
-  font-weight: 550;
+  font-size: 18px;
+  font-weight: 750;
   overflow-wrap: anywhere;
 }
-.opening-results summary > span,
-.reference-label {
-  color: var(--muted);
-  font-size: 12px;
-}
-.opening-results details p {
-  font-size: 13px;
-  color: var(--muted);
-}
-.lesson-entry {
-  display: inline-block;
-  margin-top: 12px;
-  font-size: 13px;
+.opening-results summary:hover strong {
   text-decoration: underline;
   text-underline-offset: 4px;
 }
-.reference-label {
-  display: block;
-  margin-top: 10px;
+.result-meta {
+  color: var(--pencil);
+  font-size: 15px;
+}
+.view-moves {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+details[open] .view-moves {
+  background: var(--marker);
+  text-decoration: none;
+}
+.result-detail {
+  margin-top: 12px;
+  padding: 20px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--sheet);
+}
+.detail-note {
+  color: var(--pencil);
+  font-size: 15px;
 }
 .reference-sequences {
-  padding-left: 20px;
-}
-.reference-sequences li {
-  padding: 4px 0;
-  border: 0;
+  display: grid;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }
 .reference-sequences button {
   display: block;
   width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
   text-align: left;
-  padding: 10px 12px;
-  background: transparent;
-  border: 1px solid transparent;
+  font-weight: 400;
 }
 .reference-sequences button[aria-pressed='true'] {
-  border-color: #aab79f;
-  background: #eef0e5;
-}
-.view-moves {
-  color: var(--ink);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.opening-results summary:hover strong {
-  text-decoration: underline;
+  border-color: var(--ink);
+  box-shadow: inset 4px 0 0 var(--ink);
 }
 .reference-sequences code {
-  font-size: 13px;
   overflow-wrap: anywhere;
   white-space: normal;
 }
 .reference-sequences small {
   display: block;
-  font-size: 11px;
-  color: var(--muted);
-}
-.play-first {
-  padding: 18px 20px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  line-height: 1.8;
+  margin-top: 2px;
+  color: var(--pencil);
   font-size: 14px;
-  background: #eef0e5;
 }
-.play-first a {
-  text-decoration: underline;
-  margin-inline: 7px;
-}
-.advanced-search summary {
-  cursor: pointer;
-  font-size: 12px;
-  padding-bottom: 8px;
-}
-.advanced-search label {
-  margin-block: 10px;
-}
-.advanced-search small {
-  display: block;
-  max-width: 240px;
-  font-size: 11px;
-  color: var(--muted);
-  line-height: 1.6;
-}
-.eco-code {
-  flex-shrink: 0;
-  color: #506949;
-  font-size: 12px;
+.lesson-entry {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  margin-top: 4px;
   font-weight: 650;
 }
-.opening-results li > span:last-child {
-  min-width: 0;
-  overflow-wrap: anywhere;
+.reference-label {
+  display: block;
+  margin-top: 4px;
+  color: var(--pencil);
+  font-size: 15px;
 }
 .catalogue-pages {
   display: flex;
-  gap: 20px;
+  gap: 16px;
   align-items: center;
-  margin-block: 28px;
-  font-size: 13px;
+  margin-block: 24px;
+  font-weight: 600;
+}
+.catalogue-source {
+  color: var(--pencil);
+  font-size: 14px;
+}
+@media (max-width: 680px) {
+  .catalogue-main {
+    padding-top: 36px;
+  }
+  .search-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .search-row input {
+    border-right: 2px solid var(--ink);
+    border-radius: var(--radius);
+    flex-basis: 100%;
+  }
+  .search-row .primary-link {
+    border-radius: var(--radius);
+    width: 100%;
+  }
+  .result-detail {
+    padding: 14px;
+  }
 }
 </style>

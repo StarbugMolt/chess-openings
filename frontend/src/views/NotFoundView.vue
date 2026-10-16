@@ -1,10 +1,11 @@
 <template>
   <main id="main-content" class="page-width empty-page">
-    <span class="eyebrow">PAGE NOT FOUND</span>
+    <p class="eyebrow">Page not found</p>
     <h1>Back to the opening.</h1>
     <p>This page is not available.</p>
-    <RouterLink class="primary-link" to="/"
-      >Return home <span aria-hidden="true">↗</span></RouterLink
-    >
+    <div class="status-actions">
+      <RouterLink class="primary-link" to="/">Return home</RouterLink>
+      <RouterLink to="/learn">Browse lessons</RouterLink>
+    </div>
   </main>
 </template>

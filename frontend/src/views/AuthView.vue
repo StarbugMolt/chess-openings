@@ -120,7 +120,6 @@ async function submit(): Promise<void> {
 <template>
   <main id="main-content" class="page-width account-page">
     <div class="account-intro">
-      <span class="eyebrow">YOUR CHESS OPENINGS ACCOUNT</span>
       <h1>{{ titles[mode] }}</h1>
       <p v-if="mode === 'register'">Save your lesson practice. Just your email and a password.</p>
       <p v-else-if="mode === 'login'">Sign in with your verified email address.</p>
@@ -202,7 +201,7 @@ async function submit(): Promise<void> {
           Open the complete link from your email, or request a new one below.
         </p>
         <button class="primary-link" type="submit" :disabled="busy || (!emailRequired && !token)">
-          {{ busy ? 'Please wait…' : buttonLabel }} <span aria-hidden="true">→</span>
+          {{ busy ? 'Please wait…' : buttonLabel }}
         </button>
       </form>
       <div class="account-links">

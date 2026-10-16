@@ -12,8 +12,8 @@ const isDevelopment = import.meta.env.DEV
   <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header page-width">
     <RouterLink class="wordmark" to="/" aria-label="Chess Openings home">
-      <span class="brand-mark" aria-hidden="true">♞</span>
-      <span>chess<span class="wordmark-light">openings</span></span>
+      <span class="brand-mark" aria-hidden="true" />
+      <span class="wordmark-text">Chess Openings</span>
     </RouterLink>
     <nav aria-label="Main navigation">
       <RouterLink class="learn-link" to="/learn">Learn</RouterLink>
@@ -35,6 +35,6 @@ const isDevelopment = import.meta.env.DEV
     <RouterLink v-if="isDevelopment" class="developer-link" to="/dev/board"
       >Developer board</RouterLink
     >
-    <a href="https://github.com/Starbugstone/chess-openings">Open source · GPLv3</a>
+    <a href="https://github.com/Starbugstone/chess-openings">Open source under GPLv3</a>
   </footer>
 </template>

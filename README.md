@@ -125,7 +125,7 @@ Populate the opening library with `make catalogue` (or the `app:database:prepare
 | Vue/Vite preview | [localhost:5173](http://localhost:5173) |
 | Guided lessons | [localhost:5173/learn](http://localhost:5173/learn) |
 | Variation practice (sign in first) | [Italian](http://localhost:5173/train/italian) / [Caro-Kann as Black](http://localhost:5173/train/caro-kann) |
-| Your practice & reviews (signed in) | [localhost:5173/progress](http://localhost:5173/progress) |
+| Your practice and reviews (signed in) | [localhost:5173/progress](http://localhost:5173/progress) |
 | Opening library | [localhost:5173/openings](http://localhost:5173/openings) |
 | Register / sign in | [localhost:5173/register](http://localhost:5173/register) / [localhost:5173/login](http://localhost:5173/login) |
 | Development board lab | [localhost:5173/dev/board](http://localhost:5173/dev/board) |
@@ -138,7 +138,7 @@ After `make catalogue`, `/learn` offers **ten courses/25 current lines**: Italia
 
 Choose **Practise variations** on a course card after learning its lines. Select your pieces and training lines, then start. Previously completed lines in the same course revision and colour are selected by default; a new learner can explicitly choose available lines or return to guidance. The opponent favours supported lines with less practice or a due review. Any taught response in the selected scope is accepted. One selected line is described as a fixed sequence. Names can stay hidden until reveal, a coaching hint or completion. Only the exact line played is saved.
 
-Choose **Your practice & reviews** in Account, or **See your practice & reviews** after finishing. Current coverage, measured first-try recall and review suggestions are separate for White and Black. Earlier-version history stays visible; old completions have recall marked unknown. Reviews begin after one day without help, advance on successful due reviews and return in ten minutes after practice with help. Hints and takebacks are welcome and are described honestly. Review links open the exact current line and side. See [the approved M5b contract and verification](docs/PROGRESS.md).
+Choose **Your practice and reviews** in Account, or **See your practice and reviews** after finishing. Current coverage, measured first-try recall and review suggestions are separate for White and Black. Earlier-version history stays visible; old completions have recall marked unknown. Reviews begin after one day without help, advance on successful due reviews and return in ten minutes after practice with help. Hints and takebacks are welcome and are described honestly. Review links open the exact current line and side. See [the approved M5b contract and verification](docs/PROGRESS.md).
 
 To try accounts, register with an `@example.test` address and password, open its verification link in Mailpit, confirm, then sign in with that same password. The confirmation page asks for no password. Session cookies keep you signed in across refreshes. **Remember me for 30 days** is optional and restores sign-in after the session/browser closes; signing out clears the browser's cookie and password reset invalidates existing sessions and remembered sign-ins. Reset and verification emails remain in local Mailpit. See [account setup, API and lifecycle](docs/ACCOUNTS.md). Account also provides **Download my data** and a separate, cancellable **Delete my account…** form, each requiring the current password. Deletion removes the account, email tokens and all saved practice, then signs out; other browsers cannot restore it. Downloads retain older course revisions and exclude password/token secrets. See [account data controls](docs/ACCOUNT_DATA.md). The privacy page describes this development preview; public-launch legal information, retention and hosting verification remain M6 work.
 
@@ -204,7 +204,7 @@ The MVP has **no advertising or non-essential trackers**. An authentication/sess
 
 ## Contributing / development workflow
 
-Start at [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) and the [navigation/accessibility contract](docs/UX.md); implement in small, tested milestones. Keep source-derived chess knowledge separate from editorial teaching content and user progress. Document any deviations from the chosen stack or schema before coding them.
+Start at [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md), the [navigation/accessibility contract](docs/UX.md) and the [visual design reference](docs/DESIGN.md); implement in small, tested milestones. Keep source-derived chess knowledge separate from editorial teaching content and user progress. Document any deviations from the chosen stack or schema before coding them.
 
 ## Upstream references
 
