@@ -407,3 +407,27 @@ test('chart columns are one tab stop and arrow keys reveal each value', async ({
   )
   expect(await noOverflow(page)).toBe(true)
 })
+
+test('weekly charts scale both sign-ups and later email verifications', async ({ page }) => {
+  await mockAdmin(page)
+  await page.route('**/api/admin/stats', (route) =>
+    route.fulfill({
+      json: {
+        ...stats,
+        accounts: {
+          ...stats.accounts,
+          weekly: stats.accounts.weekly.map((week, index) => ({
+            ...week,
+            signups: 1,
+            verifications: index === 11 ? 40 : 0,
+          })),
+        },
+      },
+    }),
+  )
+  await page.goto('/admin')
+  const growth = page.getByRole('region', { name: 'Sign-ups by week' })
+  await expect(growth.locator('.gridlines span')).toHaveText(['50', '25', '0'])
+  await expect(growth.locator('.column-verifications').last()).toHaveCSS('--size', '80%')
+  await expect(growth.locator('.column-signups').last()).toHaveCSS('--size', '2%')
+})

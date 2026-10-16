@@ -132,7 +132,7 @@ const peakDay = computed(() =>
 )
 const weekly = computed(() => stats.value?.accounts.weekly ?? [])
 const weeklyAxis = computed(() =>
-  axisMaximum(Math.max(0, ...weekly.value.map((week) => week.signups))),
+  axisMaximum(Math.max(0, ...weekly.value.flatMap((week) => [week.signups, week.verifications]))),
 )
 const colorTotal = computed(() =>
   stats.value ? stats.value.practice.byColor.w + stats.value.practice.byColor.b : 0,
