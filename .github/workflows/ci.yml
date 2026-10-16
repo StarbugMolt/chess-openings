@@ -1,0 +1,39 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Set up containerised development environment
+        run: bash scripts/local-up.sh
+      - name: Application and deployment checks
+        run: bash scripts/check.sh
+      - name: Fresh pinned catalogue and lesson migration order
+        run: bash tests/import/migrations-test.sh pinned-lessons-test.php
+      - name: Dependency security audits
+        run: |
+          docker compose exec -T --user www-data app composer audit --locked --no-interaction
+          docker compose run --rm --no-deps frontend npm audit
+      - name: Verify unavailable database response
+        run: |
+          docker compose stop db
+          docker compose exec -T app php /app/tests/smoke.php http://127.0.0.1 --expect-db-unavailable
+      - name: Logs on failure
+        if: failure()
+        run: docker compose logs --tail=60 app frontend db
+      - name: Stop containers
+        if: always()
+        run: docker compose down -v

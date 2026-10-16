@@ -1,0 +1,11 @@
+.git
+**/node_modules
+**/vendor
+**/var
+**/.env.local
+
+artifacts
+release.tar.gz
+output
+.playwright-cli
+**/dist

@@ -2,7 +2,9 @@
 
 An open-source, interactive chess opening trainer. Learn a precise opening line first, then practise against a computer that selects from the *recognised variations of that opening* so you learn to respond, not just memorise one move sequence.
 
-> **Status: planning / not implemented yet.** This repository currently contains the product specification and implementation roadmap, not a runnable application. Coding agents should start with [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md).
+> **Status: M0–M5 are implemented and verified locally.** Ten courses/27 current lines offer guided and selected-line variation practice, board hints, sound, accounts, private progress and scheduled reviews. See [practice and review behaviour](docs/PROGRESS.md), [M4 verification](docs/M4_IMPLEMENTATION.md), [accounts](docs/ACCOUNTS.md), [catalogue operations](docs/CATALOGUE.md) and the [implementation plan](docs/IMPLEMENTATION_PLAN.md). M6a adds password-confirmed account download/deletion; public-launch privacy/retention and hosting verification remain M6 work.
+
+The [execution roadmap](docs/IMPLEMENTATION_PLAN.md#12-implementation-milestones-and-acceptance-criteria) includes a complete local Docker environment and automatic O2Switch deployment using the existing [deployment template](https://github.com/Starbugstone/test-auto-deploy). The O2Switch target is not configured yet.
 
 ## The idea
 
@@ -17,7 +19,7 @@ Opening courses often teach one continuation at a time. Real opponents choose di
 
 Both modes use the same opening graph. In strict lessons, a valid but different move is **not automatically a chess mistake**; it simply leaves the assigned line. In variation training, any continuation included in the selected lesson scope can be followed. Off-lesson moves get a neutral explanation and retry/return option, not an invented engine verdict.
 
-### Learning experience
+### Planned learning experience
 
 - A large, responsive chessboard with drag/drop and tap-to-move.
 - Current opening, ECO code and variation name; optionally hide/reveal the name during practice.
@@ -45,13 +47,14 @@ This is a friendly, approachable teaching experience inspired by clear chess edu
 | State & routing | **Pinia**, **Vue Router** | Domain logic separated from UI |
 | Board | **Lichess Chessground** | Directly wrapped as a Vue component; GPL-compatible |
 | Browser rules & notation | **chess.js** | Validate player moves, SAN, UCI, PGN, FEN in the Vue app |
-| UI | **Element Plus** for forms/dialogs, lightweight application CSS | Board-first, touch-friendly; avoid UI bloat |
-| Backend | **Symfony 7.4 LTS** (PHP 8.2+), SecurityBundle, Mailer | Target modern PHP; verify hosting PHP availability |
+| UI | Native HTML forms and lightweight application CSS today; **Element Plus** remains the planned forms/dialogs library | Board-first, touch-friendly; the library is not currently installed |
+| Backend | **Symfony 7.4 LTS**, PHP 8.3+, Doctrine, HttpClient, Mailer, Security | PHP 8.3 with sodium locally; verify hosting extensions and PHP availability |
 | Persistence | **MariaDB**, Doctrine ORM + DBAL + Migrations | Opening data and per-user data in separate logical tables |
 | Backend importer | **Symfony Console (PHP)** + HttpClient + Doctrine DBAL + PHP chess library | Fetch all five upstream TSVs by immutable Git SHA, replay PGN, validate, upsert/stage/promote locally |
 | Automatic updates | **Weekly O2Switch/cPanel cron** calling `app:openings:sync` | Symfony PHP fetches, validates and applies Lichess updates; app refreshes catalogue version |
 | Testing | **Vitest**, **Playwright**, **PHPUnit** | Opening graph validation and end-to-end training flows |
-| Deployment | Static Vite assets + Symfony API on compatible shared PHP hosting | Prefer same-origin HTTPS; build JS in local/CI, not on the host |
+| Local development | **Docker Compose**: PHP/Apache + Composer, Vue/Vite, MariaDB, local email capture | Container-based setup/build/tests; Vite proxies same-origin API requests |
+| Deployment | Existing **O2Switch host-pull template** | Every main push with successful CI becomes eligible; host builds with Composer/Node and activates PHP/static assets |
 | Licence | **GPLv3** (GPL-3.0-only for this project's code) | Lichess opening data is separately CC0; honour third-party notices |
 
 See the full [engineering plan](docs/IMPLEMENTATION_PLAN.md) for architecture, proposed SQL schema, importer stages, endpoints, test cases, security/GDPR and execution milestones.
@@ -74,7 +77,7 @@ The project uses **three distinct layers**: **(1)** an imported chess position/m
 
 ## Proposed repository layout
 
-This is a target layout; directories will be created as the implementation progresses.
+Current foundations and planned feature locations:
 
 ```text
 frontend/                   # Vue app, Chessground wrapper, training composables
@@ -83,19 +86,23 @@ backend/src/Service/OpeningImport/ # PHP fetch, TSV/PGN replay, graph staging an
 backend/migrations/         # Schema and versioned curated-lesson data migrations
 docs/IMPLEMENTATION_PLAN.md # Agent handoff, migrations and implementation roadmap
 docs/OPENING_UPDATES.md     # Weekly Lichess refresh and app-reaction contract
-ops/cron/                   # Example alternative host crontab (not installed)
-.github/workflows/          # Tests, build and optional deployment
+ops/cron/                   # Weekly opening-data cron example (not installed)
+.github/workflows/          # Build/test CI checked by the host deployment poller
+compose.yaml                # Complete Docker development environment
+.docker/                    # PHP/Apache and Node development images
+scripts/o2switch/            # Template host deployment controller (disabled)
+scripts/deploy/              # Application build/prepare hooks
 ```
 
-## Weekly Lichess opening updates (planned)
+## Weekly Lichess opening updates
 
 The **Symfony backend owns the entire refresh**. An O2Switch/cPanel cron task will invoke a PHP CLI command **each Monday at 05:17 in the host server timezone (to be verified)**:
 
 ```cron
-17 5 * * 1 /opt/alt/php83/usr/bin/php /home/ACCOUNT/chess-openings/backend/bin/console app:openings:sync --env=prod --no-interaction >> /home/ACCOUNT/logs/chess-openings-sync.log 2>&1
+17 5 * * 1 /bin/bash /home/ACCOUNT/apps/chess-openings/control/opening-sync.sh /opt/alt/php83/usr/bin/php
 ```
 
-The PHP binary/path and account directory are illustrative. The command is **specified but not implemented or installed yet**. PHP's Symfony HttpClient retrieves all five official TSV source files at one immutable upstream Git SHA; a PHP chess library replays/validates them; Doctrine DBAL stages and atomically promotes the revised local MariaDB catalogue if the content changed. The recommended library for an initial proof of concept is [p-chess/chess](https://github.com/p-chess/chess) (MIT; Composer), to be tested against chess.js golden fixtures.
+The PHP binary/path and account directory are illustrative. The installed wrapper bounds private importer output separately from deployment logs and invokes the PHP command. **The command is implemented and locally verified; the host cron is not installed.** Symfony HttpClient retrieves all five TSVs at one resolved immutable Git SHA; the tested p-chess/chess adapter legally replays them; DBAL stages and atomically activates a complete snapshot. No-op checks keep the revision stable; failed checks keep the previous catalogue readable. See [catalogue operations](docs/CATALOGUE.md) for safeguards, dry-run, rollback and retention.
 
 Once an import is activated, the API publishes a new `catalogueRevision` and Vue/Pinia refreshes stale opening names/metadata at the next navigation or training session. **Current sessions, curated Doctrine-migration-managed lessons and private progress must never be silently modified by upstream data.** A newly catalogued line is searchable but cannot be played by the training computer until it is deliberately added to a reviewed lesson migration. On bad source data, network failure or interrupted import, keep the last valid catalogue.
 
@@ -103,19 +110,101 @@ No Node.js importer, GitHub Actions scheduled importer or remote bundle pipeline
 
 ## Local development
 
-**Not available yet.** The implementation agent will create the Symfony/Vue scaffolding, Docker Compose development database, example environment files, migration commands, the Symfony/PHP importer command, scheduled host cron instructions and curated lesson data migrations as the first milestones. Do not assume `npm install`, `composer install` or a database import is runnable in this documentation-only state.
+Requires **Git, Bash, Docker and Docker Compose**. Native PHP, Composer and Node are optional. From the repository root:
 
-Suggested local requirements: supported PHP/Composer and PHP CLI with HttpClient/JSON/ctype support, Node.js LTS for the Vue frontend, MariaDB 10.11+, and optionally Docker Compose for the development database. Versions and commands should be recorded once the scaffolding is committed.
+```bash
+bash scripts/local-up.sh
+```
+
+The script builds images, installs locked dependencies, prepares writable volumes, starts the services and applies schema migrations under the database operation lock. It can be rerun after dependency changes; it briefly stops the PHP/Vite containers while installing. Linux user IDs are detected automatically. To change published ports, copy `.env.example` to root `.env` before starting.
+
+Populate the opening library with `make catalogue` (or the `app:database:prepare` command below). This downloads/replays the pinned first catalogue in PHP, then runs the separate lesson migration phase. Later bootstrap calls retain an already active catalogue. Network access is required for first source population; normal checks use offline fixtures.
+
+| Local service | Address |
+| --- | --- |
+| Vue/Vite preview | [localhost:5173](http://localhost:5173) |
+| Guided lessons | [localhost:5173/learn](http://localhost:5173/learn) |
+| Variation practice (sign in first) | [Italian](http://localhost:5173/train/italian) / [Caro-Kann as Black](http://localhost:5173/train/caro-kann) |
+| Your practice & reviews (signed in) | [localhost:5173/progress](http://localhost:5173/progress) |
+| Opening library | [localhost:5173/openings](http://localhost:5173/openings) |
+| Register / sign in | [localhost:5173/register](http://localhost:5173/register) / [localhost:5173/login](http://localhost:5173/login) |
+| Development board lab | [localhost:5173/dev/board](http://localhost:5173/dev/board) |
+| Symfony readiness (checks MariaDB) | [localhost:8080/api/health](http://localhost:8080/api/health) |
+| Captured development email | [localhost:8025](http://localhost:8025) |
+
+Vite proxies `/api` to Symfony. The board lab supports drag/tap moves, keyboard coordinate entry, legal destinations, move history, promotion choices, undo, restart and orientation. Accepted moves play a short, low wooden knock, generated locally without external audio assets. **Sound on/off** persists in this browser; illegal moves, pending promotion, undo and board flips stay silent. The lab is a development harness excluded from production builds; the home board is read-only. Both training modes require a verified account and support keyboard input, on-board hints, neutral move feedback and finite automatic replies.
+
+After `make catalogue`, `/learn` offers **ten courses/27 current lines**: Italian, London, Queen's Gambit, Ruy Lopez and Catalan recommended for White; Caro-Kann, French, Sicilian, King's Indian and Slav recommended for Black. London teaches eight White moves through castling. Black defences start with White's automatic move. The other courses use complete pinned named records alongside retained introductions; see [revision-2 sources](docs/lessons/NAMED_LINES_REVISION_2.md) and [new-course sources](docs/lessons/NAMED_LINES_NEW_COURSES.md). These are finite lessons. Saved practice stays attached to its exact revision; a catalogue update cannot rewrite an active exercise or its completion.
+
+Choose **Practise variations** on a course card after learning its lines. Select your pieces and training lines, then start. Previously completed lines in the same course revision and colour are selected by default; a new learner can explicitly choose available lines or return to guidance. The opponent favours supported lines with less practice or a due review. Any taught response in the selected scope is accepted. One selected line is described as a fixed sequence. Names can stay hidden until reveal, a coaching hint or completion. Only the exact line played is saved.
+
+Choose **Your practice & reviews** in Account, or **See your practice & reviews** after finishing. Current coverage, measured first-try recall and review suggestions are separate for White and Black. Earlier-version history stays visible; old completions have recall marked unknown. Reviews begin after one day without help, advance on successful due reviews and return in ten minutes after practice with help. Hints and takebacks are welcome and are described honestly. Review links open the exact current line and side. See [the approved M5b contract and verification](docs/PROGRESS.md).
+
+To try accounts, register with an `@example.test` address and password, open its verification link in Mailpit, confirm, then sign in with that same password. The confirmation page asks for no password. Session cookies keep you signed in across refreshes. **Remember me for 30 days** is optional and restores sign-in after the session/browser closes; signing out clears the browser's cookie and password reset invalidates existing sessions and remembered sign-ins. Reset and verification emails remain in local Mailpit. See [account setup, API and lifecycle](docs/ACCOUNTS.md). Account also provides **Download my data** and a separate, cancellable **Delete my account…** form, each requiring the current password. Deletion removes the account, email tokens and all saved practice, then signs out; other browsers cannot restore it. Downloads retain older course revisions and exclude password/token secrets. See [account data controls](docs/ACCOUNT_DATA.md). The privacy page describes this development preview; public-launch legal information, retention and hosting verification remain M6 work.
+
+```bash
+# Static analysis, formatting, unit/API tests, build, Apache smoke checks,
+# deployment controller tests and desktop/mobile browser tests.
+bash scripts/check.sh
+
+# With other sessions using the stack, require healthy services and reuse them.
+CHECK_REUSE_SERVICES=1 bash scripts/check.sh
+
+# Separate network check: fresh DB -> complete immutable source -> all lessons.
+bash tests/import/migrations-test.sh pinned-lessons-test.php
+
+# Build the production frontend only.
+docker compose run --rm --no-deps frontend npm run build
+
+# Send an email to the local Mailpit instance.
+docker compose exec -T --user www-data app bin/console app:dev:send-test-email
+
+# Schema -> first pinned catalogue -> separate lesson data migrations.
+docker compose exec -T --user www-data app bin/console app:database:prepare --no-interaction
+
+# Check the actual latest upstream source; inspect with --dry-run first if desired.
+docker compose exec -T --user www-data app bin/console app:openings:sync --dry-run --env=prod --no-debug
+docker compose exec -T --user www-data app bin/console app:openings:status
+
+# Validate the ten pinned opening fixtures entirely in PHP (offline, no DB writes).
+docker compose exec -T --user www-data app bin/console app:openings:validate \
+  --source-directory=tests/Fixtures/Openings/source
+
+# Download/replay the complete five-file catalogue at one immutable SHA.
+docker compose exec -T --user www-data app bin/console app:openings:validate \
+  --source-sha=a6189a30dc273ccb21fc2536a9a2fefd5592a67a --env=prod --no-debug
+
+# Inspect the applied schema; lesson migrations use a separate command/history.
+docker compose exec -T --user www-data app bin/console doctrine:migrations:list
+
+# View logs; stop while preserving the database/dependency volumes.
+docker compose logs -f app frontend mailpit
+docker compose down
+```
+
+`make dev`, `make catalogue`, `make check`, `make build`, `make mail` and `make stop` are optional shortcuts. Browser tests use the optional `browser` Compose service, so the first check also downloads its Playwright image. All application tooling runs in containers. DB and SMTP ports are private to the Docker network; HTTP ports bind to loopback. Container versions are pinned in Compose/Dockerfiles; dependency versions are locked. MariaDB is locally 10.11.14; the actual hosting version remains to be verified.
+
+Schema setup starts with an inactive revision 0; first catalogue bootstrap activates 3,865 pinned opening records at revision 1. Schema setup does not seed accounts or courses. `app:schema:migrate`, source sync and `app:lessons:migrate` share a database lock; source refresh never runs either migration stream. The API and `/openings` view provide paginated name/ECO-prefix search and revision-based ETags. Pinia rechecks at navigation/new-session boundaries, never on a timer. See [docs/MIGRATIONS.md](docs/MIGRATIONS.md) and [docs/CATALOGUE.md](docs/CATALOGUE.md). The earlier `app:openings:validate` command remains read-only. No host cron is installed.
+
+Verified locally on 2026-10-15 with `CHECK_REUSE_SERVICES=1 bash scripts/check.sh` (exit 0): **194 PHPUnit tests / 4,247 assertions, 219 Vitest tests and 45 passed desktop/mobile browser checks**, plus one intentional mobile mouse-drag skip. Static/build/Apache/deployment and actual private MariaDB backup/restore checks pass. Disposable suites exercise **18 constraint, 81 migration, 108 catalogue, 93 account, 61 lesson, 109 variation and 150 practice checks**. Focused approved SQL/migration parity checks pass 56 cases. The integrated guided/variation/progress browser subset passes 18 cases, including a separate browser session and expired-session recovery. Separate curriculum-owner verification passed complete pinned-source bootstrap (31 checks) and full-source lessons (62). Fresh bootstrap applies nine schema and 15 lesson migrations; ten courses have 27 current lines, with 35 retained lines/645 steps. See [progress verification](docs/PROGRESS.md) and [coordination handoff](docs/REVIEW_COORDINATION.md). Compiled dependency notices are generated from rendered production modules and linked at `/third-party-notices.txt`.
+
+## Automatic deployment (planned)
+
+Reuse [Starbugstone/test-auto-deploy](https://github.com/Starbugstone/test-auto-deploy) and its current **host-pull** flow. Every push to `main` runs CI. An O2Switch cron poller checks for successful push CI on that exact commit, fetches it, installs locked dependencies, builds Vue with Node/npm, prepares the database/cache and switches to a verified release. Apache/PHP serves the result; no persistent Node server is needed. Failed builds keep the previous code active; health failures restore it. Retain three successful releases and treat database recovery separately from code rollback.
+
+The target still needs a domain/HTTPS, database/user, PHP/Composer/Node paths, repository access, host-only secrets and deployment-controller setup. The copied controller starts disabled. Project preparation preserves shared sessions/logs and runs the tested **schema -> first pinned catalogue import -> lesson data migrations** bootstrap before cache warmup. Later deployments retain the active source catalogue. See [template provenance and setup](docs/DEPLOYMENT_TEMPLATE.md). Enable polling after staging verification. The separate PHP-only weekly refresh command exists; install its cron only after deployed verification.
+
+See the [deployment implementation plan](docs/IMPLEMENTATION_PLAN.md#14-automatic-o2switch-deployment) for the pinned template reference, remaining integration work, host checklist, two cron roles and acceptance tests. GitHub Actions CI is configured; it has not been run remotely. No O2Switch deployment or cron is configured.
 
 ## Privacy / RGPD
 
-Accounts are used to save and sync lesson progress. Collect the minimum needed: email address, hashed password, internal identifier and optional display name. Use first-party Symfony sessions with secure, HttpOnly, SameSite cookies; don't store authentication tokens in localStorage. Provide email verification/password reset, an accessible privacy notice, account deletion, personal-data export, documented retention, and an authorisation check on every user-data endpoint.
+Accounts collect an email address, hashed password and internal identifier; no display name is currently collected. First-party Symfony sessions use HttpOnly, SameSite cookies, with Secure required in production; authentication tokens are not stored in localStorage. Email verification/password reset are implemented. Password-confirmed personal-data download and account deletion are implemented in Account, with CSRF, persistent limits and owner isolation. Deletion removes live account/token/practice data; it does not rewrite existing backups, logs, temporary abuse limits or captured local email. Public-launch privacy information, retention decisions and deployed verification remain M6 requirements. See [the tested boundaries](docs/ACCOUNT_DATA.md).
 
 The MVP has **no advertising or non-essential trackers**. An authentication/session cookie that is strictly necessary does not ordinarily require a cookie-consent banner, but privacy information is still necessary. GDPR compliance must be **tested and reviewed before deployment**, not assumed from this README.
 
 ## Contributing / development workflow
 
-Start at [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md); implement in small, tested milestones. Keep source-derived chess knowledge separate from editorial teaching content and user progress. Document any deviations from the chosen stack or schema before coding them.
+Start at [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md) and the [navigation/accessibility contract](docs/UX.md); implement in small, tested milestones. Keep source-derived chess knowledge separate from editorial teaching content and user progress. Document any deviations from the chosen stack or schema before coding them.
 
 ## Upstream references
 

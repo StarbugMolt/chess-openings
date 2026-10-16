@@ -1,0 +1,47 @@
+{
+    "repository": "https://github.com/lichess-org/chess-openings",
+    "sha": "a6189a30dc273ccb21fc2536a9a2fefd5592a67a",
+    "license": "CC0-1.0",
+    "files": {
+        "a.tsv": {
+            "upstreamSha256": "3282e4c9155289a29224f9a85fba0decb46efa35c2fa5e39662d2ac48fb0f793",
+            "selectedRows": [
+                2,
+                824
+            ],
+            "fixtureSha256": "80947721ca6db03da0f9b3ac4b343a6491786e06c26bd929265da5a0eeca9b18"
+        },
+        "b.tsv": {
+            "upstreamSha256": "1d5ed134ebbd87915ead5683416e37583bb3e5ae3582b4d8cb5cb4aa7ef4f623",
+            "selectedRows": [
+                2,
+                782
+            ],
+            "fixtureSha256": "bb61248c3ac68e5fffdf4b78d1626976f1829b61eb4731600f3576acac96701e"
+        },
+        "c.tsv": {
+            "upstreamSha256": "45e843c7b7e79a0d04d5bda879c9bd23f5a10974488bd8615e4f4c5d0749986f",
+            "selectedRows": [
+                2,
+                833
+            ],
+            "fixtureSha256": "947e654c0f0faa05ed0bdae0b20c49ba4f0a7c4ee9ba977f6c6e677029391b6a"
+        },
+        "d.tsv": {
+            "upstreamSha256": "1cf4057a8aece94f27bb3f278ad410ee2844831a642364eeceaafa091dbcceda",
+            "selectedRows": [
+                2,
+                645
+            ],
+            "fixtureSha256": "8c3090ec8580fc79653ba94c67099a72e574ec5ae32df0194e702199a661dbcc"
+        },
+        "e.tsv": {
+            "upstreamSha256": "48c6f6645b031a5937c8386839debab0e2e48837251687ba1afb6369677f8546",
+            "selectedRows": [
+                2,
+                368
+            ],
+            "fixtureSha256": "a154c02bd968cc0baf735420e342901dacceca8a54ef59ebc75543cd8e540d7e"
+        }
+    }
+}

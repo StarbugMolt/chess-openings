@@ -1,8 +1,10 @@
 # PHP opening importer and weekly catalogue refresh
 
-> **Status: approved technical specification, NOT implemented or scheduled.** The repository is currently documentation-only. The implementation agent must create and test the Symfony services and commands, then install the weekly task in the O2Switch/cPanel cron interface. Merely committing this document does **not** install a cron.
+> **Status: M2c sync/status/rollback and catalogue browsing are implemented and locally verified. No hosting cron is installed.** Full pinned PHP/DBAL import and default latest-source no-op passed locally; see [CATALOGUE.md](CATALOGUE.md) and [MIGRATIONS.md](MIGRATIONS.md). Deploy and verify the command on the actual O2Switch account before installing the weekly task. Merely committing this document does **not** install a cron.
 >
 > **Owner's decision:** the complete importer and scheduler integration belong to the **Symfony/PHP backend**. No Node/TypeScript opening-import script, GitHub Actions scheduled importer, SSH-delivered bundles or remote worker is required. Vue/TypeScript and chess.js remain frontend-only. CI can still build Vue and run tests.
+
+> **Deployment addition (2026-10-15):** application deployment will reuse the existing template's host-pull/build controller, as specified in [implementation plan section 14](IMPLEMENTATION_PLAN.md#14-automatic-o2switch-deployment). Its deployment-polling cron is separate from the single weekly opening-data cron below. Node may build Vue on hosting; catalogue importing remains PHP-only.
 
 ## Meaning of "latest news"
 
@@ -13,7 +15,7 @@ Lichess labels are **catalogue metadata**; source changes do not constitute an a
 ## Confirmed architecture
 
 ```text
-O2Switch / cPanel cron — weekly (single scheduler)
+O2Switch / cPanel opening-data cron — weekly (single opening-data scheduler)
     |
     v
 PHP CLI: backend/bin/console app:openings:sync
@@ -43,40 +45,42 @@ Symfony API revision/ETag -> Vue/Pinia refreshes opening metadata on next naviga
 - Use a robust PHP TSV parser (`fgetcsv` with `\t` delimiter and configured quoting/escaping), and a dedicated PGN movetext tokenizer. Handle SAN, castling, checks/mates, annotations, move numbers, results, escaped text/UTF-8 and malformed records. Lichess opening TSV values are typically single-line main lines, not arbitrary annotated studies; nevertheless reject unexpected input instead of silently skipping moves.
 - Use the chess library to **legally replay** tokens; convert each move to canonical SAN, UCI (`from+to+promotion`) and resulting FEN. Implement and test canonical position keys as board placement, side to move, castling rights and **legally capturable en-passant**; omit FEN move clocks. Never assume a raw FEN string or the library's E.P. field is already canonical.
 - Build shared **golden fixtures**: PHP output must match frontend chess.js replay results for normal lines, two equivalent transpositions, castling, ambiguous SAN, promotion, checkmate and en-passant. Use these tests to decide whether `p-chess/chess` meets the importer contract; document and explicitly choose an alternative maintained PHP library only if the spike fails.
-- Node is only needed for **Vue build/frontend tests**, **not** for import, refresh or production.
+- Node is only needed for **Vue builds/frontend tests**, including the approved host-side frontend build. It is not used for catalogue import/refresh or for serving production requests.
 
 References: [p-chess/chess on Packagist](https://packagist.org/packages/p-chess/chess), [chess.js](https://github.com/jhlywa/chess.js).
 
 ## Backend command specification
 
-Create a real Symfony Console command using Symfony HttpClient, Doctrine DBAL, Symfony Lock (or a deliberate DB advisory lock) and an importer service responsible for the complete fetch-parse-validate-stage-activate sequence:
+The implemented Symfony Console command uses HttpClient, DBAL and the shared MariaDB advisory lock for the complete fetch-parse-validate-stage-activate sequence:
 
 ```bash
-# The command to configure in cPanel after implementation.
-php backend/bin/console app:openings:sync --env=prod --no-interaction
+# Direct command for deployed/manual verification before cron installation.
+php backend/bin/console app:openings:sync --env=prod --no-debug --no-interaction
 
 # Safe inspection without writes.
-php backend/bin/console app:openings:sync --dry-run --env=prod --no-interaction
+php backend/bin/console app:openings:sync --dry-run --env=prod --no-debug --no-interaction
 
 # Deterministic fixture/offline run for testing, no GitHub access.
-php backend/bin/console app:openings:sync --source-directory=/absolute/path/to/tsv --dry-run
+php backend/bin/console app:openings:sync --source-directory=/absolute/path/to/tsv --source-ref=a6189a30dc273ccb21fc2536a9a2fefd5592a67a --dry-run
 
 # Inspect active version, last check and status.
 php backend/bin/console app:openings:status --env=prod
 ```
 
-Commands above are a **future interface**; they do not exist yet. Provide documented `--force` and `--source-ref=<immutable SHA>` options if needed, but a normal scheduled run must not require arguments besides production environment. Manual reruns must be idempotent. There is **no public HTTP endpoint** that triggers updates.
+These commands exist. `--source-ref` accepts only a full immutable SHA; local-directory mode requires it as explicit provenance. `--force` accepts reviewed count/removal thresholds and cannot bypass invalid source/chess data. Normal scheduled runs need only the production environment. `app:openings:rollback <batch-id>` restores a retained validated batch with a new monotonic revision. See [CATALOGUE.md](CATALOGUE.md) for exact commands, measured results, retention and API behavior. There is **no public HTTP endpoint** that triggers updates.
 
 ### Weekly O2Switch cron
 
-Create a cron job in **O2Switch cPanel → Tâches Cron**. The [sample crontab](../ops/cron/opening-catalogue.crontab.example) contains a concrete PHP-CLI invocation. Typical example:
+After the deployed verification gate passes, create one job in **O2Switch cPanel → Tâches Cron**. The [sample crontab](../ops/cron/opening-catalogue.crontab.example) calls the installed log wrapper, which invokes only the PHP importer and bounds its private console log independently of deployment-log pruning. Typical example:
 
 ```cron
 # Every Monday at 05:17 in the server cron timezone (verify O2Switch/cPanel TZ).
-17 5 * * 1 /opt/alt/php83/usr/bin/php /home/ACCOUNT/chess-openings/backend/bin/console app:openings:sync --env=prod --no-interaction >> /home/ACCOUNT/logs/chess-openings-sync.log 2>&1
+17 5 * * 1 /bin/bash /home/ACCOUNT/apps/chess-openings/control/opening-sync.sh /opt/alt/php83/usr/bin/php
 ```
 
 **Replace** the placeholder account directory, actual Symfony path and PHP executable with values verified on the deployed host. `php83` is an **example**, not confirmation that production is on 8.3. The log directory must exist, be writable and be **outside the public webroot**. Check the host's timezone before interpreting the scheduled hour; cPanel may use the server clock, not Europe/Paris. Configure optional failure email/monitoring. Do not use a web-facing `wget` URL; this is a CLI cron with PHP's CLI limits. A weekly job is much lighter than any persistent scheduler service.
+
+The template moves the built backend into each release root, so the stable deployed command is `current/bin/console`; repository-local commands still use `backend/bin/console`. Use a shared/DB import lock across releases and coordinate it with deployment migration preparation. The deployment poller must not run weekly sync on every code release.
 
 O2Switch specifically documents `php /absolute/path/to/cron.php` and versioned CLI binary paths for cron jobs: https://faq.o2switch.fr/cpanel/outils-avances/tache-planifiee-cron/ and https://faq.o2switch.fr/cpanel/logiciels/hebergement-php-multi-version/.
 
@@ -145,12 +149,10 @@ Consider retaining source `opening_entry` history by batch (or explicit versione
 
 ## Implementation checklist
 
-- **M0**: Symfony backend, HttpClient, DBAL, console setup, baseline PHP CLI and test fixtures; pin composer dependencies.
-- **M2**: PHP chess-replayer spike and golden chess.js fixtures; parser, graph and stable source import; import batches/staging; run against real official TSVs; update/rollback tests; `app:openings:sync`, `app:openings:status` and dry-run/local-directory options.
-- **M2 operations**: cPanel weekly cron installation **after deployment** and end-to-end tests; log and alert checks.
-- **M3**: Doctrine data migrations for manually curated lessons; no lessons silently changed on refresh.
-- **M4 / API + Vue**: revision/status API, ETag, Pinia revalidation and pinned active lesson graph.
-- **M6**: production smoke tests, privacy review, rollback test, confirmation cron successfully performed a live check.
+- **M0, implemented locally**: Symfony backend, HttpClient, DBAL, console setup, baseline PHP CLI and test fixtures; locked Composer dependencies.
+- **M2a–M2c, implemented locally**: PHP/chess.js replay fixtures, parser/graph, staged source imports, real pinned TSV verification, update/rollback tests, sync/status and dry-run/local-directory commands; public revision API, ETags and Pinia revalidation.
+- **M3, implemented locally**: five courses/seven current finite guided lines, reviewed Doctrine lesson migrations and pinned lesson revisions; tests verify source refresh cannot modify teaching, provenance or saved completion.
+- **M6, pending host gate**: deployed runtime/SMTP/HTTPS checks and importer dry-run/live tests, privacy review, rollback and log/alert verification; only then install the single cPanel weekly cron and record its first actual execution.
 
 ## References
 

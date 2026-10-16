@@ -1,0 +1,16 @@
+doctrine:
+    dbal:
+        # Preserve URL-encoded credentials; resolve: interprets %...% as parameters.
+        url: '%env(DATABASE_URL)%'
+        charset: utf8mb4
+        profiling_collect_backtrace: '%kernel.debug%'
+    orm:
+        controller_resolver:
+            auto_mapping: false
+        auto_mapping: true
+        mappings:
+            App:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/src/Entity'
+                prefix: 'App\Entity'

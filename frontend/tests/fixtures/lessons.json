@@ -1,0 +1,797 @@
+[
+  {
+    "id": "italian",
+    "revision": 1,
+    "recommendedColor": "w",
+    "title": "Italian Game",
+    "introduction": "Take space in the centre, bring out a knight and bishop, then prepare your next central move. You will play one short, fixed line. The other side replies automatically.",
+    "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "lines": [
+      {
+        "id": "centre-plan",
+        "title": "Prepare the centre",
+        "description": "Your first line: build towards a later d-pawn advance.",
+        "steps": [
+          {
+            "uci": "e2e4",
+            "san": "e4",
+            "fromKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
+            "hint": "Move the pawn in front of your king from e2 to e4.",
+            "explanation": "The pawn takes space in the centre and opens a path for your bishop."
+          },
+          {
+            "uci": "e7e5",
+            "san": "e5",
+            "fromKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
+            "toKey": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+            "hint": "Move the pawn in front of your king from e7 to e5.",
+            "explanation": "Black also takes space in the centre."
+          },
+          {
+            "uci": "g1f3",
+            "san": "Nf3",
+            "fromKey": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq -",
+            "hint": "Move your knight from g1 to f3.",
+            "explanation": "A knight comes towards the centre and attacks the pawn on e5."
+          },
+          {
+            "uci": "b8c6",
+            "san": "Nc6",
+            "fromKey": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq -",
+            "toKey": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq -",
+            "hint": "Move your knight from b8 to c6.",
+            "explanation": "The knight develops and protects the pawn on e5."
+          },
+          {
+            "uci": "f1c4",
+            "san": "Bc4",
+            "fromKey": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq -",
+            "toKey": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -",
+            "hint": "Move your bishop from f1 to c4.",
+            "explanation": "The bishop develops to an active diagonal. This is the characteristic Italian setup."
+          },
+          {
+            "uci": "f8c5",
+            "san": "Bc5",
+            "fromKey": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -",
+            "toKey": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq -",
+            "hint": "Move your bishop from f8 to c5.",
+            "explanation": "Black develops a bishop too. Both sides are bringing pieces into play."
+          },
+          {
+            "uci": "c2c3",
+            "san": "c3",
+            "fromKey": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq -",
+            "toKey": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R b KQkq -",
+            "hint": "Move your pawn from c2 to c3.",
+            "explanation": "The pawn on c3 supports a later d2\u2013d4 advance. You have reached the end of this short introduction."
+          },
+          {
+            "uci": "g8f6",
+            "san": "Nf6",
+            "fromKey": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R b KQkq -",
+            "toKey": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R w KQkq -",
+            "hint": "Move your knight from g8 to f6.",
+            "explanation": "Black develops another knight and attacks the pawn on e4. This is the stopping point for this lesson."
+          }
+        ]
+      },
+      {
+        "id": "quiet-plan",
+        "title": "A quieter setup",
+        "description": "An alternative: support the centre with your d-pawn.",
+        "steps": [
+          {
+            "uci": "e2e4",
+            "san": "e4",
+            "fromKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
+            "hint": "Move the pawn in front of your king from e2 to e4.",
+            "explanation": "The pawn takes space in the centre and opens a path for your bishop."
+          },
+          {
+            "uci": "e7e5",
+            "san": "e5",
+            "fromKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
+            "toKey": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+            "hint": "Move the pawn in front of your king from e7 to e5.",
+            "explanation": "Black also takes space in the centre."
+          },
+          {
+            "uci": "g1f3",
+            "san": "Nf3",
+            "fromKey": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq -",
+            "hint": "Move your knight from g1 to f3.",
+            "explanation": "A knight comes towards the centre and attacks the pawn on e5."
+          },
+          {
+            "uci": "b8c6",
+            "san": "Nc6",
+            "fromKey": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq -",
+            "toKey": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq -",
+            "hint": "Move your knight from b8 to c6.",
+            "explanation": "The knight develops and protects the pawn on e5."
+          },
+          {
+            "uci": "f1c4",
+            "san": "Bc4",
+            "fromKey": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq -",
+            "toKey": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -",
+            "hint": "Move your bishop from f1 to c4.",
+            "explanation": "The bishop develops to an active diagonal. This is the characteristic Italian setup."
+          },
+          {
+            "uci": "f8c5",
+            "san": "Bc5",
+            "fromKey": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq -",
+            "toKey": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq -",
+            "hint": "Move your bishop from f8 to c5.",
+            "explanation": "Black develops a bishop too. Both sides are bringing pieces into play."
+          },
+          {
+            "uci": "d2d3",
+            "san": "d3",
+            "fromKey": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq -",
+            "toKey": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R b KQkq -",
+            "hint": "Move your pawn from d2 to d3.",
+            "explanation": "The d-pawn supports e4 and opens a path for the other bishop. This is a different taught line, not a chess mistake."
+          },
+          {
+            "uci": "g8f6",
+            "san": "Nf6",
+            "fromKey": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R b KQkq -",
+            "toKey": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq -",
+            "hint": "Move your knight from g8 to f6.",
+            "explanation": "Black develops another knight towards the centre. This is the stopping point for this lesson."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "london",
+    "revision": 3,
+    "recommendedColor": "w",
+    "title": "London System",
+    "introduction": "Build a complete beginner London setup against a direct central response: develop both knights and bishops, support your centre with pawns, then castle. You play eight White moves; Black replies automatically along this one taught line. Other replies are possible in a real game.",
+    "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "lines": [
+      {
+        "id": "first-setup",
+        "title": "Build the London and castle",
+        "description": "Eight White moves: centre, development and king safety. One fixed teaching line against ...d5, ...Nf6 and ...e6.",
+        "steps": [
+          {
+            "uci": "d2d4",
+            "san": "d4",
+            "fromKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq -",
+            "hint": "Move your pawn from d2 to d4.",
+            "explanation": "Take space in the centre and open a path for the bishop on c1."
+          },
+          {
+            "uci": "d7d5",
+            "san": "d5",
+            "fromKey": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq -",
+            "toKey": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+            "hint": "Move your pawn from d7 to d5.",
+            "explanation": "Black occupies the centre too. The d-pawns now face each other."
+          },
+          {
+            "uci": "g1f3",
+            "san": "Nf3",
+            "fromKey": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/ppp1pppp/8/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq -",
+            "hint": "Move your knight from g1 to f3.",
+            "explanation": "Develop a knight towards the centre, where it helps control more squares."
+          },
+          {
+            "uci": "g8f6",
+            "san": "Nf6",
+            "fromKey": "rnbqkbnr/ppp1pppp/8/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq -",
+            "toKey": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq -",
+            "hint": "Move your knight from g8 to f6.",
+            "explanation": "Black develops a knight and keeps an eye on the central squares."
+          },
+          {
+            "uci": "c1f4",
+            "san": "Bf4",
+            "fromKey": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq -",
+            "toKey": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq -",
+            "hint": "Move your bishop from c1 to f4.",
+            "explanation": "Bring this bishop outside your pawn chain before playing e3, which would close its diagonal."
+          },
+          {
+            "uci": "e7e6",
+            "san": "e6",
+            "fromKey": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq -",
+            "toKey": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R w KQkq -",
+            "hint": "Move your pawn from e7 to e6.",
+            "explanation": "Black supports the pawn on d5 and opens a path for the bishop on f8."
+          },
+          {
+            "uci": "e2e3",
+            "san": "e3",
+            "fromKey": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R w KQkq -",
+            "toKey": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq -",
+            "hint": "Move your pawn from e2 to e3.",
+            "explanation": "Support your pawn on d4 and open a path for the bishop on f1."
+          },
+          {
+            "uci": "c7c5",
+            "san": "c5",
+            "fromKey": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq -",
+            "toKey": "rnbqkb1r/pp3ppp/4pn2/2pp4/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq -",
+            "hint": "Move your pawn from c7 to c5.",
+            "explanation": "Black challenges the pawn on d4. This is pressure on the centre, not a random pawn move."
+          },
+          {
+            "uci": "c2c3",
+            "san": "c3",
+            "fromKey": "rnbqkb1r/pp3ppp/4pn2/2pp4/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq -",
+            "toKey": "rnbqkb1r/pp3ppp/4pn2/2pp4/3P1B2/2P1PN2/PP3PPP/RN1QKB1R b KQkq -",
+            "hint": "Move your pawn from c2 to c3.",
+            "explanation": "Give the pawn on d4 another defender. Your c3, d4 and e3 pawns form a compact central structure."
+          },
+          {
+            "uci": "b8c6",
+            "san": "Nc6",
+            "fromKey": "rnbqkb1r/pp3ppp/4pn2/2pp4/3P1B2/2P1PN2/PP3PPP/RN1QKB1R b KQkq -",
+            "toKey": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/3P1B2/2P1PN2/PP3PPP/RN1QKB1R w KQkq -",
+            "hint": "Move your knight from b8 to c6.",
+            "explanation": "Black develops another piece and adds pressure to d4."
+          },
+          {
+            "uci": "b1d2",
+            "san": "Nbd2",
+            "fromKey": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/3P1B2/2P1PN2/PP3PPP/RN1QKB1R w KQkq -",
+            "toKey": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/3P1B2/2P1PN2/PP1N1PPP/R2QKB1R b KQkq -",
+            "hint": "Move your knight from b1 to d2.",
+            "explanation": "Bring your remaining knight into play. It supports f3 and leaves c3 available for your pawn."
+          },
+          {
+            "uci": "f8e7",
+            "san": "Be7",
+            "fromKey": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/3P1B2/2P1PN2/PP1N1PPP/R2QKB1R b KQkq -",
+            "toKey": "r1bqk2r/pp2bppp/2n1pn2/2pp4/3P1B2/2P1PN2/PP1N1PPP/R2QKB1R w KQkq -",
+            "hint": "Move your bishop from f8 to e7.",
+            "explanation": "Black clears f8 so the king can castle, without immediately challenging your bishop on f4."
+          },
+          {
+            "uci": "f1d3",
+            "san": "Bd3",
+            "fromKey": "r1bqk2r/pp2bppp/2n1pn2/2pp4/3P1B2/2P1PN2/PP1N1PPP/R2QKB1R w KQkq -",
+            "toKey": "r1bqk2r/pp2bppp/2n1pn2/2pp4/3P1B2/2PBPN2/PP1N1PPP/R2QK2R b KQkq -",
+            "hint": "Move your bishop from f1 to d3.",
+            "explanation": "Develop your last bishop towards the centre. The squares between your king and rook are now clear for castling."
+          },
+          {
+            "uci": "e8g8",
+            "san": "O-O",
+            "fromKey": "r1bqk2r/pp2bppp/2n1pn2/2pp4/3P1B2/2PBPN2/PP1N1PPP/R2QK2R b KQkq -",
+            "toKey": "r1bq1rk1/pp2bppp/2n1pn2/2pp4/3P1B2/2PBPN2/PP1N1PPP/R2QK2R w KQ -",
+            "hint": "Castle: move your king from e8 to g8. The rook moves from h8 to f8 automatically.",
+            "explanation": "Black brings the king towards shelter and the rook towards the centre. Castling moves the king and rook together."
+          },
+          {
+            "uci": "e1g1",
+            "san": "O-O",
+            "fromKey": "r1bq1rk1/pp2bppp/2n1pn2/2pp4/3P1B2/2PBPN2/PP1N1PPP/R2QK2R w KQ -",
+            "toKey": "r1bq1rk1/pp2bppp/2n1pn2/2pp4/3P1B2/2PBPN2/PP1N1PPP/R2Q1RK1 b - -",
+            "hint": "Castle: move your king from e1 to g1. The rook moves from h1 to f1 automatically.",
+            "explanation": "Your king moves towards shelter and your rook joins the game. You have built the London setup and castled. This is an opening foundation, not the end of the game."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "caro-kann",
+    "revision": 1,
+    "recommendedColor": "b",
+    "title": "Caro-Kann Defense",
+    "introduction": "Play Black against 1. e4. Prepare ...d5 with ...c6, answer a central exchange, and bring your pieces into play. Start with a five-move Exchange setup, then try a longer Panov line ending in castling. White replies automatically along the selected line; real opponents can choose other continuations.",
+    "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "lines": [
+      {
+        "id": "exchange-setup",
+        "title": "First steps: the Exchange setup",
+        "description": "Five Black moves. Meet a central exchange, then develop both knights. This short foundation stops before castling.",
+        "steps": [
+          {
+            "uci": "e2e4",
+            "san": "e4",
+            "fromKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
+            "hint": "Move your pawn from e2 to e4.",
+            "explanation": "White takes space in the centre and opens a path for the bishop on f1. The Caro-Kann is a reply to this first move."
+          },
+          {
+            "uci": "c7c6",
+            "san": "c6",
+            "fromKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
+            "toKey": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+            "hint": "Move your pawn from c7 to c6.",
+            "explanation": "Prepare to move your d-pawn to d5. From c6, this pawn will support that central advance."
+          },
+          {
+            "uci": "d2d4",
+            "san": "d4",
+            "fromKey": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "hint": "Move your pawn from d2 to d4.",
+            "explanation": "White places a second pawn in the centre. Black will challenge that centre rather than leave it unopposed."
+          },
+          {
+            "uci": "d7d5",
+            "san": "d5",
+            "fromKey": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "toKey": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq -",
+            "hint": "Move your pawn from d7 to d5.",
+            "explanation": "Challenge the white pawn on e4. Your pawn on c6 supports the pawn on d5: this is the central idea behind your first move."
+          },
+          {
+            "uci": "e4d5",
+            "san": "exd5",
+            "fromKey": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/pp2pppp/2p5/3P4/3P4/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "hint": "Move your pawn from e4 to d5, capturing the black pawn.",
+            "explanation": "White exchanges the e-pawn for the black d-pawn. Pawns capture one square diagonally, rather than straight ahead."
+          },
+          {
+            "uci": "c6d5",
+            "san": "cxd5",
+            "fromKey": "rnbqkbnr/pp2pppp/2p5/3P4/3P4/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "toKey": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq -",
+            "hint": "Move your pawn from c6 to d5, capturing the white pawn.",
+            "explanation": "Recapture with the pawn you prepared on c6. The exchange is complete, and Black still has a pawn in the centre."
+          },
+          {
+            "uci": "f1d3",
+            "san": "Bd3",
+            "fromKey": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/pp2pppp/8/3p4/3P4/3B4/PPP2PPP/RNBQK1NR b KQkq -",
+            "hint": "Move your bishop from f1 to d3.",
+            "explanation": "White develops a bishop towards the centre. Both sides now need to bring more pieces off their starting squares."
+          },
+          {
+            "uci": "b8c6",
+            "san": "Nc6",
+            "fromKey": "rnbqkbnr/pp2pppp/8/3p4/3P4/3B4/PPP2PPP/RNBQK1NR b KQkq -",
+            "toKey": "r1bqkbnr/pp2pppp/2n5/3p4/3P4/3B4/PPP2PPP/RNBQK1NR w KQkq -",
+            "hint": "Move your knight from b8 to c6.",
+            "explanation": "Develop a knight towards the centre. It attacks the white pawn on d4 and controls the central square e5."
+          },
+          {
+            "uci": "c2c3",
+            "san": "c3",
+            "fromKey": "r1bqkbnr/pp2pppp/2n5/3p4/3P4/3B4/PPP2PPP/RNBQK1NR w KQkq -",
+            "toKey": "r1bqkbnr/pp2pppp/2n5/3p4/3P4/2PB4/PP3PPP/RNBQK1NR b KQkq -",
+            "hint": "Move your pawn from c2 to c3.",
+            "explanation": "White gives the pawn on d4 another defender. This is a solid reply to the pressure from your knight."
+          },
+          {
+            "uci": "g8f6",
+            "san": "Nf6",
+            "fromKey": "r1bqkbnr/pp2pppp/2n5/3p4/3P4/2PB4/PP3PPP/RNBQK1NR b KQkq -",
+            "toKey": "r1bqkb1r/pp2pppp/2n2n2/3p4/3P4/2PB4/PP3PPP/RNBQK1NR w KQkq -",
+            "hint": "Move your knight from g8 to f6.",
+            "explanation": "Develop your other knight towards the centre. You have learned the Caro-Kann pawn idea and brought both knights into play. This line ends here; your bishops and king still need attention in a real game."
+          }
+        ]
+      },
+      {
+        "id": "panov-development",
+        "title": "Next step: meet the Panov and castle",
+        "description": "Nine Black moves. White challenges d5 with the c-pawn; develop your pieces, recapture in the centre, then castle.",
+        "steps": [
+          {
+            "uci": "e2e4",
+            "san": "e4",
+            "fromKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
+            "hint": "Move your pawn from e2 to e4.",
+            "explanation": "White takes space in the centre and opens a path for the bishop on f1. The Caro-Kann is a reply to this first move."
+          },
+          {
+            "uci": "c7c6",
+            "san": "c6",
+            "fromKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
+            "toKey": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+            "hint": "Move your pawn from c7 to c6.",
+            "explanation": "Prepare to move your d-pawn to d5. From c6, this pawn will support that central advance."
+          },
+          {
+            "uci": "d2d4",
+            "san": "d4",
+            "fromKey": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "hint": "Move your pawn from d2 to d4.",
+            "explanation": "White places a second pawn in the centre. Black will challenge that centre rather than leave it unopposed."
+          },
+          {
+            "uci": "d7d5",
+            "san": "d5",
+            "fromKey": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "toKey": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq -",
+            "hint": "Move your pawn from d7 to d5.",
+            "explanation": "Challenge the white pawn on e4. Your pawn on c6 supports the pawn on d5: this is the central idea behind your first move."
+          },
+          {
+            "uci": "e4d5",
+            "san": "exd5",
+            "fromKey": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/pp2pppp/2p5/3P4/3P4/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "hint": "Move your pawn from e4 to d5, capturing the black pawn.",
+            "explanation": "White exchanges the e-pawn for the black d-pawn. Pawns capture one square diagonally, rather than straight ahead."
+          },
+          {
+            "uci": "c6d5",
+            "san": "cxd5",
+            "fromKey": "rnbqkbnr/pp2pppp/2p5/3P4/3P4/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "toKey": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq -",
+            "hint": "Move your pawn from c6 to d5, capturing the white pawn.",
+            "explanation": "Recapture with the pawn you prepared on c6. The exchange is complete, and Black still has a pawn in the centre."
+          },
+          {
+            "uci": "c2c4",
+            "san": "c4",
+            "fromKey": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/pp2pppp/8/3p4/2PP4/8/PP3PPP/RNBQKBNR b KQkq -",
+            "hint": "Move your pawn from c2 to c4.",
+            "explanation": "White attacks the black pawn on d5 with another pawn. This central challenge is called the Panov Attack."
+          },
+          {
+            "uci": "b8c6",
+            "san": "Nc6",
+            "fromKey": "rnbqkbnr/pp2pppp/8/3p4/2PP4/8/PP3PPP/RNBQKBNR b KQkq -",
+            "toKey": "r1bqkbnr/pp2pppp/2n5/3p4/2PP4/8/PP3PPP/RNBQKBNR w KQkq -",
+            "hint": "Move your knight from b8 to c6.",
+            "explanation": "Develop a knight and put pressure on the pawn on d4. You can bring pieces into play while White decides how to handle the central pawns."
+          },
+          {
+            "uci": "b1c3",
+            "san": "Nc3",
+            "fromKey": "r1bqkbnr/pp2pppp/2n5/3p4/2PP4/8/PP3PPP/RNBQKBNR w KQkq -",
+            "toKey": "r1bqkbnr/pp2pppp/2n5/3p4/2PP4/2N5/PP3PPP/R1BQKBNR b KQkq -",
+            "hint": "Move your knight from b1 to c3.",
+            "explanation": "White develops a knight and adds another attack on the black pawn on d5."
+          },
+          {
+            "uci": "g8f6",
+            "san": "Nf6",
+            "fromKey": "r1bqkbnr/pp2pppp/2n5/3p4/2PP4/2N5/PP3PPP/R1BQKBNR b KQkq -",
+            "toKey": "r1bqkb1r/pp2pppp/2n2n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR w KQkq -",
+            "hint": "Move your knight from g8 to f6.",
+            "explanation": "Bring your second knight towards the centre. Both black knights are now active instead of sitting on the back rank."
+          },
+          {
+            "uci": "g1f3",
+            "san": "Nf3",
+            "fromKey": "r1bqkb1r/pp2pppp/2n2n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR w KQkq -",
+            "toKey": "r1bqkb1r/pp2pppp/2n2n2/3p4/2PP4/2N2N2/PP3PPP/R1BQKB1R b KQkq -",
+            "hint": "Move your knight from g1 to f3.",
+            "explanation": "White develops the other knight and adds another defender to d4. Moving it also clears g1 for later castling."
+          },
+          {
+            "uci": "e7e6",
+            "san": "e6",
+            "fromKey": "r1bqkb1r/pp2pppp/2n2n2/3p4/2PP4/2N2N2/PP3PPP/R1BQKB1R b KQkq -",
+            "toKey": "r1bqkb1r/pp3ppp/2n1pn2/3p4/2PP4/2N2N2/PP3PPP/R1BQKB1R w KQkq -",
+            "hint": "Move your pawn from e7 to e6.",
+            "explanation": "Support the pawn on d5 and open a diagonal for the bishop on f8. This prepares the next stage of your development."
+          },
+          {
+            "uci": "c4d5",
+            "san": "cxd5",
+            "fromKey": "r1bqkb1r/pp3ppp/2n1pn2/3p4/2PP4/2N2N2/PP3PPP/R1BQKB1R w KQkq -",
+            "toKey": "r1bqkb1r/pp3ppp/2n1pn2/3P4/3P4/2N2N2/PP3PPP/R1BQKB1R b KQkq -",
+            "hint": "Move your pawn from c4 to d5, capturing the black pawn.",
+            "explanation": "White exchanges the c-pawn for the black pawn on d5. Black now needs to recapture to restore the material balance."
+          },
+          {
+            "uci": "e6d5",
+            "san": "exd5",
+            "fromKey": "r1bqkb1r/pp3ppp/2n1pn2/3P4/3P4/2N2N2/PP3PPP/R1BQKB1R b KQkq -",
+            "toKey": "r1bqkb1r/pp3ppp/2n2n2/3p4/3P4/2N2N2/PP3PPP/R1BQKB1R w KQkq -",
+            "hint": "Move your pawn from e6 to d5, capturing the white pawn.",
+            "explanation": "Recapture with your e-pawn and keep a pawn in the centre. Both sides now have a d-pawn without a friendly pawn on either neighbouring file, so pieces must help defend those pawns."
+          },
+          {
+            "uci": "f1b5",
+            "san": "Bb5",
+            "fromKey": "r1bqkb1r/pp3ppp/2n2n2/3p4/3P4/2N2N2/PP3PPP/R1BQKB1R w KQkq -",
+            "toKey": "r1bqkb1r/pp3ppp/2n2n2/1B1p4/3P4/2N2N2/PP3PPP/R1BQK2R b KQkq -",
+            "hint": "Move your bishop from f1 to b5.",
+            "explanation": "White develops a bishop and pins the knight on c6 to the king on e8: moving that knight would expose the king."
+          },
+          {
+            "uci": "f8d6",
+            "san": "Bd6",
+            "fromKey": "r1bqkb1r/pp3ppp/2n2n2/1B1p4/3P4/2N2N2/PP3PPP/R1BQK2R b KQkq -",
+            "toKey": "r1bqk2r/pp3ppp/2nb1n2/1B1p4/3P4/2N2N2/PP3PPP/R1BQK2R w KQkq -",
+            "hint": "Move your bishop from f8 to d6.",
+            "explanation": "Develop your bishop on an open diagonal. With the bishop and knight out of the way, the squares between your king and h8 rook are clear for castling."
+          },
+          {
+            "uci": "c1g5",
+            "san": "Bg5",
+            "fromKey": "r1bqk2r/pp3ppp/2nb1n2/1B1p4/3P4/2N2N2/PP3PPP/R1BQK2R w KQkq -",
+            "toKey": "r1bqk2r/pp3ppp/2nb1n2/1B1p2B1/3P4/2N2N2/PP3PPP/R2QK2R b KQkq -",
+            "hint": "Move your bishop from c1 to g5.",
+            "explanation": "White develops another bishop and lines it up with the knight on f6 and queen on d8. This is pressure on a piece, rather than a check on the king."
+          },
+          {
+            "uci": "e8g8",
+            "san": "O-O",
+            "fromKey": "r1bqk2r/pp3ppp/2nb1n2/1B1p2B1/3P4/2N2N2/PP3PPP/R2QK2R b KQkq -",
+            "toKey": "r1bq1rk1/pp3ppp/2nb1n2/1B1p2B1/3P4/2N2N2/PP3PPP/R2QK2R w KQ -",
+            "hint": "Castle: move your king from e8 to g8. The rook moves from h8 to f8 automatically.",
+            "explanation": "Bring your king towards shelter and move a rook closer to the centre. Castling also takes your king away from the bishop pin on c6. This lesson ends with both knights and one bishop developed; the bishop on c8 still needs a plan."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "french",
+    "revision": 1,
+    "recommendedColor": "b",
+    "title": "French Defense",
+    "introduction": "Learn one French plan against White's Advance Variation: support your centre, challenge d4 with your c-pawn, then develop pieces towards that target. You play seven Black moves; White replies automatically along this fixed line. Other White replies need different plans.",
+    "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "lines": [
+      {
+        "id": "advance-centre",
+        "title": "Challenge the pawn centre",
+        "description": "Advance Variation: pressure on d4 with the c-pawn, knight and queen, followed by an exchange and bishop development.",
+        "steps": [
+          {
+            "uci": "e2e4",
+            "san": "e4",
+            "fromKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
+            "hint": "Move your pawn from e2 to e4.",
+            "explanation": "White takes space in the centre and opens a diagonal for the bishop on f1."
+          },
+          {
+            "uci": "e7e6",
+            "san": "e6",
+            "fromKey": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq -",
+            "toKey": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+            "hint": "Move your pawn from e7 to e6.",
+            "explanation": "Prepare to put the d-pawn on d5 with support from this pawn. This is the first move of the French Defense."
+          },
+          {
+            "uci": "d2d4",
+            "san": "d4",
+            "fromKey": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "hint": "Move your pawn from d2 to d4.",
+            "explanation": "White builds a broad pawn centre. Black will challenge it rather than let both pawns advance freely."
+          },
+          {
+            "uci": "d7d5",
+            "san": "d5",
+            "fromKey": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "toKey": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq -",
+            "hint": "Move your pawn from d7 to d5.",
+            "explanation": "Challenge the pawn on e4. Your pawn on e6 supports d5, so White cannot simply win that pawn by capturing it."
+          },
+          {
+            "uci": "e4e5",
+            "san": "e5",
+            "fromKey": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "hint": "Move your pawn from e4 to e5.",
+            "explanation": "White advances instead of exchanging pawns. The central pawns now block each other; this is the Advance Variation."
+          },
+          {
+            "uci": "c7c5",
+            "san": "c5",
+            "fromKey": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq -",
+            "toKey": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq -",
+            "hint": "Move your pawn from c7 to c5.",
+            "explanation": "Attack the pawn on d4, which supports White's advanced pawn on e5. Challenging the base of a pawn chain is a useful plan when the centre is blocked."
+          },
+          {
+            "uci": "c2c3",
+            "san": "c3",
+            "fromKey": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/2P5/PP3PPP/RNBQKBNR b KQkq -",
+            "hint": "Move your pawn from c2 to c3.",
+            "explanation": "White adds another defender to d4. These connected pawns help hold the centre together."
+          },
+          {
+            "uci": "b8c6",
+            "san": "Nc6",
+            "fromKey": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/2P5/PP3PPP/RNBQKBNR b KQkq -",
+            "toKey": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P5/PP3PPP/RNBQKBNR w KQkq -",
+            "hint": "Move your knight from b8 to c6.",
+            "explanation": "Develop a piece and add another attacker to d4. Your knight and c-pawn are working towards the same central target."
+          },
+          {
+            "uci": "g1f3",
+            "san": "Nf3",
+            "fromKey": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P5/PP3PPP/RNBQKBNR w KQkq -",
+            "toKey": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R b KQkq -",
+            "hint": "Move your knight from g1 to f3.",
+            "explanation": "White brings a knight into play and defends the advanced pawn on e5."
+          },
+          {
+            "uci": "d8b6",
+            "san": "Qb6",
+            "fromKey": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R b KQkq -",
+            "toKey": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq -",
+            "hint": "Move your queen from d8 to b6.",
+            "explanation": "The queen attacks b2 and lines up with d4. Your c5-pawn is still in the way; the queen will add pressure to d4 after that pawn is exchanged. This early queen move has a specific purpose."
+          },
+          {
+            "uci": "f1d3",
+            "san": "Bd3",
+            "fromKey": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq -",
+            "toKey": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/2PB1N2/PP3PPP/RNBQK2R b KQkq -",
+            "hint": "Move your bishop from f1 to d3.",
+            "explanation": "White develops the bishop towards the kingside and clears f1 for possible castling."
+          },
+          {
+            "uci": "c5d4",
+            "san": "cxd4",
+            "fromKey": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/2PB1N2/PP3PPP/RNBQK2R b KQkq -",
+            "toKey": "r1b1kbnr/pp3ppp/1qn1p3/3pP3/3p4/2PB1N2/PP3PPP/RNBQK2R w KQkq -",
+            "hint": "Move your pawn from c5 to d4, capturing White's pawn.",
+            "explanation": "Exchange your c-pawn for White's central d-pawn. If White recaptures with the c3-pawn, your queen will have a clear diagonal from b6 to the new pawn on d4."
+          },
+          {
+            "uci": "c3d4",
+            "san": "cxd4",
+            "fromKey": "r1b1kbnr/pp3ppp/1qn1p3/3pP3/3p4/2PB1N2/PP3PPP/RNBQK2R w KQkq -",
+            "toKey": "r1b1kbnr/pp3ppp/1qn1p3/3pP3/3P4/3B1N2/PP3PPP/RNBQK2R b KQkq -",
+            "hint": "Move your pawn from c3 to d4, capturing Black's pawn.",
+            "explanation": "White recaptures and keeps a pawn on d4. Black still has a target for the knight on c6 and queen on b6."
+          },
+          {
+            "uci": "c8d7",
+            "san": "Bd7",
+            "fromKey": "r1b1kbnr/pp3ppp/1qn1p3/3pP3/3P4/3B1N2/PP3PPP/RNBQK2R b KQkq -",
+            "toKey": "r3kbnr/pp1b1ppp/1qn1p3/3pP3/3P4/3B1N2/PP3PPP/RNBQK2R w KQkq -",
+            "hint": "Move your bishop from c8 to d7.",
+            "explanation": "Develop the bishop behind your central pawns and support your knight on c6. You have reached this lesson's stopping point: a French plan based on pressure against d4. Black still needs to develop the kingside and consider king safety as the game continues."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "queens-gambit",
+    "revision": 1,
+    "recommendedColor": "w",
+    "title": "Queen's Gambit",
+    "introduction": "Learn the Queen's Gambit as White against one declined response. Challenge the centre with c4, develop both knights and a bishop, then castle. You play seven White moves; Black replies automatically. The pawns keep their central tension in this line: capturing is a choice, not an obligation. This is one introductory line, not every possible Black response.",
+    "startFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "lines": [
+      {
+        "id": "declined-development",
+        "title": "Develop and castle",
+        "description": "Seven White moves against the Semi-Tarrasch symmetrical setup. Learn central pressure, development and castling without a forced pawn exchange.",
+        "steps": [
+          {
+            "uci": "d2d4",
+            "san": "d4",
+            "fromKey": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq -",
+            "hint": "Move your pawn from d2 to d4.",
+            "explanation": "Take space in the centre and open a path for the bishop on c1."
+          },
+          {
+            "uci": "d7d5",
+            "san": "d5",
+            "fromKey": "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq -",
+            "toKey": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+            "hint": "Move your pawn from d7 to d5.",
+            "explanation": "Black takes central space too and stops your d-pawn from moving straight ahead."
+          },
+          {
+            "uci": "c2c4",
+            "san": "c4",
+            "fromKey": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq -",
+            "hint": "Move your pawn from c2 to c4.",
+            "explanation": "Challenge Black's central pawn from the side. This is the Queen's Gambit: Black could capture this pawn, but does not have to."
+          },
+          {
+            "uci": "e7e6",
+            "san": "e6",
+            "fromKey": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq -",
+            "toKey": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq -",
+            "hint": "Move your pawn from e7 to e6.",
+            "explanation": "Black declines the offered pawn for now, supports d5 and opens a path for the bishop on f8."
+          },
+          {
+            "uci": "b1c3",
+            "san": "Nc3",
+            "fromKey": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq -",
+            "toKey": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq -",
+            "hint": "Move your knight from b1 to c3.",
+            "explanation": "Develop a knight towards the centre and add pressure to Black's pawn on d5."
+          },
+          {
+            "uci": "g8f6",
+            "san": "Nf6",
+            "fromKey": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq -",
+            "toKey": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq -",
+            "hint": "Move your knight from g8 to f6.",
+            "explanation": "Black develops a knight, supports the pawn on d5 and controls e4."
+          },
+          {
+            "uci": "g1f3",
+            "san": "Nf3",
+            "fromKey": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq -",
+            "toKey": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R b KQkq -",
+            "hint": "Move your knight from g1 to f3.",
+            "explanation": "Bring your other knight into play. It defends d4 and clears g1 for castling."
+          },
+          {
+            "uci": "c7c5",
+            "san": "c5",
+            "fromKey": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R b KQkq -",
+            "toKey": "rnbqkb1r/pp3ppp/4pn2/2pp4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq -",
+            "hint": "Move your pawn from c7 to c5.",
+            "explanation": "Black challenges your pawn on d4. Both sides now have pawns that could capture each other: this is central tension. Neither side must capture immediately."
+          },
+          {
+            "uci": "e2e3",
+            "san": "e3",
+            "fromKey": "rnbqkb1r/pp3ppp/4pn2/2pp4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq -",
+            "toKey": "rnbqkb1r/pp3ppp/4pn2/2pp4/2PP4/2N1PN2/PP3PPP/R1BQKB1R b KQkq -",
+            "hint": "Move your pawn from e2 to e3.",
+            "explanation": "Support d4 and open the diagonal for your bishop on f1. In this line you keep the central tension while developing."
+          },
+          {
+            "uci": "b8c6",
+            "san": "Nc6",
+            "fromKey": "rnbqkb1r/pp3ppp/4pn2/2pp4/2PP4/2N1PN2/PP3PPP/R1BQKB1R b KQkq -",
+            "toKey": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/2PP4/2N1PN2/PP3PPP/R1BQKB1R w KQkq -",
+            "hint": "Move your knight from b8 to c6.",
+            "explanation": "Black develops the second knight and adds another attacker to d4. The pawn on e3 and knight on f3 help you defend it."
+          },
+          {
+            "uci": "f1d3",
+            "san": "Bd3",
+            "fromKey": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/2PP4/2N1PN2/PP3PPP/R1BQKB1R w KQkq -",
+            "toKey": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/2PP4/2NBPN2/PP3PPP/R1BQK2R b KQkq -",
+            "hint": "Move your bishop from f1 to d3.",
+            "explanation": "Put the bishop on an open diagonal. With f1 and g1 clear, your king can prepare to castle."
+          },
+          {
+            "uci": "f8d6",
+            "san": "Bd6",
+            "fromKey": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/2PP4/2NBPN2/PP3PPP/R1BQK2R b KQkq -",
+            "toKey": "r1bqk2r/pp3ppp/2nbpn2/2pp4/2PP4/2NBPN2/PP3PPP/R1BQK2R w KQkq -",
+            "hint": "Move your bishop from f8 to d6.",
+            "explanation": "Black develops the bishop towards the centre and clears f8 for castling."
+          },
+          {
+            "uci": "e1g1",
+            "san": "O-O",
+            "fromKey": "r1bqk2r/pp3ppp/2nbpn2/2pp4/2PP4/2NBPN2/PP3PPP/R1BQK2R w KQkq -",
+            "toKey": "r1bqk2r/pp3ppp/2nbpn2/2pp4/2PP4/2NBPN2/PP3PPP/R1BQ1RK1 b kq -",
+            "hint": "Castle: move your king from e1 to g1. The rook moves from h1 to f1 automatically.",
+            "explanation": "Move your king towards the shelter of its pawns and bring the rook closer to the centre. Castling moves the king and rook together."
+          },
+          {
+            "uci": "e8g8",
+            "san": "O-O",
+            "fromKey": "r1bqk2r/pp3ppp/2nbpn2/2pp4/2PP4/2NBPN2/PP3PPP/R1BQ1RK1 b kq -",
+            "toKey": "r1bq1rk1/pp3ppp/2nbpn2/2pp4/2PP4/2NBPN2/PP3PPP/R1BQ1RK1 w - -",
+            "hint": "Castle: move your king from e8 to g8. The rook moves from h8 to f8 automatically.",
+            "explanation": "Black castles too. Both sides have developed knights and a bishop and sheltered their kings. This lesson ends here; the central pawn decisions and the rest of the game are still ahead."
+          }
+        ]
+      }
+    ]
+  }
+]

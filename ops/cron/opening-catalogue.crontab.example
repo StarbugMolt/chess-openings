@@ -2,18 +2,20 @@
 # The single scheduled job runs the complete import in Symfony/PHP:
 # fetch Lichess TSVs -> validate moves -> stage MariaDB -> safely promote new revision.
 # Requires deployed, tested app:openings:sync Symfony Console command.
+# Application deployment polling is a separate job; see plan section 14.
 #
 # Every Monday at 05:17 in HOST server's cron timezone (verify before enabling).
 # Adapt all placeholder paths and PHP CLI version to the actual hosting account.
 # O2Switch documents /opt/alt/php83/usr/bin/php as an example PHP 8.3 binary;
 # do not assume that is the version configured on the actual site.
-# /home/ACCOUNT/logs/ must exist, be writable and be outside public_html.
+# The template releases the backend at current/ (no backend/ segment).
+# The installed wrapper rotates private shared/log/openings-sync.log independently of deployment logs.
 #
-17 5 * * 1 /opt/alt/php83/usr/bin/php /home/ACCOUNT/chess-openings/backend/bin/console app:openings:sync --env=prod --no-interaction >> /home/ACCOUNT/logs/chess-openings-sync.log 2>&1
+17 5 * * 1 /bin/bash /home/ACCOUNT/apps/chess-openings/control/opening-sync.sh /opt/alt/php83/usr/bin/php
 #
 # Optional manual checks (replace paths/version):
-# /opt/alt/php83/usr/bin/php /home/ACCOUNT/chess-openings/backend/bin/console app:openings:sync --env=prod --dry-run --no-interaction
-# /opt/alt/php83/usr/bin/php /home/ACCOUNT/chess-openings/backend/bin/console app:openings:status --env=prod
+# /opt/alt/php83/usr/bin/php /home/ACCOUNT/apps/chess-openings/current/bin/console app:openings:sync --env=prod --no-debug --dry-run --no-interaction
+# /opt/alt/php83/usr/bin/php /home/ACCOUNT/apps/chess-openings/current/bin/console app:openings:status --env=prod --no-debug
 #
 # Symfony command must hold an import lock; unchanged data => successful no-op.
 # Invalid data/network failures => nonzero exit without changing active revision.

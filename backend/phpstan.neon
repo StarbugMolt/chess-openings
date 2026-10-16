@@ -1,0 +1,8 @@
+parameters:
+    level: 8
+    paths:
+        - src
+        - migrations/Schema
+        - migrations/LessonData
+        - migrations/Support
+    tmpDir: var/phpstan
