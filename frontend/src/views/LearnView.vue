@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import { t, type Text } from '../i18n'
 import { computed, onMounted, ref } from 'vue'
 import { getCourses, type Course } from '../api/lessons'
 import { useAccountStore } from '../stores/account'
 const account = useAccountStore()
 const courses = ref<Course[]>([])
 const loading = ref(true)
-const error = ref('')
+const error = ref<Text>('')
 const side = ref<'all' | 'w' | 'b'>('all')
 const visibleCourses = computed(() =>
   courses.value.filter((course) => side.value === 'all' || course.recommendedColor === side.value),
@@ -27,26 +28,32 @@ onMounted(() => {
 </script>
 <template>
   <main id="main-content" class="page-width learn-main">
-    <span class="eyebrow">START HERE · GUIDED LESSONS</span>
-    <h1>Learn an opening.</h1>
+    <span class="eyebrow">{{ t('START HERE · GUIDED LESSONS') }}</span>
+    <h1>{{ t('Learn an opening.') }}</h1>
     <p class="learn-intro">
-      Pick an opening below. You move your pieces, we play the other side. A hint is always one
-      click away. No chess notation needed.
+      {{
+        t(
+          'Pick an opening below. You move your pieces, we play the other side. A hint is always one click away. No chess notation needed.',
+        )
+      }}
     </p>
     <p id="variation-training" class="learn-intro">
-      Learn one fixed line first. Then use <strong>Practise variations</strong> to mix the taught
-      replies from lines you choose.
+      {{ t('Learn one fixed line first. Then use') }}
+      <strong>{{ t('Practise variations') }}</strong>
+      {{ t('to mix the taught replies from lines you choose.') }}
     </p>
     <p v-if="account.user" class="learn-intro">
-      <RouterLink class="practice-entry" to="/progress">Your practice &amp; reviews →</RouterLink>
+      <RouterLink class="practice-entry" to="/progress">{{
+        t('Your practice & reviews →')
+      }}</RouterLink>
     </p>
-    <p v-if="loading" role="status">Loading lessons…</p>
+    <p v-if="loading" role="status">{{ t('Loading lessons…') }}</p>
     <div v-else-if="error" role="alert">
-      <p>{{ error }}</p>
-      <button @click="load">Try again</button>
+      <p>{{ t(error) }}</p>
+      <button @click="load">{{ t('Try again') }}</button>
     </div>
     <fieldset class="lesson-side-filter">
-      <legend>Which pieces would you like to learn?</legend>
+      <legend>{{ t('Which pieces would you like to learn?') }}</legend>
       <label
         v-for="option in [
           { value: 'all', label: 'Both sides' },
@@ -55,35 +62,42 @@ onMounted(() => {
         ]"
         :key="option.value"
         ><input v-model="side" type="radio" name="lesson-side" :value="option.value" />{{
-          option.label
+          t(option.label)
         }}</label
       >
     </fieldset>
     <div v-if="!loading && !error" class="lesson-cards">
       <article v-for="course in visibleCourses" :key="course.id" class="lesson-card">
         <span class="eyebrow">{{
-          course.recommendedColor === 'b' ? 'YOU PLAY BLACK' : 'YOU PLAY WHITE'
+          course.recommendedColor === 'b' ? t('YOU PLAY BLACK') : t('YOU PLAY WHITE')
         }}</span>
-        <h2>{{ course.title }}</h2>
-        <p>{{ course.introduction }}</p>
-        <span class="lesson-length">At your own pace · Hints included</span>
+        <h2>{{ t(course.title) }}</h2>
+        <p>{{ t(course.introduction) }}</p>
+        <span class="lesson-length">{{ t('At your own pace · Hints included') }}</span>
         <RouterLink class="primary-link" :to="`/learn/${course.id}`"
-          >Learn the {{ course.title }} <span aria-hidden="true">→</span></RouterLink
+          >{{ t('Learn the {p0}', { p0: t(course.title) }) }}
+          <span aria-hidden="true">→</span></RouterLink
         >
-        <RouterLink v-if="course.lineCount > 1" class="variation-entry" :to="`/train/${course.id}`"
-          >Practise variations in {{ course.title }} →</RouterLink
+        <RouterLink
+          v-if="course.lineCount > 1"
+          class="variation-entry"
+          :to="`/train/${course.id}`"
+          >{{ t('Practise variations in {p0} →', { p0: t(course.title) }) }}</RouterLink
         >
       </article>
       <p v-if="!visibleCourses.length">
-        The first guided lessons are being prepared. Please check back shortly.
+        {{ t('The first guided lessons are being prepared. Please check back shortly.') }}
       </p>
     </div>
     <aside class="reference-note">
-      <strong>Looking for another opening?</strong>
+      <strong>{{ t('Looking for another opening?') }}</strong>
       <p>
-        The <RouterLink to="/openings">opening reference</RouterLink> lists names and recorded move
-        sequences. The lessons above are ready to practise; reference entries are not automatically
-        playable courses.
+        {{ t('The') }} <RouterLink to="/openings">{{ t('opening reference') }}</RouterLink>
+        {{
+          t(
+            'lists names and recorded move sequences. The lessons above are ready to practise; reference entries are not automatically playable courses.',
+          )
+        }}
       </p>
     </aside>
   </main>

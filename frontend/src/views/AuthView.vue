@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { t, message as textMessage, setLocale, supportedLocale, type Text } from '../i18n'
 import { computed, nextTick, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { accountAction, AccountError, type AccountAction } from '../api/account'
 import { useAccountStore } from '../stores/account'
 
 const route = useRoute()
+
 const router = useRouter()
 const account = useAccountStore()
 const email = ref('')
@@ -14,8 +16,8 @@ const statusElement = ref<HTMLElement>()
 const rememberMe = ref(false)
 const token = ref('')
 const busy = ref(false)
-const error = ref('')
-const message = ref('')
+const error = ref<Text>('')
+const message = ref<Text>('')
 const mode = computed(() => String(route.name))
 const titles: Record<string, string> = {
   login: 'Sign in.',
@@ -45,8 +47,10 @@ const buttonLabel = computed(
 )
 
 watch(
-  () => route.name,
+  [() => route.name, () => route.query.lang],
   () => {
+    if (typeof route.query.lang === 'string' && supportedLocale(route.query.lang))
+      setLocale(route.query.lang)
     password.value = ''
     showPassword.value = false
     error.value = ''
@@ -105,10 +109,19 @@ async function submit(): Promise<void> {
   } catch (failure) {
     error.value =
       failure instanceof AccountError
-        ? failure.message +
-          (failure.retryAfter
-            ? ` Try again in about ${Math.ceil(failure.retryAfter / 60)} minute${failure.retryAfter > 60 ? 's' : ''}.`
-            : '')
+        ? failure.retryAfter
+          ? textMessage('{error} {retry}', {
+              error: failure.message,
+              retry: textMessage(
+                Math.ceil(failure.retryAfter / 60) === 1
+                  ? 'Try again in about {minutes} minute.'
+                  : 'Try again in about {minutes} minutes.',
+                {
+                  minutes: Math.ceil(failure.retryAfter / 60),
+                },
+              ),
+            })
+          : failure.message
         : 'The account service is unavailable. Please try again.'
   } finally {
     password.value = ''
@@ -120,31 +133,44 @@ async function submit(): Promise<void> {
 <template>
   <main id="main-content" class="page-width account-page">
     <div class="account-intro">
-      <span class="eyebrow">YOUR CHESS OPENINGS ACCOUNT</span>
-      <h1>{{ titles[mode] }}</h1>
-      <p v-if="mode === 'register'">Save your lesson practice. Just your email and a password.</p>
-      <p v-else-if="mode === 'login'">Sign in with your verified email address.</p>
+      <span class="eyebrow">{{ t('YOUR CHESS OPENINGS ACCOUNT') }}</span>
+      <h1>{{ t(titles[mode]) }}</h1>
+      <p v-if="mode === 'register'">
+        {{ t('Save your lesson practice. Just your email and a password.') }}
+      </p>
+      <p v-else-if="mode === 'login'">{{ t('Sign in with your verified email address.') }}</p>
       <p v-else-if="mode === 'verify-email'">
-        Confirm your email below. If you didn’t create this account, you can ignore this.
+        {{ t('Confirm your email below. If you didn’t create this account, you can ignore this.') }}
       </p>
       <p v-else-if="mode === 'reset-password'">
-        Use at least 12 characters. Saving your password signs out existing sessions.
+        {{ t('Use at least 12 characters. Saving your password signs out existing sessions.') }}
       </p>
-      <p v-else>We’ll email a link if this address is eligible. Check your spam folder too.</p>
+      <p v-else>
+        {{ t('We’ll email a link if this address is eligible. Check your spam folder too.') }}
+      </p>
     </div>
-    <section class="account-card" :aria-label="titles[mode]">
-      <p ref="statusElement" role="status" tabindex="-1" class="account-success">{{ message }}</p>
+    <section class="account-card" :aria-label="t(titles[mode])">
+      <p ref="statusElement" role="status" tabindex="-1" class="account-success">
+        {{ t(message) }}
+      </p>
       <p v-if="mode === 'login' && route.query.session === 'unavailable'" role="alert">
-        We could not check your sign-in. The account service may be unavailable. Please try again.
+        {{
+          t(
+            'We could not check your sign-in. The account service may be unavailable. Please try again.',
+          )
+        }}
       </p>
       <p v-if="mode === 'login' && route.query.session === 'cookies'" role="alert">
-        Sign-in succeeded, but your browser did not keep the session. Allow cookies for this site
-        and try again.
+        {{
+          t(
+            'Sign-in succeeded, but your browser did not keep the session. Allow cookies for this site and try again.',
+          )
+        }}
       </p>
       <form v-if="!message" @submit.prevent="submit">
-        <p v-if="error" role="alert" class="account-error">{{ error }}</p>
+        <p v-if="error" role="alert" class="account-error">{{ t(error) }}</p>
         <label v-if="emailRequired" for="account-email"
-          >Email address
+          >{{ t('Email address') }}
           <input
             id="account-email"
             v-model="email"
@@ -156,7 +182,7 @@ async function submit(): Promise<void> {
           />
         </label>
         <label v-if="passwordRequired" for="account-password"
-          ><span id="password-label">{{ newPassword ? 'New password' : 'Password' }}</span>
+          ><span id="password-label">{{ newPassword ? t('New password') : t('Password') }}</span>
           <input
             id="account-password"
             v-model="password"
@@ -171,8 +197,8 @@ async function submit(): Promise<void> {
           />
           <small id="password-help">{{
             newPassword
-              ? '12–256 characters, up to 256 bytes. Spaces and password managers welcome.'
-              : 'Use the password you chose when you registered.'
+              ? t('12–256 characters, up to 256 bytes. Spaces and password managers welcome.')
+              : t('Use the password you chose when you registered.')
           }}</small>
         </label>
         <button
@@ -183,38 +209,39 @@ async function submit(): Promise<void> {
           aria-controls="account-password"
           @click="showPassword = !showPassword"
         >
-          {{ showPassword ? 'Hide password' : 'Show password' }}
+          {{ showPassword ? t('Hide password') : t('Show password') }}
         </button>
         <label v-if="mode === 'login'" class="remember-option">
           <input v-model="rememberMe" type="checkbox" :disabled="busy" />
           <span
-            >Remember me for 30 days<small
-              >Use on your own device. Sign out on shared computers.</small
-            ></span
+            >{{ t('Remember me for 30 days')
+            }}<small>{{ t('Use on your own device. Sign out on shared computers.') }}</small></span
           >
         </label>
         <p v-if="mode === 'register'" class="account-disclosure">
-          By creating an account, you acknowledge the
-          <RouterLink to="/privacy">account privacy notice</RouterLink>. Email verification is
-          required before sign-in.
+          {{ t('By creating an account, you acknowledge the') }}
+          <RouterLink to="/privacy">{{ t('account privacy notice') }}</RouterLink
+          >. {{ t('Email verification is required before sign-in.') }}
         </p>
         <p v-if="!emailRequired && !token" class="account-error">
-          Open the complete link from your email, or request a new one below.
+          {{ t('Open the complete link from your email, or request a new one below.') }}
         </p>
         <button class="primary-link" type="submit" :disabled="busy || (!emailRequired && !token)">
-          {{ busy ? 'Please wait…' : buttonLabel }} <span aria-hidden="true">→</span>
+          {{ busy ? t('Please wait…') : t(buttonLabel) }} <span aria-hidden="true">→</span>
         </button>
       </form>
       <div class="account-links">
-        <RouterLink v-if="mode !== 'login'" to="/login">Sign in</RouterLink>
-        <RouterLink v-if="mode === 'login'" to="/register">Create an account</RouterLink>
-        <RouterLink v-if="mode !== 'forgot-password' && mode !== 'register'" to="/forgot-password"
-          >Reset password</RouterLink
+        <RouterLink v-if="mode !== 'login'" to="/login">{{ t('Sign in') }}</RouterLink>
+        <RouterLink v-if="mode === 'login'" to="/register">{{ t('Create an account') }}</RouterLink>
+        <RouterLink
+          v-if="mode !== 'forgot-password' && mode !== 'register'"
+          to="/forgot-password"
+          >{{ t('Reset password') }}</RouterLink
         >
         <RouterLink
           v-if="mode === 'login' || mode === 'verify-email' || mode === 'register'"
           to="/resend-verification"
-          >Resend verification email</RouterLink
+          >{{ t('Resend verification email') }}</RouterLink
         >
       </div>
     </section>

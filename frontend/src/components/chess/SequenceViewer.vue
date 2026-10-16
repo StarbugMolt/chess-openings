@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { t, message } from '../../i18n'
 import { computed, ref, watch } from 'vue'
 import type { Key } from '@lichess-org/chessground/types'
 import ChessBoard from './ChessBoard.vue'
@@ -18,7 +19,9 @@ const last = computed(() => (frames.value?.length ?? 1) - 1)
 const frame = computed(() => frames.value?.[index.value])
 const lastMove = computed(() => frame.value?.lastMove as [Key, Key] | undefined)
 const status = computed(() =>
-  index.value === 0 ? 'Starting position' : `Position after ${frame.value?.label}`,
+  index.value === 0
+    ? 'Starting position'
+    : message('Position after {p0}', { p0: frame.value?.label }),
 )
 function go(target: number) {
   index.value = Math.max(0, Math.min(last.value, target))
@@ -42,7 +45,7 @@ function key(event: KeyboardEvent) {
     v-if="frames && frame"
     class="sequence-viewer"
     role="group"
-    :aria-label="`${name} on a board`"
+    :aria-label="t('{p0} on a board', { p0: name })"
   >
     <div class="sequence-board">
       <ChessBoard
@@ -51,19 +54,24 @@ function key(event: KeyboardEvent) {
         :in-check="frame.check"
         :turn-color="frame.fen.split(' ')[1] === 'w' ? 'white' : 'black'"
         read-only
-        :label="`${name}: ${status}`"
+        :label="t('{name}: {status}', { name, status })"
       />
     </div>
     <div class="sequence-side">
-      <p class="sequence-status" aria-live="polite">{{ status }}</p>
+      <p class="sequence-status" aria-live="polite">{{ t(status) }}</p>
       <div class="sequence-controls" @keydown="key">
-        <button type="button" :disabled="index === 0" aria-label="Starting position" @click="go(0)">
+        <button
+          type="button"
+          :disabled="index === 0"
+          :aria-label="t('Starting position')"
+          @click="go(0)"
+        >
           ⏮
         </button>
         <button
           type="button"
           :disabled="index === 0"
-          aria-label="Previous move"
+          :aria-label="t('Previous move')"
           @click="go(index - 1)"
         >
           ◀
@@ -71,7 +79,7 @@ function key(event: KeyboardEvent) {
         <button
           type="button"
           :disabled="index === last"
-          aria-label="Next move"
+          :aria-label="t('Next move')"
           @click="go(index + 1)"
         >
           ▶
@@ -79,13 +87,13 @@ function key(event: KeyboardEvent) {
         <button
           type="button"
           :disabled="index === last"
-          aria-label="Final position"
+          :aria-label="t('Final position')"
           @click="go(last)"
         >
           ⏭
         </button>
       </div>
-      <ol class="sequence-moves" aria-label="Moves in this sequence" @keydown="key">
+      <ol class="sequence-moves" :aria-label="t('Moves in this sequence')" @keydown="key">
         <li v-for="(item, position) in frames.slice(1)" :key="position">
           <button
             type="button"
@@ -97,11 +105,11 @@ function key(event: KeyboardEvent) {
         </li>
       </ol>
       <p class="sequence-tip">
-        Step through with the buttons, click any move, or use the arrow keys.
+        {{ t('Step through with the buttons, click any move, or use the arrow keys.') }}
       </p>
     </div>
   </div>
-  <p v-else class="sequence-unavailable">This sequence cannot be shown on a board.</p>
+  <p v-else class="sequence-unavailable">{{ t('This sequence cannot be shown on a board.') }}</p>
 </template>
 
 <style scoped>

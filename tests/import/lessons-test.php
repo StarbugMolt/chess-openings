@@ -114,6 +114,18 @@ try {
     }
     $french = $get($a,'/api/lessons/french')['lesson'];
     $assert(3 === $french['revision'] && [20,18,20] === array_map(static fn(array $l): int => count($l['steps']),$french['lines']),'Complete named French lines were not published.');
+    // Language presentation is separate from immutable curriculum paths and revisions.
+    $translations = [...json_decode(file_get_contents('/app/frontend/src/i18n/ui.json'), true, 512, JSON_THROW_ON_ERROR), ...json_decode(file_get_contents('/app/frontend/src/i18n/lessons.json'), true, 512, JSON_THROW_ON_ERROR)];
+    foreach ($courses['courses'] as $courseSummary) {
+        $translatedLesson = $get($a, '/api/lessons/'.$courseSummary['id'])['lesson'];
+        $texts = [$translatedLesson['title'], $translatedLesson['introduction']];
+        foreach ($translatedLesson['lines'] as $translatedLine) {
+            array_push($texts, $translatedLine['title'], $translatedLine['description']);
+            foreach ($translatedLine['steps'] as $translatedStep) array_push($texts, $translatedStep['hint'], $translatedStep['explanation']);
+        }
+        $missing = array_filter($texts, static fn (string $source): bool => empty($translations[$source]['fr']) || empty($translations[$source]['es']));
+        $assert([] === $missing, 'Untranslated current curriculum in '.$courseSummary['id'].': '.implode('; ', $missing));
+    }
     $line = $graph['lesson']['lines'][0];
     $body = ['attemptId'=>'01234567-89ab-4cde-8fab-0123456789ab','lessonId'=>'italian','revision'=>$graph['lesson']['revision'],'lineId'=>$line['id'],'playingColor'=>'w','hintCount'=>1,'path'=>array_column($line['steps'],'uci')];
     $post($a,'/api/me/completions',$body,false); $assert(403 === $a->getResponse()->getStatusCode(),'Completion lacked CSRF.');

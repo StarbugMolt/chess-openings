@@ -1,3 +1,5 @@
+import { locale } from '../i18n'
+
 /** Session CSRF is read immediately before each mutation; signing in rotates it. */
 export async function csrfPost(
   path: string,
@@ -22,7 +24,11 @@ export async function csrfRequest(
     method,
     credentials: 'same-origin',
     cache: 'no-store',
-    headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrf.csrfToken },
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept-Language': locale.value,
+      'X-CSRF-Token': csrf.csrfToken,
+    },
     body: JSON.stringify(body),
   })
 }

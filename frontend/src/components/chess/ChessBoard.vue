@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { t } from '../../i18n'
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { Chessground } from '@lichess-org/chessground'
 import type { Api } from '@lichess-org/chessground/api'
@@ -128,7 +129,7 @@ onBeforeUnmount(() => {
     class="cg-wrap chess-board"
     :class="{ 'is-read-only': readOnly }"
     :role="readOnly ? 'img' : 'group'"
-    :aria-label="label"
+    :aria-label="t(label)"
   />
 </template>
 

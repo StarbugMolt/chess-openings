@@ -2,7 +2,8 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import HomeView from './views/HomeView.vue'
 import NotFoundView from './views/NotFoundView.vue'
 import { useAccountStore } from './stores/account'
-import { nextTick } from 'vue'
+import { t, locale } from './i18n'
+import { nextTick, watch } from 'vue'
 
 const routes: RouteRecordRaw[] = [{ path: '/', name: 'home', component: HomeView }]
 routes.push({ path: '/learn', name: 'learn', component: () => import('./views/LearnView.vue') })
@@ -117,9 +118,13 @@ router.beforeEach(async (to, from) => {
   return true
 })
 
+watch(locale, () => {
+  document.title = `${t(String(router.currentRoute.value.meta.title ?? 'Chess Openings'))} · Chess Openings`
+})
+
 router.afterEach(async (to, from, failure) => {
   if (failure) return
-  document.title = `${String(to.meta.title)} · Chess Openings`
+  document.title = `${t(String(to.meta.title))} · Chess Openings`
   if (to.path === from.path) return
   await nextTick()
   const main = document.getElementById('main-content')
