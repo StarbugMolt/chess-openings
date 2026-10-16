@@ -861,7 +861,7 @@
   },
   "Move {p0} of {p1} for you": {
     "fr": "Votre coup {p0} sur {p1}",
-    "es": "Tu movimiento {p0} de {p1}"
+    "es": "Tu jugada {p0} de {p1}"
   },
   "Lesson progress": {
     "fr": "Avancement de la leçon",
@@ -1224,7 +1224,7 @@
     "es": "Tus repasos aparecerán aquí cuando empieces a practicar."
   },
   "You play {p0}": {
-    "fr": "Vous jouez les {p0}",
+    "fr": "Vous jouez avec les {p0}",
     "es": "Juegas con {p0}"
   },
   "Earlier practice recorded · recall not tracked yet": {
@@ -2134,5 +2134,173 @@
   "Try again in about {minutes} minute.": {
     "fr": "Réessayez dans environ {minutes} minute.",
     "es": "Vuelve a intentarlo en aproximadamente {minutes} minuto."
+  },
+  "Chess Openings": {
+    "fr": "Chess Openings",
+    "es": "Chess Openings"
+  },
+  "Open source under GPLv3": {
+    "fr": "Code source sous GPLv3",
+    "es": "Código abierto bajo GPLv3"
+  },
+  "Choose a lesson": {
+    "fr": "Choisir une leçon",
+    "es": "Elegir una lección"
+  },
+  "Your practice and reviews": {
+    "fr": "Votre pratique et vos révisions",
+    "es": "Tu práctica y tus repasos"
+  },
+  "Development only": {
+    "fr": "Développement uniquement",
+    "es": "Solo para desarrollo"
+  },
+  "Browse a family": {
+    "fr": "Parcourir une famille",
+    "es": "Explorar una familia"
+  },
+  "Start a beginner lesson": {
+    "fr": "Commencer une leçon pour débutants",
+    "es": "Empezar una lección para principiantes"
+  },
+  "Guided lesson not available yet": {
+    "fr": "Leçon guidée pas encore disponible",
+    "es": "Lección guiada aún no disponible"
+  },
+  "Your line": {
+    "fr": "Votre variante",
+    "es": "Tu variante"
+  },
+  "Nice work": {
+    "fr": "Bien joué",
+    "es": "Buen trabajo"
+  },
+  "{p0} of {p1}": {
+    "fr": "{p0} sur {p1}",
+    "es": "{p0} de {p1}"
+  },
+  "taught decisions played on the first try without a hint.": {
+    "fr": "décisions enseignées jouées du premier coup sans indice.",
+    "es": "decisiones enseñadas jugadas al primer intento sin pistas."
+  },
+  "After this lesson": {
+    "fr": "Après cette leçon",
+    "es": "Después de esta lección"
+  },
+  "Practise variations in this opening": {
+    "fr": "Pratiquer les variantes de cette ouverture",
+    "es": "Practicar variantes de esta apertura"
+  },
+  "Choose another lesson": {
+    "fr": "Choisir une autre leçon",
+    "es": "Elegir otra lección"
+  },
+  "See your practice and reviews": {
+    "fr": "Voir votre pratique et vos révisions",
+    "es": "Ver tu práctica y tus repasos"
+  },
+  "Move {p0} for you": {
+    "fr": "Votre coup {p0}",
+    "es": "Tu jugada {p0}"
+  },
+  "Recognise the variation.": {
+    "fr": "Reconnaître la variante.",
+    "es": "Reconoce la variante."
+  },
+  "First, make an opening feel familiar. Then learn to find your way when the moves change. You move your pieces, we reply, and a hint is always one tap away.": {
+    "fr": "Familiarisez-vous d’abord avec une ouverture. Apprenez ensuite à vous repérer quand les coups changent. Vous jouez vos pièces, nous répondons, et un indice reste toujours à portée de main.",
+    "es": "Primero, familiarízate con una apertura. Después, aprende a orientarte cuando cambian las jugadas. Tú mueves tus piezas, nosotros respondemos y siempre tienes una pista a un toque."
+  },
+  "Look up an opening": {
+    "fr": "Rechercher une ouverture",
+    "es": "Buscar una apertura"
+  },
+  "Italian Game moves": {
+    "fr": "Coups de la partie italienne",
+    "es": "Jugadas de la apertura italiana"
+  },
+  "Both bishops aim at the square beside the enemy king.": {
+    "fr": "Les deux fous visent la case à côté du roi adverse.",
+    "es": "Ambos alfiles apuntan a la casilla junto al rey rival."
+  },
+  "Replay the moves": {
+    "fr": "Rejouer les coups",
+    "es": "Reproducir las jugadas"
+  },
+  "Two steps to a reliable opening": {
+    "fr": "Deux étapes pour une ouverture solide",
+    "es": "Dos pasos para una apertura sólida"
+  },
+  "Play one precise sequence. We answer each move and explain why it matters, with a hint whenever you need one.": {
+    "fr": "Jouez une suite précise. Nous répondons à chaque coup et expliquons son intérêt, avec un indice dès que vous en avez besoin.",
+    "es": "Juega una secuencia concreta. Respondemos a cada jugada y explicamos su sentido, con una pista siempre que la necesites."
+  },
+  "Start a guided lesson": {
+    "fr": "Commencer une leçon guidée",
+    "es": "Empezar una lección guiada"
+  },
+  "Mix the lines you have learned. We choose among their taught replies, and you find the response that fits.": {
+    "fr": "Mélangez les variantes apprises. Nous choisissons parmi les réponses enseignées, et vous trouvez le coup adapté.",
+    "es": "Combina las variantes que has aprendido. Elegimos entre sus respuestas enseñadas y tú encuentras la jugada adecuada."
+  },
+  "Choose lines to mix": {
+    "fr": "Choisir les variantes à mélanger",
+    "es": "Elegir variantes para combinar"
+  },
+  "in": {
+    "fr": "dans",
+    "es": "en"
+  },
+  "Counts cover the current course version and the pieces shown. Practice with White and Black is recorded separately. Each course starts with its recommended pieces; switch pieces to see your other practice.": {
+    "fr": "Les compteurs concernent la version actuelle du cours et la couleur affichée. La pratique avec les blancs et les noirs est enregistrée séparément. Chaque cours affiche d’abord sa couleur recommandée ; changez de couleur pour voir votre autre pratique.",
+    "es": "Los recuentos corresponden a la versión actual del curso y al color mostrado. La práctica con blancas y negras se registra por separado. Cada curso empieza con su color recomendado; cambia de color para ver tu otra práctica."
+  },
+  "Version {p0}": {
+    "fr": "Version {p0}",
+    "es": "Versión {p0}"
+  },
+  "{p0} of {p1} current line practised as {p2}": {
+    "fr": "{p0} variante actuelle sur {p1} pratiquée avec les {p2}",
+    "es": "{p0} de {p1} variante actual practicada con {p2}"
+  },
+  "{p0} of {p1} current lines practised as {p2}": {
+    "fr": "{p0} variantes actuelles sur {p1} pratiquées avec les {p2}",
+    "es": "{p0} de {p1} variantes actuales practicadas con {p2}"
+  },
+  "Start with guidance": {
+    "fr": "Commencer avec un guide",
+    "es": "Empezar con ayuda"
+  },
+  "Learn these moves with guidance": {
+    "fr": "Apprendre ces coups avec un guide",
+    "es": "Aprender estas jugadas con ayuda"
+  },
+  "One selected line, played as a fixed sequence.": {
+    "fr": "Une seule variante sélectionnée, jouée comme une suite fixe.",
+    "es": "Una sola variante seleccionada, jugada como una secuencia fija."
+  },
+  "{p0} selected lines. Replies stay within these taught paths.": {
+    "fr": "{p0} variantes sélectionnées. Les réponses restent dans ces suites enseignées.",
+    "es": "{p0} variantes seleccionadas. Las respuestas siguen estas secuencias enseñadas."
+  },
+  "Possible line": {
+    "fr": "Variante possible",
+    "es": "Variante posible"
+  },
+  "Possible lines": {
+    "fr": "Variantes possibles",
+    "es": "Variantes posibles"
+  },
+  "Variation names are hidden. Hints and explanations reveal them.": {
+    "fr": "Les noms des variantes sont masqués. Les indices et les explications les révèlent.",
+    "es": "Los nombres de las variantes están ocultos. Las pistas y las explicaciones los revelan."
+  },
+  "You play White": {
+    "fr": "Vous jouez avec les blancs",
+    "es": "Juega con blancas"
+  },
+  "You play Black": {
+    "fr": "Vous jouez avec les noirs",
+    "es": "Juega con negras"
   }
 }

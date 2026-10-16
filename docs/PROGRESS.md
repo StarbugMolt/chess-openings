@@ -4,7 +4,7 @@
 
 ## Try it
 
-After local setup and `make catalogue`, sign in, finish a guided lesson or variation practice, then choose **See your practice & reviews**. The same page is available from Account or at [localhost:5173/progress](http://localhost:5173/progress). Practice with White and Black is separate. Current coverage says how many of that course's current taught lines you have finished with the displayed pieces; it is not a percentage of the opening reference or your chess strength.
+After local setup and `make catalogue`, sign in, finish a guided lesson or variation practice, then choose **See your practice and reviews**. The same page is available from Account or at [localhost:5173/progress](http://localhost:5173/progress). Practice with White and Black is separate. Current coverage says how many of that course's current taught lines you have finished with the displayed pieces; it is not a percentage of the opening reference or your chess strength.
 
 The page shows suggested reviews, current course coverage, measured recall, moves to revisit and earlier-version history. Each course defaults to its recommended pieces. Review links select an exact current line, colour and revision in the existing guided trainer. An outdated link explains the course update and offers explicit current setup. Old practice remains in its original version and does not automatically complete a revised line.
 

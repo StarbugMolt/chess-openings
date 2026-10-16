@@ -124,7 +124,6 @@ async function logout(): Promise<void> {
   <main id="main-content" class="page-width account-page">
     <template v-if="deleted">
       <div class="account-intro deletion-result">
-        <span class="eyebrow">{{ t('YOUR ACCOUNT') }}</span>
         <h1 ref="deletedHeading" tabindex="-1">{{ t('Account deleted.') }}</h1>
         <p>{{ t('Your account and saved practice have been removed. You are signed out.') }}</p>
         <RouterLink class="primary-link" to="/">{{ t('Back to home') }}</RouterLink>
@@ -132,7 +131,6 @@ async function logout(): Promise<void> {
     </template>
     <template v-else>
       <div class="account-intro">
-        <span class="eyebrow">{{ t('YOUR ACCOUNT') }}</span>
         <h1>{{ t('Your account.') }}</h1>
         <p v-if="account.user">
           {{
@@ -157,9 +155,9 @@ async function logout(): Promise<void> {
           {{ t('to continue.') }}
         </p>
         <p v-if="error" role="alert" class="account-error">{{ t(error) }}</p>
-        <RouterLink class="primary-link" to="/learn">{{ t('Choose a lesson →') }}</RouterLink>
-        <RouterLink class="primary-link" to="/progress">{{
-          t('Your practice & reviews →')
+        <RouterLink class="primary-link" to="/learn">{{ t('Choose a lesson') }}</RouterLink>
+        <RouterLink class="secondary-button" to="/progress">{{
+          t('Your practice and reviews')
         }}</RouterLink>
         <button v-if="account.user" class="account-signout" :disabled="!!busy" @click="logout">
           {{ busy === 'logout' ? t('Signing out…') : t('Sign out') }}
@@ -267,48 +265,55 @@ async function logout(): Promise<void> {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 24px;
+  gap: 20px;
 }
 .account-data h2 {
   margin-top: 0;
-  font-size: 28px;
 }
 .account-data form {
   gap: 14px;
 }
-.account-data label,
-.account-data button,
-.deletion-card .account-disclosure {
-  font-size: 14px;
+.account-data label {
+  font-weight: 600;
 }
-.account-data button,
-.account-data input[type='password'],
-.deletion-confirmation {
-  min-height: 44px;
+.deletion-card {
+  border-color: #e3c4c1;
 }
-.danger-button,
+.danger-button {
+  width: 100%;
+  min-height: 48px;
+  border-color: var(--danger);
+  background: var(--sheet);
+  color: var(--danger);
+}
+.danger-button:hover:not(:disabled) {
+  border-color: var(--danger);
+  background: #fbf1f0;
+}
+form .danger-button {
+  background: var(--danger);
+  color: #fff;
+}
+form .danger-button:hover:not(:disabled) {
+  background: #8a2222;
+}
+form .danger-button:disabled {
+  background: transparent;
+  color: #8a93a6;
+}
 .cancel-button {
-  padding: 12px 16px;
-  border: 1px solid #943a2c;
-  border-radius: 4px;
-  background: #fff7f4;
-  color: #7d3025;
-  line-height: 1.5;
-}
-.cancel-button {
-  border-color: #afbaa4;
-  background: #f4f4e9;
-  color: var(--ink);
+  width: 100%;
+  min-height: 48px;
 }
 .deletion-card .account-disclosure {
-  margin-top: 22px;
+  margin-top: 20px;
 }
 .deletion-result {
   grid-column: 1 / -1;
 }
-@media (max-width: 680px) {
+@media (max-width: 900px) {
   .account-data {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 </style>

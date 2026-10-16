@@ -13,7 +13,7 @@ bash scripts/local-up.sh
 
 Refreshes retain the session. Checking **Remember me for 30 days** also restores sign-in after the session/browser closes. It is off by default. Sign out on shared devices. Mailpit captures all local mail; nothing is sent to the test address externally.
 
-After completing a guided lesson or variation practice, choose **See your practice & reviews**, or open **Your practice** from Account. Saved practice is account-owned and survives logout and another browser session. Current coverage is separate for White/Black and each course revision. Earlier-version practice remains visible without automatically completing revised content; legacy completions have unknown recall rather than inferred perfect scores.
+After completing a guided lesson or variation practice, choose **See your practice and reviews**, or open **Your practice** from Account. Saved practice is account-owned and survives logout and another browser session. Current coverage is separate for White/Black and each course revision. Earlier-version practice remains visible without automatically completing revised content; legacy completions have unknown recall rather than inferred perfect scores.
 
 ## API contract
 

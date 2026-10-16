@@ -143,11 +143,8 @@ onBeforeUnmount(() => {
   <main id="main-content" class="page-width progress-main">
     <p class="sr-only" aria-live="polite" aria-atomic="true">{{ t(announcement) }}</p>
     <header class="progress-heading">
-      <div>
-        <span class="eyebrow">{{ t('A LITTLE PRACTICE, OFTEN') }}</span>
-        <h1>{{ t('Your practice.') }}</h1>
-      </div>
-      <RouterLink class="choose-lessons" to="/learn">{{ t('Choose a lesson →') }}</RouterLink>
+      <h1>{{ t('Your practice.') }}</h1>
+      <RouterLink class="choose-lessons" to="/learn">{{ t('Choose a lesson') }}</RouterLink>
     </header>
     <p class="progress-intro">
       {{
@@ -157,7 +154,7 @@ onBeforeUnmount(() => {
       }}
     </p>
     <p v-if="loading" role="status">{{ t('Loading your practice…') }}</p>
-    <div v-else-if="error" class="progress-error" role="alert">
+    <div v-else-if="error" class="notice status-actions progress-error" role="alert">
       <p>{{ t(error) }}</p>
       <RouterLink v-if="sessionEnded" class="primary-link" to="/login?next=/progress">{{
         t('Sign in again')
@@ -174,36 +171,38 @@ onBeforeUnmount(() => {
             )
           }}
         </p>
-        <RouterLink class="primary-link" to="/learn">{{ t('Start a guided lesson →') }}</RouterLink>
+        <RouterLink class="primary-link" to="/learn">{{ t('Start a guided lesson') }}</RouterLink>
       </section>
       <section class="review-section" :aria-label="t('Ready to review')">
         <h2 id="review-heading">{{ t('Ready to review') }}</h2>
-        <p v-if="reviews.length">
+        <p v-if="reviews.length" class="muted">
           {{
             t(
               'Up to 20 suggested reviews from your current course versions are shown here. A review is a suggestion; you can practise any time.',
             )
           }}
         </p>
-        <p v-else-if="hasPractice">
+        <p v-else-if="hasPractice" class="muted">
           {{
             t(
               'Nothing is ready for review yet. You can repeat a favourite line or learn another below.',
             )
           }}
         </p>
-        <p v-else>{{ t('Your reviews will appear here after you start practising.') }}</p>
+        <p v-else class="muted">
+          {{ t('Your reviews will appear here after you start practising.') }}
+        </p>
         <ul v-if="reviews.length" class="review-list" :aria-label="t('Lines ready to review')">
           <li
             v-for="review in visibleReviews"
             :key="`${review.reference.lessonId}/${review.reference.revision}/${review.reference.lineId}/${review.reference.playingColor}`"
           >
             <div>
-              <span class="pieces-badge">{{
+              <span class="side-token" :class="{ 'is-black': review.line.playingColor === 'b' }">{{
                 t('You play {p0}', { p0: colorName(review.line.playingColor) })
               }}</span>
               <h3>{{ t(review.course.title) }}</h3>
-              <p>{{ t(review.line.title) }}</p>
+              <p class="review-line">{{ t(review.line.title) }}</p>
               <p v-if="review.line.lastOutcome === 'unknown'" class="muted">
                 {{ t('Earlier practice recorded · recall not tracked yet') }}
               </p>
@@ -214,9 +213,9 @@ onBeforeUnmount(() => {
                 }}</time>
               </p>
             </div>
-            <RouterLink class="primary-link" :to="reviewLink(review.reference)"
-              >{{ t('Review this line') }}<span aria-hidden="true">→</span></RouterLink
-            >
+            <RouterLink class="primary-link" :to="reviewLink(review.reference)">{{
+              t('Review this line')
+            }}</RouterLink>
           </li>
         </ul>
         <button
@@ -228,19 +227,12 @@ onBeforeUnmount(() => {
           {{ showAllReviews ? t('Show fewer reviews') : t('Show more suggestions') }}
         </button>
       </section>
-      <section aria-labelledby="course-progress-heading">
+      <section class="course-section" aria-labelledby="course-progress-heading">
         <h2 id="course-progress-heading">{{ t('Your course progress') }}</h2>
         <p class="muted">
           {{
             t(
-              'Counts cover the current course version and the pieces shown. Practice with White and Black is recorded separately.',
-            )
-          }}
-        </p>
-        <p class="muted">
-          {{
-            t(
-              'Each course starts with its recommended pieces. Switch pieces to see your other practice.',
+              'Counts cover the current course version and the pieces shown. Practice with White and Black is recorded separately. Each course starts with its recommended pieces; switch pieces to see your other practice.',
             )
           }}
         </p>
@@ -252,13 +244,38 @@ onBeforeUnmount(() => {
             role="region"
             :aria-label="t('{p0} practice', { p0: t(course.title) })"
           >
-            <span class="pieces-badge">{{
-              t('You play {p0} · Version {p1}', {
-                p0: colorName(courseColor(course)),
-                p1: course.revision,
-              })
-            }}</span>
+            <div class="card-meta">
+              <span class="side-token" :class="{ 'is-black': courseColor(course) === 'b' }">{{
+                t('You play {p0}', { p0: colorName(courseColor(course)) })
+              }}</span>
+              <span class="version-tag">{{ t('Version {p0}', { p0: course.revision }) }}</span>
+            </div>
             <h3>{{ t(course.title) }}</h3>
+            <p class="coverage-count">
+              {{
+                t(
+                  course.lineCount === 1
+                    ? '{p0} of {p1} current line practised as {p2}'
+                    : '{p0} of {p1} current lines practised as {p2}',
+                  {
+                    p0: practisedCount(course),
+                    p1: course.lineCount,
+                    p2: colorName(courseColor(course)),
+                  },
+                )
+              }}
+            </p>
+            <progress
+              :value="practisedCount(course)"
+              :max="course.lineCount"
+              :style="{ '--segments': course.lineCount }"
+              :aria-label="
+                t('{p0}: current lines practised as {p1}', {
+                  p0: course.title,
+                  p1: colorName(courseColor(course)),
+                })
+              "
+            />
             <label class="pieces-label"
               >{{ t('Your pieces')
               }}<select
@@ -274,30 +291,6 @@ onBeforeUnmount(() => {
                 </option>
               </select></label
             >
-            <p class="coverage-count">
-              {{
-                t(
-                  course.lineCount === 1
-                    ? '{practised} of {total} current line practised as {color}'
-                    : '{practised} of {total} current lines practised as {color}',
-                  {
-                    practised: practisedCount(course),
-                    total: course.lineCount,
-                    color: colorName(courseColor(course)),
-                  },
-                )
-              }}
-            </p>
-            <progress
-              :value="practisedCount(course)"
-              :max="course.lineCount"
-              :aria-label="
-                t('{p0}: current lines practised as {p1}', {
-                  p0: t(course.title),
-                  p1: colorName(courseColor(course)),
-                })
-              "
-            />
             <details class="course-lines">
               <summary>
                 {{
@@ -398,16 +391,13 @@ onBeforeUnmount(() => {
                     :to="lineLink(course, line)"
                     :aria-label="
                       t('{p0} {p1}: {p2} as {p3}', {
-                        p0: line.completions ? t('Review') : t('Learn'),
-                        p1: t(course.title),
-                        p2: t(line.title),
+                        p0: line.completions ? 'Review' : 'Learn',
+                        p1: course.title,
+                        p2: line.title,
                         p3: colorName(line.playingColor),
                       })
                     "
-                    >{{
-                      line.completions ? t('Review this line') : t('Learn this line')
-                    }}
-                    →</RouterLink
+                    >{{ t(line.completions ? 'Review this line' : 'Learn this line') }}</RouterLink
                   >
                 </li>
               </ul>
@@ -416,7 +406,7 @@ onBeforeUnmount(() => {
               v-if="!practisedCount(course)"
               class="line-action"
               :to="startLink(course)"
-              >{{ t('Start with guidance →') }}</RouterLink
+              >{{ t('Start with guidance') }}</RouterLink
             >
           </article>
         </div>
@@ -428,7 +418,7 @@ onBeforeUnmount(() => {
       </section>
       <details v-if="overview.history.length" class="earlier-practice">
         <summary>{{ t('Earlier course versions') }}</summary>
-        <p>
+        <p class="muted">
           {{
             t(
               'Your earlier practice is kept here. Course updates start separate progress, so these records do not add to current line coverage.',
@@ -483,70 +473,52 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .progress-main {
-  padding-block: 42px 70px;
-  min-height: 75vh;
+  padding-block: 56px 24px;
 }
 .progress-heading {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  align-items: baseline;
   justify-content: space-between;
-  gap: 20px;
+  gap: 8px 24px;
 }
-h1 {
-  font-size: clamp(38px, 5vw, 58px);
-  letter-spacing: -1.8px;
-  margin-block: 20px;
-}
-h2 {
-  font:
-    30px Georgia,
-    serif;
-  margin: 0 0 16px;
-}
-h3 {
-  font:
-    26px Georgia,
-    serif;
-  margin: 12px 0;
-  overflow-wrap: anywhere;
-}
-h4 {
-  font-size: 15px;
-  line-height: 1.6;
-  margin: 0 0 8px;
-}
-p {
-  font-size: 14px;
-  line-height: 1.8;
+.progress-heading h1 {
+  margin: 0;
 }
 .progress-intro,
 .progress-note,
 .muted {
-  color: var(--muted);
+  color: var(--pencil);
 }
 .progress-intro {
-  max-width: 680px;
-  margin-bottom: 30px;
+  margin-block: 12px 32px;
+  font-size: 17px;
 }
 .choose-lessons,
 .line-action {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  font-size: 14px;
+  font-weight: 650;
 }
-.first-practice,
-.progress-error {
-  border: 1px solid var(--line);
-  background: #edf0e4;
-  padding: 25px;
-  border-radius: 7px;
-  margin-block: 28px;
+.first-practice {
+  margin-block: 0 32px;
+  padding: 28px;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--sheet);
+}
+.first-practice h2 {
+  font-size: 24px;
 }
 .review-section {
-  padding-block: 25px 32px;
-  margin-bottom: 30px;
-  border-bottom: 1px solid var(--line);
+  padding-bottom: 36px;
+  margin-bottom: 36px;
+  border-bottom: 1px solid var(--rule);
+}
+.review-section h2,
+.course-section h2 {
+  font-size: 26px;
 }
 .review-list,
 .course-lines ul,
@@ -557,147 +529,135 @@ p {
 }
 .review-list {
   display: grid;
-  gap: 14px;
-  margin-block: 22px;
+  margin-block: 20px;
+  border-top: 2px solid var(--ink);
 }
 .review-list > li {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  padding: 22px;
-  border: 1px solid var(--line);
-  border-radius: 7px;
-  background: #faf9f4;
+  padding: 18px 4px;
+  border-bottom: 1px solid var(--rule);
 }
 .review-list > li > div {
   min-width: 0;
 }
+.review-list h3 {
+  margin: 8px 0 2px;
+}
 .review-list p {
-  margin-block: 6px;
+  margin-block: 2px;
+}
+.review-line {
+  font-weight: 600;
 }
 .review-list .primary-link {
   flex-shrink: 0;
 }
-.pieces-badge {
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.8;
+.card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.version-tag {
+  color: var(--pencil);
+  font-size: 14px;
+  font-weight: 600;
 }
 .pieces-label {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
-  font-size: 13px;
-  margin-block: 18px;
+  margin-block: 16px 4px;
+  font-size: 15px;
+  font-weight: 600;
 }
 .pieces-label select {
   min-height: 44px;
-  padding: 8px;
-  border: 1px solid #aeb9a4;
-  border-radius: 4px;
-  background: #faf9f4;
-  color: var(--ink);
+  padding-block: 8px;
 }
 .course-progress-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 22px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 20px;
+  margin-top: 20px;
 }
 .course-progress-card {
   min-width: 0;
-  padding: 25px;
-  border: 1px solid var(--line);
-  border-radius: 7px;
-  background: #faf9f4;
+  padding: 22px 24px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--sheet);
+}
+.course-progress-card h3 {
+  margin: 12px 0 6px;
+  overflow-wrap: anywhere;
 }
 .coverage-count {
   margin-bottom: 10px;
-}
-progress {
-  width: 100%;
-  height: 7px;
-  accent-color: var(--green);
-}
-summary {
-  min-height: 44px;
-  padding-block: 12px;
-  line-height: 1.6;
-  font-size: 14px;
-  cursor: pointer;
-}
-.course-lines {
-  margin-top: 14px;
-}
-.course-lines > ul > li {
-  border-top: 1px solid var(--line);
-  padding-block: 18px;
-}
-.course-lines li p {
-  margin-block: 7px;
-  font-size: 13px;
-}
-.line-status {
   font-weight: 600;
 }
+summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+}
+.course-lines {
+  margin-top: 8px;
+  border-top: 1px solid var(--rule);
+}
+.course-lines > ul > li {
+  padding-block: 16px;
+  border-top: 1px solid var(--rule);
+}
+.course-lines li p {
+  margin-block: 6px;
+  font-size: 15px;
+}
+.line-status {
+  font-weight: 700;
+}
 .decision-notes ul {
-  padding-left: 15px;
-  border-left: 2px solid var(--line);
+  padding-left: 14px;
+  border-left: 3px solid var(--marker);
 }
 .decision-notes li + li {
-  margin-top: 16px;
+  margin-top: 14px;
 }
 .earlier-practice {
-  margin-top: 30px;
-  border-top: 1px solid var(--line);
-  padding-top: 10px;
+  margin-top: 36px;
+  padding-top: 8px;
+  border-top: 1px solid var(--rule);
 }
 .earlier-practice li {
-  padding-block: 15px;
-  border-top: 1px solid var(--line);
+  padding-block: 14px;
+  border-top: 1px solid var(--rule);
 }
 .earlier-practice h3 {
-  font-size: 22px;
+  font-size: 19px;
 }
 .progress-note {
-  max-width: 800px;
-  margin-top: 30px;
-  font-size: 13px;
-}
-button {
-  min-height: 44px;
-  padding: 10px 15px;
-  border: 1px solid #aeb9a4;
-  border-radius: 4px;
-  background: #faf9f4;
-  color: var(--ink);
-}
-.primary-link {
-  min-height: 44px;
+  margin-top: 36px;
+  font-size: 15px;
 }
 @media (max-width: 760px) {
   .progress-main {
-    padding-inline: 20px;
-    padding-top: 30px;
-  }
-  .progress-heading {
-    display: block;
-  }
-  .course-progress-grid {
-    grid-template-columns: 1fr;
+    padding-top: 36px;
   }
   .review-list > li {
     flex-direction: column;
     align-items: stretch;
-    padding: 20px;
     gap: 12px;
   }
   .review-list .primary-link {
     align-self: start;
   }
   .course-progress-card {
-    padding: 22px;
+    padding: 20px;
   }
 }
 </style>
