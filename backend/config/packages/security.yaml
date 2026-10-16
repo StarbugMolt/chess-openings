@@ -28,6 +28,8 @@ security:
                 csrf_token_id: account
                 invalidate_session: true
     access_control:
+        # First match wins: admin API needs ROLE_ADMIN (granted only by app:admin:grant).
+        - { path: '^/api/admin(?:/|$)', roles: ROLE_ADMIN }
         - { request_matcher: App\Security\AccountRoutes, roles: ROLE_USER }
 
 when@test:

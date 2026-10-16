@@ -46,6 +46,13 @@ for ((attempt=0; attempt<60; attempt++)); do
   sleep 0.25
 done
 docker exec --user www-data "$test_app" bin/console app:database:prepare --source-directory=/app/backend/tests/Fixtures/Lessons/source --no-interaction
+# Seed one verified administrator for the live admin journey, granted through the real console
+# command. The password is random per run and exists only in this disposable database.
+admin_email="admin-$test_suffix@example.test"
+admin_password="Admin-$(od -An -N12 -tx1 /dev/urandom | tr -d ' \n')"
+admin_hash=$(docker exec "$test_app" php -r 'echo password_hash($argv[1], PASSWORD_ARGON2ID);' "$admin_password")
+sql <<< "INSERT INTO \`$test_db\`.user_account (email,password,created_at,verified_at) VALUES ('$admin_email','$admin_hash',UTC_TIMESTAMP(),UTC_TIMESTAMP());"
+docker exec --user www-data "$test_app" bin/console app:admin:grant "$admin_email" --no-interaction >/dev/null
 docker compose run -d --no-deps --name "$test_frontend" -e "API_PROXY_TARGET=http://$test_app" -e "BROWSER_HOST=$test_frontend" frontend >/dev/null
 frontend_created=true
 for ((attempt=0; attempt<60; attempt++)); do
@@ -54,4 +61,4 @@ for ((attempt=0; attempt<60; attempt++)); do
   sleep 0.25
 done
 # Separate artifact roots also survive another session's default Playwright cleanup.
-docker compose run --rm --no-deps -e "BASE_URL=http://$test_frontend:5173" -e LIVE_LESSON_TEST=1 browser npm run test:e2e -- --output="/app/artifacts/browser/$test_suffix" "$@"
+docker compose run --rm --no-deps -e "BASE_URL=http://$test_frontend:5173" -e LIVE_LESSON_TEST=1 -e "E2E_ADMIN_EMAIL=$admin_email" -e "E2E_ADMIN_PASSWORD=$admin_password" browser npm run test:e2e -- --output="/app/artifacts/browser/$test_suffix" "$@"

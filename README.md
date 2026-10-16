@@ -200,6 +200,17 @@ The owner has deployed the target. Repository setup examples start the controlle
 
 See the [deployment implementation plan](docs/IMPLEMENTATION_PLAN.md#14-automatic-o2switch-deployment) for the pinned template reference, host checklist and acceptance tests. Daily [privacy maintenance](docs/PRIVACY_RETENTION.md) is a third, separate cron role. [GitHub CI](https://github.com/Starbugstone/chess-openings/actions/runs/38861773058) passed on 2026-10-16 for `4e484ef`; every new main push receives its own CI run. This session verified public readiness, but did not install cron or exercise production cutover/SMTP/restore. The new daily privacy cron still needs activation after this increment is deployed.
 
+## Admin area
+
+`/admin` gives administrators usage statistics derived from stored data, plus a user list with search and password-confirmed account deletion (see [ADMIN_REVIEW.md](docs/ADMIN_REVIEW.md)). Admins can only be appointed on the server; the web interface cannot grant or revoke admin:
+
+```bash
+docker compose exec -T --user www-data app bin/console app:admin:grant you@example.com   # account must exist and be verified
+docker compose exec -T --user www-data app bin/console app:admin:list
+docker compose exec -T --user www-data app bin/console app:admin:revoke you@example.com
+```
+
+On the host, run the same commands with the host PHP binary and `--env=prod --no-debug`. A grant or revoke signs that account out in every browser; sign in again to use the new role. Administrator deletions are logged to `var/log/admin-*.log` with account IDs only.
 
 ## Privacy / RGPD
 

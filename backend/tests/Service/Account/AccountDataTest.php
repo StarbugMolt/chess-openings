@@ -22,7 +22,7 @@ final class AccountDataTest extends TestCase
 
     private function account(): array
     {
-        return ['id' => 7, 'email' => 'data@example.test', 'password' => 'fresh-database-hash', 'created_at' => '2026-10-15 08:00:00', 'verified_at' => '2026-10-15 09:00:00'];
+        return ['id' => 7, 'email' => 'data@example.test', 'password' => 'fresh-database-hash', 'created_at' => '2026-10-15 08:00:00', 'verified_at' => '2026-10-15 09:00:00', 'last_login_at' => '2026-10-16 07:30:00'];
     }
 
     #[DataProvider('actions')]
@@ -74,7 +74,8 @@ final class AccountDataTest extends TestCase
         self::assertSame('9999', $data['completions'][9999]['attemptId']);
         self::assertNull($data['completions'][9999]['assessment']);
         self::assertSame('2026-10-15T10:00:00+00:00', $data['completions'][0]['completedAt']);
-        self::assertSame(['id', 'email', 'createdAt', 'verifiedAt'], array_keys($data['account']));
+        self::assertSame(['id', 'email', 'createdAt', 'verifiedAt', 'lastSignInAt'], array_keys($data['account']));
+        self::assertSame('2026-10-16T07:30:00+00:00', $data['account']['lastSignInAt']);
         self::assertSame(['purpose', 'createdAt', 'expiresAt'], array_keys($data['emailLinks'][0]));
         self::assertStringNotContainsString('fresh-database-hash', json_encode($data, JSON_THROW_ON_ERROR));
     }

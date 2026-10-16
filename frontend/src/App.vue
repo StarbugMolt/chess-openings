@@ -18,6 +18,7 @@ const isDevelopment = import.meta.env.DEV
     <nav aria-label="Main navigation">
       <RouterLink class="learn-link" to="/learn">Learn</RouterLink>
       <RouterLink class="catalogue-link" to="/openings">Openings</RouterLink>
+      <RouterLink v-if="account.user?.admin" class="admin-link" to="/admin">Admin</RouterLink>
       <RouterLink class="account-link" :to="account.user ? '/account' : '/login'">{{
         account.user ? 'Account' : 'Sign in'
       }}</RouterLink>
@@ -38,3 +39,16 @@ const isDevelopment = import.meta.env.DEV
     <a href="https://github.com/Starbugstone/chess-openings">Open source · GPLv3</a>
   </footer>
 </template>
+
+<style scoped>
+/* Global mobile rules hide unlisted header links; the admin link stays reachable. */
+@media (max-width: 680px) {
+  .site-header nav > a.admin-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+</style>

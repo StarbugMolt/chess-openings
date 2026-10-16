@@ -2,6 +2,7 @@ monolog:
     channels: # To see all channels, run bin/console debug:autowiring logger
         - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
         - opening_catalogue
+        - admin # Administrator actions (IDs only, never email addresses)
     handlers:
         opening_catalogue:
             type: rotating_file
@@ -11,6 +12,15 @@ monolog:
             use_locking: true
             level: info
             channels: [opening_catalogue]
+            formatter: monolog.formatter.json
+        admin_audit:
+            type: rotating_file
+            path: '%kernel.logs_dir%/admin.log'
+            max_files: 14
+            file_permission: 384 # 0600
+            use_locking: true
+            level: info
+            channels: [admin]
             formatter: monolog.formatter.json
 
 when@dev:

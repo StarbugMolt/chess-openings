@@ -5,6 +5,8 @@ export interface AccountUser {
   email: string
   verified: boolean
   createdAt: string
+  /** Display hint only; the server enforces ROLE_ADMIN on every admin endpoint. */
+  admin: boolean
 }
 
 export class AccountError extends Error {
@@ -41,7 +43,7 @@ async function responseData(response: Response): Promise<Record<string, unknown>
   return data
 }
 
-function retryAfter(value: string | null): number | undefined {
+export function retryAfter(value: string | null): number | undefined {
   if (!value) return undefined
   const seconds = /^\d+$/.test(value) ? Number(value) : (Date.parse(value) - Date.now()) / 1000
   return Number.isFinite(seconds) && seconds > 0 ? Math.ceil(seconds) : undefined
@@ -54,11 +56,18 @@ export function accountUser(value: unknown): AccountUser {
     !/^[1-9]\d*$/.test(user.id) ||
     typeof user.email !== 'string' ||
     typeof user.verified !== 'boolean' ||
-    typeof user.createdAt !== 'string'
+    typeof user.createdAt !== 'string' ||
+    typeof user.admin !== 'boolean'
   ) {
     throw new Error('The account service returned an unexpected user.')
   }
-  return { id: user.id, email: user.email, verified: user.verified, createdAt: user.createdAt }
+  return {
+    id: user.id,
+    email: user.email,
+    verified: user.verified,
+    createdAt: user.createdAt,
+    admin: user.admin,
+  }
 }
 
 export async function currentUser(): Promise<AccountUser | null> {

@@ -32,7 +32,7 @@ These three identity fields are **public**. Never put a transport DSN, password 
 
 | Data | Policy and enforcement |
 | --- | --- |
-| Verified accounts and private practice | Until owner deletion; no inactivity purge. Account metadata is removed with the account. Existing authenticated, password/CSRF-confirmed account deletion cascades to links and completions. |
+| Verified accounts and private practice | Until owner deletion; no inactivity purge. Account metadata, including the single overwritten latest-sign-in time and any admin grant time (see [ADMIN_REVIEW.md](ADMIN_REVIEW.md)), is removed with the account; maintenance never changes those columns. Existing authenticated, password/CSRF-confirmed account deletion cascades to links and completions. |
 | Unverified accounts | No automatic age-based deletion. The owner chose to retain them. A person can verify then use Account, or contact the publisher for assistance. |
 | Email-token records | Verification expires at 24 hours, reset at one hour; existing token flows also consume/replace links. Expired rows are eligible immediately, pruned opportunistically and by daily maintenance. |
 | Hashed request-limit buckets | Expire at the end of their existing 15-minute/hour/day windows. Expired rows are pruned opportunistically and daily. These hashes remain personal security data, not anonymous analytics. |
@@ -108,6 +108,9 @@ Local logs/traces are retained under ignored `artifacts/privacy-retention-202610
 
 Final small hardening after the fixed-snapshot full run suppresses PHP’s raw `unlink` warning before the existing generic cleanup exception, so a permission failure does not print a session filename. The focused privacy suite was rerun: **eight tests/51 assertions passed**. A disposable read-only-directory check as `www-data` also confirmed a generic failure, no filesystem warning and preservation of the file; its temporary directory was then removed. No cleanup behaviour or retention period changed.
 
+## Administrator access (2026-10-16)
+
+The owner-approved admin area adds `user_account.last_login_at` (latest sign-in only) and `admin_granted_at`. Admins can see account emails, dates, practice counts and aggregate statistics, and can delete accounts. Deletions are written to the `admin` log channel (`var/log/admin-YYYY-MM-DD.log`, JSON, 0600, one file per day with entries, Monolog keeping at most the 14 most recent) with admin and account IDs only. This log is not yet in `app:privacy:cleanup`'s dated-log pattern, because Monolog's `max_files` already bounds it.
 
 ## Host steps for this release
 

@@ -13,6 +13,7 @@ test('account forms complete registration, verification, sign-in and sign-out', 
     email: 'learner@example.test',
     verified: true,
     createdAt: '2026-10-15T10:00:00Z',
+    admin: false,
   }
   await page.route('**/api/me', (route) =>
     route.fulfill({

@@ -12,6 +12,7 @@ const user = {
   email: 'practice@example.test',
   verified: true,
   createdAt: '2026-10-15T08:00:00Z',
+  admin: false,
 }
 
 test('review links select a current line and side; stale or malformed links explain the fallback', async ({

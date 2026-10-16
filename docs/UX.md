@@ -16,6 +16,7 @@ This is the interaction contract for guided lessons, variation practice and revi
 | `/forgot-password`, `/resend-verification` | Public | Request an email using the same public response for eligible and unknown addresses. |
 | `/verify-email`, `/reset-password` | Public | Confirm a single-use link. Keep the token out of query strings and clear it from browser history. |
 | `/account` | Signed in | Account state, learning/review links, password-confirmed data download and cancellable permanent deletion. Sign-out returns home. |
+| `/admin` | Admins only (non-admins → `/learn`) | Usage statistics from stored data and a searchable user list with password-confirmed account deletion. See [ADMIN_REVIEW.md](ADMIN_REVIEW.md). |
 | `/privacy` | Public | Describe actual preview data use and distinguish pending public-launch information. |
 | `/dev/board` | Development builds only | Exercise board/rules/audio; never serve an unrestricted board in production. |
 | Unknown route | Public | Explain that the page does not exist and offer learning/home links. |
@@ -25,6 +26,10 @@ Keep Learn, Openings and Account/Sign in available in desktop and mobile navigat
 On route changes, restore browser back/forward scroll, honour local hash anchors and otherwise start at the top. Move focus to the new main region without scrolling it away. Search paging retains focus on a persistent control or announces the updated results. Loading and unavailable sign-in state must be distinguishable from being signed out.
 
 The owner chose ordinary account registration: enter email and password once, confirm the email link, then sign in with that password. Verification posts only the token and asks for no password. Each registration link retains its own password binding until a link is consumed; resending uses the most recent pending registration. Tell recipients to ignore registrations they did not request. See [ACCOUNTS.md](ACCOUNTS.md) for the accepted unsolicited-link residual and legacy-link handling.
+
+## Admin area
+
+Show the header **Admin** link only when `/api/me` reports `admin: true`; nobody can become an admin from the web. **Usage** shows numeric headline figures and tables, with the value always printed beside any bar. It states that figures come only from stored data and that practice mode and page views are not recorded. **Users** keeps search and page in the URL, uses a table on desktop and cards below 760 px, and marks admins and the current account. Delete is disabled for yourself and other admins, with an explanation. Otherwise it expands into the same permanence warning, own-password field and confirmation checkbox as Account. Success removes the row and announces it. 401 offers sign-in again (a CLI grant or revoke signs that account out everywhere), 404 counts as already deleted, 409 refreshes and explains, and 429 shows the wait.
 
 ## Account data controls
 

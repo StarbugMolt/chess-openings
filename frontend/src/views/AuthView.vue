@@ -66,7 +66,8 @@ async function submit(): Promise<void> {
       await account.login(email.value, password.value, rememberMe.value)
       const next = typeof route.query.next === 'string' ? route.query.next : ''
       await router.replace(
-        /^(?:\/(?:learn|train)(?:\/|$)|\/(?:account|progress)$)/.test(next) && !next.includes('\\')
+        /^(?:\/(?:learn|train)(?:\/|$)|\/(?:account|progress)$|\/admin(?:\?|$))/.test(next) &&
+          !next.includes('\\')
           ? next
           : '/learn',
       )

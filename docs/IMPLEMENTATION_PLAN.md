@@ -282,7 +282,7 @@ The owner approved the implemented [M5b private progress design](M5B_REVIEW.md) 
 
 | Table | Key columns | Constraints / purpose |
 | --- | --- | --- |
-| `user_account` | `id`, unique normalised `email`, `password`, `verified_at`, `created_at` | Minimal identity; no display name, DOB, address or last-login tracking |
+| `user_account` | `id`, unique normalised `email`, `password`, `verified_at`, `created_at`, nullable `admin_granted_at`, nullable `last_login_at` | Minimal identity; no display name, DOB or address. Owner-approved schema `Version20261016000440` (2026-10-16, [ADMIN_REVIEW.md](ADMIN_REVIEW.md)) adds a console-granted admin marker and the latest sign-in time only: one overwritten UTC value, no history, IP or device |
 | `account_email_token`, `account_request_limit` | Hashed token/password bindings and HMAC request-limit buckets | Account-owned token cascade and bounded persistent limits; see [ACCOUNTS.md](ACCOUNTS.md) |
 | `user_line_completion` | `user_id`, `attempt_id`, `lesson_id`, `revision`, `line_id`, `playing_color`, `hint_count`, `completed_at`, nullable `assessment_json` | Idempotent user/attempt key; exact retained line/colour references; account deletion cascade |
 

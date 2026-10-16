@@ -2,7 +2,7 @@
 
 The owner approved the imported-table schema, canonical keys and refresh lifecycle on 2026-10-15 in [IMPORTER_REVIEW.md](IMPORTER_REVIEW.md). M2b implements the seven imported tables in [Version20261015000100.php](../backend/migrations/Schema/Version20261015000100.php). `Version20261015000410` later adds the nullable `automatic_updates_held_at` rollback hold without rewriting the approved initial migration/reference. The application database starts with **no active catalogue**: singleton ID 1, null batch and revision 0. No catalogue, account or lesson data is seeded by schema migrations.
 
-The current tree includes **nine schema migrations and 19 lesson migrations**, publishing ten courses with 25 current taught lines. Its separately owner-approved private recall addition is [Version20261015000430.php](../backend/migrations/Schema/Version20261015000430.php); see [practice and review](PROGRESS.md) for current behavior/results. Importer, curriculum and earlier migration approvals remain settled.
+The current tree includes **ten schema migrations and 19 lesson migrations**, publishing ten courses with 25 current taught lines. Its separately owner-approved private recall addition is [Version20261015000430.php](../backend/migrations/Schema/Version20261015000430.php); see [practice and review](PROGRESS.md) for current behavior/results. Importer, curriculum and earlier migration approvals remain settled.
 
 ## Separate execution and histories
 
@@ -53,6 +53,10 @@ The owner approved the [M5b storage and review design](M5B_REVIEW.md) and its [e
 Existing rows remain NULL with unknown recall. No backfill, aggregate table, new source fact or lesson rewrite is performed. The existing user/attempt primary key, exact lesson/revision/line references and account-deletion cascade stay authoritative. A compact assessment and its completion save atomically in one row; normalized retries cannot double-count or replace historical evidence. Existing DBAL table protection covers the added column, and migration parity/constraint tests verify the approved SQL.
 
 Run the ordinary schema command before serving the new completion writes. `app:database:prepare` retains its schema -> first source import only if absent -> lesson order, and `app:lessons:migrate` still rejects pending schema. The private reader derives current recall, review dates and separate earlier-version history from the immutable ledger and retained paths, without storing seeds, raw rejected moves or abandoned-position logs. The private API/page and review policy are documented in [PROGRESS.md](PROGRESS.md).
+
+## Approved admin migration
+
+The owner approved the [admin design](ADMIN_REVIEW.md) and its [exact SQL](ADMIN_SCHEMA_PROPOSAL.sql) on 2026-10-16. Schema `Version20261016000440` runs one additive, nontransactional `ALTER TABLE user_account`. It adds nullable `admin_granted_at DATETIME` and `last_login_at DATETIME`, both mapped on the Doctrine `User` entity, so `doctrine:schema:validate` and the empty ORM diff still pass. There is no new table, so the DBAL table protection list is unchanged. Existing accounts stay NULL (no backfill), and the destructive down operation is refused. `tests/import/admin-test.php` checks exact parity between the proposal SQL and the migrated table.
 
 ## Verified integration checks
 
