@@ -501,3 +501,13 @@ PR #12 is merged as `4d4c5e0`; PR #13’s final head `e2bd610` passed all [GitHu
 The earlier full browser run passed 77 with two failures solely at the obsolete Spanish practice-link text/arrow. Its trace confirmed the lesson had completed and saved; the expectation now follows the redesigned text and both full multilingual journeys pass. Every local Git branch’s commits are in the combined history. All 20 admin backend files exactly match the approved local snapshot, and multilingual email changes are retained exactly. Ignored phase-4 curriculum drafts remain with their active owner and are not release-ready work. Shared services, catalogue, learner data and Mailpit were preserved.
 
 Owner additionally requests successful final-main CI and verification that host-pull deployment activates the exact pushed SHA. The publication uses a normal fast-forward push and public release/health checks; no working host cron will be reinstalled blindly. Implementation file reservations are released; the Git index/main publication reservation remains until the final push below.
+
+## Status alignment and curriculum continuation — Claude (Opus), started 2026-10-16
+
+Working from a separate clone at `/home/starbugmolt/projects/chess-openings` (no other worktrees or uncommitted changes here). Owner request: first a small docs-only commit aligning the status text with what is live, then more training courses. Host/SSH work is deferred by the owner.
+
+**Docs step reserves:** `AGENTS.md` (the "Current implementation and next step" paragraphs only), `docs/IMPLEMENTATION_PLAN.md` (§13 first paragraph only) and this section.
+
+**Observed state before the docs commit:** main `27dfeda` passed [exact-SHA CI](https://github.com/Starbugstone/chess-openings/actions/runs/38891219759), and production returns `X-Release-Id: 27dfeda…-20261016120503` with `/api/health` `{"status":"ok"}`, `/api/privacy` 200 and catalogue revision 1 (`a6189a3`). The "PR 12/13 merge" publication above has therefore completed and deployed; its remaining Git index/main reservation is treated as closed. The phase-4 curriculum drafts (`artifacts/lesson-staging/…Version20261016010000–012000`) are **not present** in this clone; they live only in the earlier workspace. To avoid version collisions if they reappear, this continuation will not reuse that range (see the curriculum reservation below).
+
+Docs step: `AGENTS.md` and plan §13 now describe the deployed state, the latest combined verification and the owner's next step (more courses; host work deferred). Docs-only; no runtime change.
