@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import type { PrivacyNotice } from '../../src/api/privacy'
 import type { LessonPayload } from '../../src/api/lessons'
 import { readFileSync } from 'node:fs'
 
@@ -53,6 +54,50 @@ test.describe('French browser preference', () => {
     await page.reload()
     await expect(page.locator('html')).toHaveAttribute('lang', 'en')
     expect(errors).toEqual([])
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+  })
+
+  test('privacy translations preserve the configured publisher, contact and retention policy', async ({
+    page,
+  }) => {
+    const notice = {
+      version: 1,
+      publisher: 'StarbugStone',
+      contactEmail: 'chessopenings@starbugstone.com',
+      emailProvider: 'O2Switch',
+      hostingProvider: 'o2switch',
+      hostingBackupDays: 30,
+      deploymentBackupDays: 30,
+      applicationLogDays: 14,
+      unverifiedAccountDays: 0,
+      development: false,
+      configured: true,
+      missing: [],
+    } satisfies PrivacyNotice
+    await page.route('**/api/privacy', (route) => route.fulfill({ json: notice }))
+    await page.goto('/privacy')
+    await expect(
+      page.getByRole('heading', { name: 'Confidentialité des comptes.', exact: true }),
+    ).toBeVisible()
+    await expect(
+      page.getByText('L’éditeur et responsable du traitement est StarbugStone.', { exact: true }),
+    ).toBeVisible()
+    await expect(
+      page.getByRole('link', { name: notice.contactEmail, exact: true }),
+    ).toHaveAttribute('href', 'mailto:' + notice.contactEmail)
+    await expect(page.locator('.retention-list')).toContainText('14 jours sans nouvelle entrée')
+    await expect(page.locator('.retention-list')).toContainText('30 jours dans le cycle')
+    await choose(page, 'Español')
+    await expect(
+      page.getByRole('heading', { name: 'Privacidad de las cuentas.', exact: true }),
+    ).toBeVisible()
+    await expect(
+      page.getByText('El editor y responsable del tratamiento es StarbugStone.', { exact: true }),
+    ).toBeVisible()
+    await expect(page.locator('.retention-list')).toContainText('14 días sin nuevas entradas')
+    await expect(
+      page.getByRole('link', { name: 'contactar con la CNIL', exact: true }),
+    ).toHaveAttribute('href', 'https://www.cnil.fr/fr/adresser-une-plainte')
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   })
 

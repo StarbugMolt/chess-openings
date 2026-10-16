@@ -68,11 +68,14 @@ final class ProductionPreparation
             if (!is_resource($process) || proc_close($process) !== 0 || filesize($temporary) === 0 || !rename($temporary, $destination)) {
                 throw new RuntimeException('Database backup failed; migrations were not started. Check dump tool, database access and disk space.');
             }
-            // Keep the last three successful deployment snapshots. Partial backups never rotate good ones.
-            $backups = glob("$directory/*.sql");
+            // Retain at most three application snapshots; drop those aged 30 days here.
+            // Leave manual dumps and provider-managed backups outside this lifecycle.
+            $backups = array_values(array_filter(glob("$directory/*.sql"), static fn (string $path): bool => (bool) preg_match('/^\d{8}-\d{6}-\d{6}-[a-f0-9]{8}\.sql$/D', basename($path))));
             rsort($backups, SORT_STRING);
-            foreach (array_slice($backups, 3) as $old) {
-                if (is_link($old) || !unlink($old)) throw new RuntimeException('Cannot rotate private database backups.');
+            foreach ($backups as $index => $old) {
+                if ($index >= 3 || filemtime($old) <= time() - 30 * 86400) {
+                    if (is_link($old) || !unlink($old)) throw new RuntimeException('Cannot rotate private database backups.');
+                }
             }
             return $destination;
         } finally {

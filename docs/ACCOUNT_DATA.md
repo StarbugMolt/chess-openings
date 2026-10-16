@@ -1,6 +1,6 @@
 # Account download and deletion
 
-M6a implements the user account controls without a schema change. It uses existing account ownership, retained completions and deletion cascades. Public-launch publisher/contact details, retention rules and host verification remain separate M6 work.
+M6a implements the user account controls without a schema change. It uses existing account ownership, retained completions and deletion cascades. M6b adds owner-approved public details, retention rules and maintenance; see [PRIVACY_RETENTION.md](PRIVACY_RETENTION.md) for daily activation and remaining host checks.
 
 ## Use the controls
 
@@ -31,7 +31,7 @@ The service locks the current account row and verifies its fresh database passwo
 
 Deletion commits existing `ON DELETE CASCADE` removal of private email tokens and completions, then uses the configured Symfony logout listeners to invalidate the current session and clear remember me. Other sessions and remembered browsers cannot reload the deleted user on their next request. Other browsers' private session files are not enumerated for immediate physical erasure; they become unusable and follow the existing session-handler expiry/cleanup. Recreating the same email/password does not revive their old credentials. A database failure rolls the transaction back and leaves the account signed in; it never reports success after partial removal.
 
-Deletion acts on the live service. It does not rewrite existing backups, access logs, temporary HMAC abuse-limit records or local Mailpit messages. Their actual retention and recovery/restore procedure still need finalisation before public launch. There is no invented expiry promise, backup-erasure claim or compliance label.
+Deletion acts on the live service. It does not rewrite existing backups, access logs, temporary HMAC abuse-limit records or local Mailpit messages. M6b documents their separate lifecycles in [PRIVACY_RETENTION.md](PRIVACY_RETENTION.md): accounts remain until deletion; expired temporary rows and stale files use bounded daily cleanup, application SQL snapshots expire after 30 days and O2Switch backups follow a separate 30-day cycle. Nested backup copies can extend recovery retention beyond 30 days after deletion. Restore privately and reapply post-snapshot deletions before reopening; no automatic suppression ledger is claimed. The daily host job and recovery reconciliation still need host verification.
 
 ## Verification
 
@@ -48,4 +48,4 @@ Focused checks passed on 2026-10-16:
 
 The full run also covers the independent guided move-explanation and catalogue reference-board changes. All destructive checks use disposable databases/accounts. No schema change was needed; fresh bootstrap remains nine schema/15 lesson migrations. Shared services, the retained learner and the other agent's browser account were preserved. Native T3 inspection at 390 px confirms the account cards fit without horizontal scrolling; no destructive action was submitted there.
 
-The first targeted browser run lost a trace file when another run cleared shared output. Each isolated runner now uses ignored `artifacts/browser/<run>` output outside frontend source discovery. An older intermediate `.test-artifacts` directory is also ignored by Git/formatting/lint so another session's retained artifacts need not be deleted. The corrected targeted and final combined runs both pass. [GitHub CI](https://github.com/Starbugstone/chess-openings/actions/runs/38861773058) passed for `4e484ef` on 2026-10-16. Host activation and remaining M6 public privacy/retention work remain unverified.
+The first targeted browser run lost a trace file when another run cleared shared output. Each isolated runner now uses ignored `artifacts/browser/<run>` output outside frontend source discovery. An older intermediate `.test-artifacts` directory is also ignored by Git/formatting/lint so another session's retained artifacts need not be deleted. The corrected targeted and final combined runs both pass. [GitHub CI](https://github.com/Starbugstone/chess-openings/actions/runs/38861773058) passed for `4e484ef` on 2026-10-16. This is the historical M6a checkpoint; [M6b privacy/retention operations](PRIVACY_RETENTION.md) records the subsequent owner decisions and verification. Production is owner-confirmed; detailed job/recovery verification remains separate.

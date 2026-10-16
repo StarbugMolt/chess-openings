@@ -1,6 +1,6 @@
 # PHP opening importer and weekly catalogue refresh
 
-> **Status: M2c sync/status/rollback and catalogue browsing are implemented and locally verified. No hosting cron is installed.** Full pinned PHP/DBAL import and default latest-source no-op passed locally; see [CATALOGUE.md](CATALOGUE.md) and [MIGRATIONS.md](MIGRATIONS.md). Deploy and verify the command on the actual O2Switch account before installing the weekly task. Merely committing this document does **not** install a cron.
+> **Status: M2c sync/status/rollback and catalogue browsing are implemented and locally verified. O2Switch deployment is owner-confirmed; host-cron execution has not been independently verified in this session.** Full pinned PHP/DBAL import and default latest-source no-op passed locally; see [CATALOGUE.md](CATALOGUE.md) and [MIGRATIONS.md](MIGRATIONS.md). Verify the deployed command on the actual O2Switch account before installing a missing weekly task; preserve an existing verified job. Merely committing this document does **not** install a cron.
 >
 > **Owner's decision:** the complete importer and scheduler integration belong to the **Symfony/PHP backend**. No Node/TypeScript opening-import script, GitHub Actions scheduled importer, SSH-delivered bundles or remote worker is required. Vue/TypeScript and chess.js remain frontend-only. CI can still build Vue and run tests.
 

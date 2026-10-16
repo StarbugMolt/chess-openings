@@ -141,19 +141,27 @@ describe('translated content', () => {
           ['t', 'message', 'textMessage'].includes(node.expression.getText(file))
         ) {
           const argument = node.arguments[0]
-          if (
-            argument &&
-            ts.isStringLiteral(argument) &&
-            argument.text &&
-            !catalogues[argument.text]
-          )
-            missing.add(argument.text)
+          function checkSource(expression: ts.Expression) {
+            if (ts.isStringLiteral(expression) && expression.text && !catalogues[expression.text])
+              missing.add(expression.text)
+            if (ts.isConditionalExpression(expression)) {
+              checkSource(expression.whenTrue)
+              checkSource(expression.whenFalse)
+            }
+          }
+          if (argument) checkSource(argument)
         }
         ts.forEachChild(node, visit)
       }
       visit(file)
     }
     function visitTemplate(node: RootNode | TemplateChildNode) {
+      if (
+        node.type === 2 &&
+        /[a-zA-Z]{2,}/.test(node.content) &&
+        !['chess', 'openings', 'chessopening.starbugstone.com'].includes(node.content.trim())
+      )
+        missing.add('Untranslated template text: ' + node.content.trim())
       if (node.type === 5) checkExpression(node.content.loc.source)
       if (node.type === 1)
         for (const property of node.props) {

@@ -66,7 +66,7 @@ services:
       retries: 30
 
   mailpit:
-    image: axllent/mailpit:v1.27.8
+    image: axllent/mailpit:v1.31.5
     ports:
       - "127.0.0.1:${MAIL_PORT:-8025}:8025"
 

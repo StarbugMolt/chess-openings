@@ -112,9 +112,14 @@ async function submit(): Promise<void> {
         ? failure.retryAfter
           ? textMessage('{error} {retry}', {
               error: failure.message,
-              retry: textMessage('Try again in about {minutes} minutes.', {
-                minutes: Math.ceil(failure.retryAfter / 60),
-              }),
+              retry: textMessage(
+                Math.ceil(failure.retryAfter / 60) === 1
+                  ? 'Try again in about {minutes} minute.'
+                  : 'Try again in about {minutes} minutes.',
+                {
+                  minutes: Math.ceil(failure.retryAfter / 60),
+                },
+              ),
             })
           : failure.message
         : 'The account service is unavailable. Please try again.'

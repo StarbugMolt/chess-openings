@@ -2,7 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 test_file=${1:-migrations-test.php}
-case "$test_file" in migrations-test.php|catalogue-test.php|accounts-test.php|account-data-test.php|lessons-test.php|pinned-lessons-test.php|variation-test.php|practice-test.php) ;; *) exit 2 ;; esac
+case "$test_file" in migrations-test.php|catalogue-test.php|accounts-test.php|account-data-test.php|privacy-test.php|lessons-test.php|pinned-lessons-test.php|variation-test.php|practice-test.php) ;; *) exit 2 ;; esac
 test_db="chess_migration_test_${RANDOM}_${RANDOM}_$$"
 created=false
 granted=false

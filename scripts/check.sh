@@ -26,6 +26,7 @@ bash tests/import/migrations-test.sh
 bash tests/import/catalogue-test.sh
 bash tests/import/migrations-test.sh accounts-test.php
 bash tests/import/migrations-test.sh account-data-test.php
+bash tests/import/migrations-test.sh privacy-test.php
 bash tests/import/migrations-test.sh lessons-test.php
 bash tests/import/migrations-test.sh variation-test.php
 bash tests/import/migrations-test.sh practice-test.php

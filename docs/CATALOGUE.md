@@ -86,7 +86,7 @@ The Vue `/openings` view supports name/ECO search, family shortcuts and paging. 
 
 The full graph checksum remains `32b6eadeecd0a9620100f19613b55595e96e5cb72d1addd8cbd49fa9f7b009e3`, matching the M2a replay evidence. These are local PHP 8.3.30/MariaDB 10.11.14 measurements, not hosting benchmarks. Fresh source fixture tests are offline; the two full-source commands above were explicit network checks.
 
-The actual host still needs the [deployment setup](IMPLEMENTATION_PLAN.md#14-automatic-o2switch-deployment), runtime/DB/path/HTTPS/cron-timezone verification and deployed dry-run/live validation. Only then enable the separate weekly job in [opening-catalogue.crontab.example](../ops/cron/opening-catalogue.crontab.example). M2c does not install either hosting cron.
+The owner confirms O2Switch is deployed; public HTTPS readiness passed on 2026-10-16. This session has not inspected weekly-cron execution or detailed runtime/DB/path/timezone and sync dry-run/live evidence. Preserve existing verified host configuration. Enable the separate weekly job in [opening-catalogue.crontab.example](../ops/cron/opening-catalogue.crontab.example) only after its deployed gate passes. The separate daily [privacy maintenance](PRIVACY_RETENTION.md) job has its own gate; this local increment installs no hosting cron.
 
 ## Review regression verification (2026-10-15)
 

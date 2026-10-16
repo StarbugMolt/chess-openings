@@ -45,6 +45,13 @@ DUMP);
     foreach ($backups as $backup) {
         assertProduction((fileperms($backup) & 0777) === 0600 && str_contains(file_get_contents($backup), 'CREATE TABLE'), 'SQL snapshots are private and complete');
     }
+    foreach ($backups as $backup) touch($backup, time() - 31 * 86400);
+    $manual = "$root/backups/manual-export.sql";
+    file_put_contents($manual, '-- outside automatic snapshot lifecycle');
+    ProductionPreparation::backup($env, $root, $binary);
+    assertProduction(count(glob("$root/backups/*.sql")) === 2 && file_exists($manual), 'Expired snapshots are removed even below the count limit; manual dumps are preserved');
+    foreach ($backups as $expired) assertProduction(!file_exists($expired), 'Snapshots must not exceed 30-day retention');
+    $backups = glob("$root/backups/*.sql");
     file_put_contents($binary, "#!/bin/sh\nexit 1\n");
     try { ProductionPreparation::backup($env, $root, $binary); throw new LogicException('Expected failed dump rejection'); }
     catch (RuntimeException) {}
