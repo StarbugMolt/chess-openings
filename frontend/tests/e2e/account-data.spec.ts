@@ -12,6 +12,7 @@ test('account data controls explain confirmation failures and recover an expired
     email: 'data@example.test',
     verified: true,
     createdAt: '2026-10-15T08:00:00Z',
+    admin: false,
   }
   await page.route('**/api/me', (route) =>
     route.fulfill({

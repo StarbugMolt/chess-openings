@@ -49,7 +49,8 @@ onBeforeUnmount(() => {
       <h2 id="publisher-heading">{{ t('Who runs this service') }}</h2>
       <p>
         {{ t('This notice covers') }}
-        <a href="https://chessopening.starbugstone.com/">chessopening.starbugstone.com</a>.
+        <a href="https://chessopening.starbugstone.com/">{{ t('chessopening.starbugstone.com') }}</a
+        >.
       </p>
       <p v-if="loading" role="status">{{ t('Loading publisher and retention details…') }}</p>
       <div v-else-if="unavailable" role="alert">
@@ -91,7 +92,7 @@ onBeforeUnmount(() => {
     <p>
       {{
         t(
-          'Accounts store an email address, password hash, internal ID, creation time and email-verification time. We need these to provide sign-in, account recovery and the private learning service you request. Providing those account features is based on performing our agreement with you. The course list and opening reference can be browsed without an account.',
+          'Accounts store an email address, password hash, internal ID, creation time, email-verification time and the time of your most recent sign-in. We need these to provide sign-in, account recovery and the private learning service you request. The latest sign-in time is a single value, overwritten each time you sign in or a remembered sign-in is restored; we keep no sign-in history, device or location with it. It lets the publisher see whether accounts are still in use, based on our legitimate interest in running the service. Providing those account features is based on performing our agreement with you. The course list and opening reference can be browsed without an account.',
         )
       }}
     </p>
@@ -105,7 +106,7 @@ onBeforeUnmount(() => {
     <p>
       {{
         t(
-          'Security limits and operational logs help prevent abuse and diagnose failures, based on our legitimate interest in keeping the service secure. Limits store keyed hashes of email and client-network addresses. Hosting access logs may contain IP addresses and requested paths. Passwords and email-link secrets stay out of request URLs. We do not collect a display name, date of birth or last-login history.',
+          'Security limits and operational logs help prevent abuse and diagnose failures, based on our legitimate interest in keeping the service secure. Limits store keyed hashes of email and client-network addresses. Hosting access logs may contain IP addresses and requested paths. Passwords and email-link secrets stay out of request URLs. We do not collect a display name, date of birth or a history of past sign-ins.',
         )
       }}
     </p>
@@ -213,6 +214,13 @@ onBeforeUnmount(() => {
         )
       }}
     </p>
+    <p>
+      {{
+        t(
+          "Administrators appointed by the publisher can see each account's email address, creation, verification and latest sign-in times, number of saved practices and latest practice time, together with aggregated usage figures. They can permanently delete an account; each deletion is recorded with account identifiers only, not the email address.",
+        )
+      }}
+    </p>
     <p v-if="notice?.emailProvider">
       {{
         t(
@@ -239,7 +247,7 @@ onBeforeUnmount(() => {
     <p>
       {{
         t(
-          'In Account, download your details, every saved practice and email-link metadata as JSON, or permanently delete the account, its email links and all practice. Both actions require your current password. Deletion signs you out; other browsers cannot restore the deleted account.',
+          'In Account, download your details (including your latest sign-in time), every saved practice and email-link metadata as JSON, or permanently delete the account, its email links and all practice. Both actions require your current password. Deletion signs you out; other browsers cannot restore the deleted account.',
         )
       }}
     </p>

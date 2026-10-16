@@ -52,7 +52,7 @@ SMTP delivery runs on `kernel.terminate`, after sending the response. Accepted r
 
 | Table | Ownership / constraints |
 | --- | --- |
-| `user_account` | Doctrine `User` entity; integer internal ID, unique normalised email, Argon2id password hash, UTC creation/verification times; no display name or other profile fields |
+| `user_account` | Doctrine `User` entity; integer internal ID, unique normalised email, Argon2id password hash, UTC creation/verification times; since schema `Version20261016000440`, nullable `admin_granted_at` (console-granted administrator marker) and `last_login_at` (latest successful sign-in only); no display name or other profile fields |
 | `account_email_token` | DBAL-managed; SHA-256 token hash primary key, account FK with delete cascade, checked `verify`/`reset` purpose, creation/expiry, nullable pending password hash, unique auto-increment issuance sequence and latest-issuance/account-purpose/expiry indexes |
 | `account_request_limit` | DBAL-managed; HMAC-SHA-256 bucket key, attempt count and expiry index; raw email/IP are not stored here |
 
@@ -113,3 +113,17 @@ No schema migration or new private storage was needed. The current password is c
 M6a final verification: `CHECK_REUSE_SERVICES=1 bash scripts/check.sh` exited 0 with **199 PHP tests / 4,276 assertions, 227 frontend tests and 49 desktop/mobile browser passes**, plus one intentional mobile mouse-drag skip. The new disposable account-data suite passed **84 checks**, existing account lifecycle stayed at **93**, and the focused account-data browser subset passed **4** cases. No schema change or shared user/service replacement was needed. [ACCOUNT_DATA.md](ACCOUNT_DATA.md) records exact commands and live-deletion boundaries.
 
 [GitHub CI](https://github.com/Starbugstone/chess-openings/actions/runs/38861773058) passed for the published application commit `4e484ef` on 2026-10-16. Subsequent commits receive a new CI run; this does not verify O2Switch deployment or activate either host job.
+
+## Administrators and latest sign-in (2026-10-16)
+
+The owner approved the [admin area design](ADMIN_REVIEW.md) and its [exact SQL](ADMIN_SCHEMA_PROPOSAL.sql). Schema `Version20261016000440` adds two nullable `DATETIME` columns to `user_account`; existing accounts start NULL and nothing is backfilled.
+
+- **Roles.** `User::getRoles()` returns `ROLE_USER`, plus `ROLE_ADMIN` while `admin_granted_at` is set. `/api/me` and the sign-in response add `admin: boolean`. Only console commands change grants, and they normalise the email like the API (trim and lowercase):
+  - `bin/console app:admin:grant <email>` refuses unknown or unverified accounts with a non-zero exit and is idempotent; a repeated grant keeps the original time.
+  - `bin/console app:admin:revoke <email>` is idempotent and fails only for unknown accounts.
+  - `bin/console app:admin:list` prints admin emails and UTC grant times, never hashes.
+- **Sessions after a grant or revoke.** Symfony reloads the account on every request and treats a role change as a changed user. The account's existing sessions, including remembered browsers, are signed out (401) on their next request, and Symfony clears the remember-me cookie. After signing in again, the account has its new role. A revoked admin therefore cannot keep admin access in any browser.
+- **Access.** `^/api/admin` requires `ROLE_ADMIN` (`security.yaml`, before the `ROLE_USER` matcher). `AccountRoutes` also covers `/api/admin`, so it gets the same session expiry and `private, no-store`/`no-referrer` headers. Anonymous requests return 401; signed-in non-admins return 403 `{"error": ...}`. The controller re-checks the role, and deletion re-checks the admin's fresh row.
+- **Latest sign-in.** `AccountLoginSubscriber` overwrites `last_login_at` with the current UTC time (second precision) on every `LoginSuccessEvent`. That covers password sign-in and remember-me restore. It uses a targeted DBAL `UPDATE` by ID. Ordinary requests on an existing session do not change it. It is one value, not a history, and no IP address, browser or device is stored. It appears as `lastSignInAt` in the data download and is deleted with the account.
+
+The admin API contract and statistics are in [ADMIN_REVIEW.md](ADMIN_REVIEW.md) §8. Its verification is in the implemented section there.

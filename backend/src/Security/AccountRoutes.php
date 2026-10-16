@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 /** One protected route set drives access control, session expiry and response privacy. */
 final class AccountRoutes implements RequestMatcherInterface
 {
-    private const AUTHENTICATED = '~^/api/(?:me|lessons|training|progress)(?:/|$)~';
+    private const AUTHENTICATED = '~^/api/(?:me|lessons|training|progress|admin)(?:/|$)~';
 
     public function matches(Request $request): bool
     {

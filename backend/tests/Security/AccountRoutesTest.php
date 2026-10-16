@@ -27,9 +27,14 @@ final class AccountRoutesTest extends TestCase
         yield ['/api/lessons/italian/graph', true, true];
         yield ['/api/training', true, true];
         yield ['/api/progress/1', true, true];
+        yield ['/api/admin', true, true];
+        yield ['/api/admin/users', true, true];
+        yield ['/api/admin/users/12', true, true];
+        yield ['/api/admin/stats', true, true];
         yield ['/api/auth/csrf', false, true];
         yield ['/api/openings', false, false];
         yield ['/api/lessons-extra', false, false];
         yield ['/api/auth-extra', false, false];
+        yield ['/api/administrator', false, false];
     }
 }

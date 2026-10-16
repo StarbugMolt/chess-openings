@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\EventSubscriber;
 
+use App\Entity\User;
 use App\Security\AccountAuthenticator;
+use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
 final class AccountLoginSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private readonly CsrfTokenManagerInterface $csrf)
+    public function __construct(private readonly CsrfTokenManagerInterface $csrf, private readonly Connection $connection)
     {
     }
 
@@ -27,6 +29,12 @@ final class AccountLoginSubscriber implements EventSubscriberInterface
         $session->set('account_active', time());
         if ($event->getAuthenticator() instanceof AccountAuthenticator) {
             $this->csrf->refreshToken('account');
+        }
+        // Password sign-in and remember-me restore both overwrite one UTC second-precision
+        // value (owner-approved admin statistics). A targeted UPDATE avoids flushing ORM state.
+        $user = $event->getUser();
+        if ($user instanceof User && null !== $id = $user->getId()) {
+            $this->connection->executeStatement('UPDATE user_account SET last_login_at = ? WHERE id = ?', [gmdate('Y-m-d H:i:s'), $id]);
         }
     }
 }

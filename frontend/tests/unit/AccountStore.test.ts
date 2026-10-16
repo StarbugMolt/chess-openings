@@ -8,6 +8,7 @@ const user = {
   email: 'learner@example.test',
   verified: true,
   createdAt: '2026-10-15T10:00:00Z',
+  admin: false,
 }
 const response = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status })
 
@@ -106,6 +107,15 @@ describe('private account requests', () => {
   it('rejects malformed users before they can become account state', () => {
     expect(() => accountUser({ ...user, id: 7 })).toThrow('unexpected user')
     expect(() => accountUser({ ...user, verified: 'yes' })).toThrow('unexpected user')
+    const withoutAdmin: Record<string, unknown> = { ...user }
+    delete withoutAdmin.admin
+    expect(() => accountUser(withoutAdmin)).toThrow('unexpected user')
+    expect(() => accountUser({ ...user, admin: 'true' })).toThrow('unexpected user')
+    expect(() => accountUser({ ...user, admin: 1 })).toThrow('unexpected user')
+    expect(accountUser({ ...user, admin: true, extra: 'ignored' })).toEqual({
+      ...user,
+      admin: true,
+    })
   })
 
   it('downloads JSON only after a fresh session CSRF request and puts the password in the body', async () => {

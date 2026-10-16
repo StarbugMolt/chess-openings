@@ -47,6 +47,13 @@ routes.push({
   meta: { requiresAuth: true },
 })
 routes.push({
+  path: '/admin',
+  name: 'admin',
+  component: () => import('./views/AdminView.vue'),
+  // Display gate only: every /api/admin/* endpoint independently requires ROLE_ADMIN.
+  meta: { requiresAuth: true, requiresAdmin: true },
+})
+routes.push({
   path: '/progress',
   name: 'practice-progress',
   component: () => import('./views/ProgressView.vue'),
@@ -78,6 +85,7 @@ const titles: Record<string, string> = {
   account: 'Your account',
   'practice-progress': 'Your practice',
   privacy: 'Account privacy',
+  admin: 'Admin',
   'board-lab': 'Developer board',
   'not-found': 'Page not found',
 }
@@ -92,6 +100,7 @@ export const router = createRouter({
     if (to.hash) return { el: to.hash }
     // Catalogue controls retain focus and scroll while changing their query.
     if (to.name === 'catalogue' && from.name === 'catalogue') return false
+    if (to.name === 'admin' && from.name === 'admin') return false
     return { top: 0 }
   },
 })
@@ -112,6 +121,8 @@ router.beforeEach(async (to, from) => {
               : {}),
         },
       }
+    // The guard reloaded /api/me above, so a revoked admin is redirected on navigation.
+    if (to.meta.requiresAdmin && !account.user?.admin) return { name: 'learn' }
   }
   if (['login', 'register'].includes(String(to.name)) && (await account.load()))
     return { name: 'learn' }

@@ -31,6 +31,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     // @phpstan-ignore property.unusedType (assigned by Doctrine hydration)
     private ?\DateTimeImmutable $verifiedAt = null;
 
+    /** Set and cleared only by the app:admin:grant/revoke console commands. */
+    #[ORM\Column(name: 'admin_granted_at', type: 'datetime_immutable', nullable: true)]
+    // @phpstan-ignore property.unusedType (assigned by Doctrine hydration)
+    private ?\DateTimeImmutable $adminGrantedAt = null;
+
+    /** Written by DBAL on each successful sign-in; one value, never a history. */
+    #[ORM\Column(name: 'last_login_at', type: 'datetime_immutable', nullable: true)]
+    // @phpstan-ignore property.unusedType, property.onlyWritten (mapped for schema validation; read and written via DBAL)
+    private ?\DateTimeImmutable $lastLoginAt = null;
+
     public function __construct(string $email)
     {
         if ('' === $email) {
@@ -75,10 +85,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->createdAt;
     }
 
+    public function isAdmin(): bool
+    {
+        return null !== $this->adminGrantedAt;
+    }
+
     /** @return list<string> */
     public function getRoles(): array
     {
-        return ['ROLE_USER'];
+        return $this->isAdmin() ? ['ROLE_USER', 'ROLE_ADMIN'] : ['ROLE_USER'];
     }
 
     #[\Deprecated]
@@ -95,9 +110,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $data;
     }
 
-    /** @return array{id: string, email: string, verified: bool, createdAt: string} */
+    /** @return array{id: string, email: string, verified: bool, createdAt: string, admin: bool} */
     public function toArray(): array
     {
-        return ['id' => (string) $this->id, 'email' => $this->email, 'verified' => $this->isVerified(), 'createdAt' => $this->createdAt->format(DATE_ATOM)];
+        return ['id' => (string) $this->id, 'email' => $this->email, 'verified' => $this->isVerified(), 'createdAt' => $this->createdAt->format(DATE_ATOM), 'admin' => $this->isAdmin()];
     }
 }

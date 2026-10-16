@@ -6,7 +6,11 @@ if [[ ${CHECK_REUSE_SERVICES:-0} == 1 ]]; then
   # Coordinated sessions may be testing against these services. Refuse to
   # restart them; an ordinary check still provisions the expected environment.
   for service in db mailpit app; do
-    container_id=$(docker compose ps --status running --quiet "$service")
+    # Other sessions may run one-off containers of the same service (isolated browser/check apps);
+    # only the long-running service container itself must be healthy.
+    container_id=$(docker compose ps --status running --quiet "$service" | while read -r id; do
+      if [[ $(docker inspect --format '{{index .Config.Labels "com.docker.compose.oneoff"}}' "$id" 2>/dev/null) == False ]]; then echo "$id"; fi
+    done | head -n 1)
     if [[ -z "$container_id" ]] || [[ $(docker inspect --format '{{.State.Health.Status}}' "$container_id") != healthy ]]; then
       printf 'CHECK_REUSE_SERVICES requires an already healthy %s service.\n' "$service" >&2
       exit 1
@@ -30,6 +34,7 @@ bash tests/import/migrations-test.sh privacy-test.php
 bash tests/import/migrations-test.sh lessons-test.php
 bash tests/import/migrations-test.sh variation-test.php
 bash tests/import/migrations-test.sh practice-test.php
+bash tests/import/migrations-test.sh admin-test.php
 docker compose run --rm --no-deps frontend sh -c 'npm run lint && npm run format:check && npm run typecheck && npm test && npm run build && cp -R dist/. /app/backend/public/'
 docker compose exec -T app php /app/tests/smoke.php
 docker compose exec -T app bash /app/scripts/test-acme.sh http://127.0.0.1

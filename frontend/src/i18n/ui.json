@@ -181,7 +181,7 @@
   },
   "Deleting account…": {
     "fr": "Suppression du compte…",
-    "es": "Eliminando cuenta…"
+    "es": "Eliminando la cuenta…"
   },
   "Permanently delete my account": {
     "fr": "Supprimer définitivement mon compte",
@@ -2297,10 +2297,438 @@
   },
   "You play White": {
     "fr": "Vous jouez avec les blancs",
-    "es": "Juegas con blancas"
+    "es": "Juega con blancas"
   },
   "You play Black": {
     "fr": "Vous jouez avec les noirs",
-    "es": "Juegas con negras"
+    "es": "Juega con negras"
+  },
+  "Admin": {
+    "fr": "Administration",
+    "es": "Administración"
+  },
+  "ADMIN": {
+    "fr": "Administration",
+    "es": "Administración"
+  },
+  "Admin.": {
+    "fr": "Administration.",
+    "es": "Administración."
+  },
+  "Admin sections": {
+    "fr": "Sections d’administration",
+    "es": "Secciones de administración"
+  },
+  "Usage": {
+    "fr": "Utilisation",
+    "es": "Uso"
+  },
+  "Users": {
+    "fr": "Utilisateurs",
+    "es": "Usuarios"
+  },
+  "Your account no longer has admin access.": {
+    "fr": "Votre compte n’a plus accès à l’administration.",
+    "es": "Tu cuenta ya no tiene acceso de administración."
+  },
+  "instead.": {
+    "fr": "à la place.",
+    "es": "en su lugar."
+  },
+  "Calculated": {
+    "fr": "Calculé le",
+    "es": "Calculado el"
+  },
+  ". Dates are in UTC; weeks start on Monday.": {
+    "fr": ". Les dates sont en UTC ; les semaines commencent le lundi.",
+    "es": ". Las fechas están en UTC; las semanas empiezan el lunes."
+  },
+  "Accounts": {
+    "fr": "Comptes",
+    "es": "Cuentas"
+  },
+  "Total": {
+    "fr": "Total",
+    "es": "Total"
+  },
+  "Verified": {
+    "fr": "Vérifiés",
+    "es": "Verificadas"
+  },
+  "Unverified": {
+    "fr": "Non vérifiés",
+    "es": "Sin verificar"
+  },
+  "Admins": {
+    "fr": "Administrateurs",
+    "es": "Administradores"
+  },
+  "Accounts signed in": {
+    "fr": "Comptes connectés",
+    "es": "Cuentas que han iniciado sesión"
+  },
+  "Last 24 hours": {
+    "fr": "Dernières 24 heures",
+    "es": "Últimas 24 horas"
+  },
+  "Last 7 days": {
+    "fr": "7 derniers jours",
+    "es": "Últimos 7 días"
+  },
+  "Last 30 days": {
+    "fr": "30 derniers jours",
+    "es": "Últimos 30 días"
+  },
+  "Never recorded": {
+    "fr": "Jamais enregistré",
+    "es": "Nunca registrado"
+  },
+  "Practice": {
+    "fr": "Pratique",
+    "es": "Práctica"
+  },
+  "Completions": {
+    "fr": "Pratiques terminées",
+    "es": "Prácticas completadas"
+  },
+  "Completions, last 7 days": {
+    "fr": "Pratiques terminées, 7 derniers jours",
+    "es": "Prácticas completadas, últimos 7 días"
+  },
+  "Completions, last 30 days": {
+    "fr": "Pratiques terminées, 30 derniers jours",
+    "es": "Prácticas completadas, últimos 30 días"
+  },
+  "Learners, last 7 days": {
+    "fr": "Élèves, 7 derniers jours",
+    "es": "Estudiantes, últimos 7 días"
+  },
+  "Learners, last 30 days": {
+    "fr": "Élèves, 30 derniers jours",
+    "es": "Estudiantes, últimos 30 días"
+  },
+  "Sign-ups by week": {
+    "fr": "Inscriptions par semaine",
+    "es": "Registros por semana"
+  },
+  "Sign-ups and email verifications for the last 12 weeks": {
+    "fr": "Inscriptions et confirmations d’adresse des 12 dernières semaines",
+    "es": "Registros y verificaciones de correo de las últimas 12 semanas"
+  },
+  "Week starting": {
+    "fr": "Semaine du",
+    "es": "Semana del"
+  },
+  "Sign-ups": {
+    "fr": "Inscriptions",
+    "es": "Registros"
+  },
+  "Verifications": {
+    "fr": "Confirmations",
+    "es": "Verificaciones"
+  },
+  "Completions by day": {
+    "fr": "Pratiques terminées par jour",
+    "es": "Prácticas completadas por día"
+  },
+  "Last 30 days. Each bar is scaled to the busiest day.": {
+    "fr": "30 derniers jours. Chaque barre est proportionnelle au jour le plus actif.",
+    "es": "Últimos 30 días. Cada barra se ajusta al día con más actividad."
+  },
+  "Completions for each of the last 30 days": {
+    "fr": "Pratiques terminées pour chacun des 30 derniers jours",
+    "es": "Prácticas completadas en cada uno de los últimos 30 días"
+  },
+  "Courses": {
+    "fr": "Cours",
+    "es": "Cursos"
+  },
+  "Completions and distinct learners for each course": {
+    "fr": "Pratiques terminées et élèves distincts par cours",
+    "es": "Prácticas completadas y estudiantes distintos por curso"
+  },
+  "Course": {
+    "fr": "Cours",
+    "es": "Curso"
+  },
+  "Learners": {
+    "fr": "Élèves",
+    "es": "Estudiantes"
+  },
+  "No courses published.": {
+    "fr": "Aucun cours publié.",
+    "es": "No hay cursos publicados."
+  },
+  "Most practised lines": {
+    "fr": "Variantes les plus pratiquées",
+    "es": "Variantes más practicadas"
+  },
+  "Up to ten lines with the most completions": {
+    "fr": "Les dix variantes les plus souvent terminées",
+    "es": "Hasta diez variantes con más prácticas completadas"
+  },
+  "No completions recorded yet.": {
+    "fr": "Aucune pratique terminée enregistrée.",
+    "es": "Aún no hay prácticas completadas registradas."
+  },
+  "Pieces played": {
+    "fr": "Couleurs jouées",
+    "es": "Colores jugados"
+  },
+  "Completed without help": {
+    "fr": "Terminé sans aide",
+    "es": "Completado sin ayuda"
+  },
+  "of": {
+    "fr": "sur",
+    "es": "de"
+  },
+  "assessed completions used no hint, retry or takeback.": {
+    "fr": "pratiques évaluées sans indice, nouvel essai ni reprise.",
+    "es": "prácticas evaluadas no usaron pistas, reintentos ni retrocesos."
+  },
+  "No assessed completions yet.": {
+    "fr": "Aucune pratique évaluée pour le moment.",
+    "es": "Aún no hay prácticas evaluadas."
+  },
+  "Older completions saved before assessments were recorded are not included.": {
+    "fr": "Les pratiques enregistrées avant le suivi du rappel ne sont pas incluses.",
+    "es": "No se incluyen las prácticas guardadas antes de registrar las evaluaciones."
+  },
+  "Search accounts": {
+    "fr": "Rechercher des comptes",
+    "es": "Buscar cuentas"
+  },
+  "Email contains": {
+    "fr": "L’adresse contient",
+    "es": "El correo contiene"
+  },
+  "Email": {
+    "fr": "Adresse e-mail",
+    "es": "Correo electrónico"
+  },
+  "Created": {
+    "fr": "Création",
+    "es": "Creación"
+  },
+  "Last sign-in": {
+    "fr": "Dernière connexion",
+    "es": "Último inicio de sesión"
+  },
+  "Last practice": {
+    "fr": "Dernière pratique",
+    "es": "Última práctica"
+  },
+  "Actions": {
+    "fr": "Actions",
+    "es": "Acciones"
+  },
+  "You": {
+    "fr": "Vous",
+    "es": "Tú"
+  },
+  "Not verified": {
+    "fr": "Non confirmé",
+    "es": "Sin verificar"
+  },
+  "None": {
+    "fr": "Aucune",
+    "es": "Ninguna"
+  },
+  "Delete…": {
+    "fr": "Supprimer…",
+    "es": "Eliminar…"
+  },
+  "Go to Account": {
+    "fr": "Aller au compte",
+    "es": "Ir a Cuenta"
+  },
+  "Permanently delete": {
+    "fr": "Supprimer définitivement",
+    "es": "Eliminar permanentemente"
+  },
+  ", its email links and all of its saved practice. This cannot be undone. The account's other sessions stop working on their next request.": {
+    "fr": ", ses liens par e-mail et toutes ses pratiques enregistrées. Cette action est irréversible. Les autres sessions du compte cesseront de fonctionner à leur prochaine requête.",
+    "es": ", sus enlaces de correo y todas sus prácticas guardadas. Esta acción no se puede deshacer. Las otras sesiones de la cuenta dejarán de funcionar en su próxima solicitud."
+  },
+  "Your current admin password": {
+    "fr": "Votre mot de passe administrateur actuel",
+    "es": "Tu contraseña actual de administrador"
+  },
+  "Enter your own password, not the learner's.": {
+    "fr": "Saisissez votre propre mot de passe, pas celui de l’élève.",
+    "es": "Introduce tu propia contraseña, no la del estudiante."
+  },
+  "I understand that this account and its saved practice will be permanently deleted.": {
+    "fr": "Je comprends que ce compte et ses pratiques enregistrées seront définitivement supprimés.",
+    "es": "Entiendo que esta cuenta y sus prácticas guardadas se eliminarán permanentemente."
+  },
+  "Keep this account": {
+    "fr": "Conserver ce compte",
+    "es": "Conservar esta cuenta"
+  },
+  "Account pages": {
+    "fr": "Pages des comptes",
+    "es": "Páginas de cuentas"
+  },
+  "Page": {
+    "fr": "Page",
+    "es": "Página"
+  },
+  "chessopening.starbugstone.com": {
+    "fr": "chessopening.starbugstone.com",
+    "es": "chessopening.starbugstone.com"
+  },
+  "Loading usage statistics…": {
+    "fr": "Chargement des statistiques d’utilisation…",
+    "es": "Cargando estadísticas de uso…"
+  },
+  "completion": {
+    "fr": "pratique terminée",
+    "es": "práctica completada"
+  },
+  "completions": {
+    "fr": "pratiques terminées",
+    "es": "prácticas completadas"
+  },
+  "No accounts match this search.": {
+    "fr": "Aucun compte ne correspond à cette recherche.",
+    "es": "Ninguna cuenta coincide con esta búsqueda."
+  },
+  "No accounts yet.": {
+    "fr": "Aucun compte pour le moment.",
+    "es": "Aún no hay cuentas."
+  },
+  "Permanently delete this account": {
+    "fr": "Supprimer définitivement ce compte",
+    "es": "Eliminar permanentemente esta cuenta"
+  },
+  "Delete {p0}…": {
+    "fr": "Supprimer {p0}…",
+    "es": "Eliminar {p0}…"
+  },
+  "Delete {p0}": {
+    "fr": "Supprimer {p0}",
+    "es": "Eliminar {p0}"
+  },
+  "Accounts, newest first, page {p0} of {p1}": {
+    "fr": "Comptes, les plus récents d’abord, page {p0} sur {p1}",
+    "es": "Cuentas, las más recientes primero, página {p0} de {p1}"
+  },
+  "{p0} {p1} with an email containing “{p2}”": {
+    "fr": "{p0} {p1} dont l’adresse contient « {p2} »",
+    "es": "{p0} {p1} con un correo que contiene «{p2}»"
+  },
+  "{p0} {p1} in total": {
+    "fr": "{p0} {p1} au total",
+    "es": "{p0} {p1} en total"
+  },
+  "account": {
+    "fr": "compte",
+    "es": "cuenta"
+  },
+  "accounts": {
+    "fr": "comptes",
+    "es": "cuentas"
+  },
+  "Deleted the account {p0}.": {
+    "fr": "Le compte {p0} a été supprimé.",
+    "es": "Se ha eliminado la cuenta {p0}."
+  },
+  "The account {p0} had already been deleted.": {
+    "fr": "Le compte {p0} avait déjà été supprimé.",
+    "es": "La cuenta {p0} ya se había eliminado."
+  },
+  "Admin access was refused. Refresh the page and try again.": {
+    "fr": "Accès administrateur refusé. Actualisez la page et réessayez.",
+    "es": "Se ha denegado el acceso de administración. Actualiza la página e inténtalo de nuevo."
+  },
+  "Usage statistics are unavailable. Please try again.": {
+    "fr": "Les statistiques d’utilisation sont indisponibles. Réessayez.",
+    "es": "Las estadísticas de uso no están disponibles. Inténtalo de nuevo."
+  },
+  "The account list is unavailable. Please try again.": {
+    "fr": "La liste des comptes est indisponible. Réessayez.",
+    "es": "La lista de cuentas no está disponible. Inténtalo de nuevo."
+  },
+  "This is your account. Delete it from Account instead.": {
+    "fr": "Il s’agit de votre compte. Supprimez-le depuis la page Compte.",
+    "es": "Esta es tu cuenta. Elimínala desde la página Cuenta."
+  },
+  "Admin accounts cannot be deleted here. Revoke admin access on the server first.": {
+    "fr": "Les comptes administrateurs ne peuvent pas être supprimés ici. Révoquez d’abord leur accès administrateur sur le serveur.",
+    "es": "Las cuentas de administrador no se pueden eliminar aquí. Revoca primero su acceso de administración en el servidor."
+  },
+  "The server refused to delete this account.": {
+    "fr": "Le serveur a refusé de supprimer ce compte.",
+    "es": "El servidor ha rechazado la eliminación de esta cuenta."
+  },
+  "The server refused this deletion. Admin accounts must have admin access revoked on the server first, and your own account is deleted from Account.": {
+    "fr": "Le serveur a refusé cette suppression. L’accès administrateur doit d’abord être révoqué sur le serveur ; votre propre compte se supprime depuis la page Compte.",
+    "es": "El servidor ha rechazado esta eliminación. Primero hay que revocar el acceso de administración en el servidor; tu propia cuenta se elimina desde la página Cuenta."
+  },
+  "Could not delete this account. Check your connection and try again.": {
+    "fr": "Impossible de supprimer ce compte. Vérifiez votre connexion et réessayez.",
+    "es": "No se ha podido eliminar esta cuenta. Comprueba tu conexión e inténtalo de nuevo."
+  },
+  "Page {p0} of {p1}": {
+    "fr": "Page {p0} sur {p1}",
+    "es": "Página {p0} de {p1}"
+  },
+  "{p0} of {p1} assessed completions used no hint, retry or takeback.": {
+    "fr": "{p0} pratiques évaluées sur {p1} sans indice, nouvel essai ni reprise.",
+    "es": "{p0} de {p1} prácticas evaluadas no usaron pistas, reintentos ni retrocesos."
+  },
+  "Admin · Chess Openings": {
+    "fr": "Administration · Chess Openings",
+    "es": "Administración · Chess Openings"
+  },
+  "Usage figures and account administration for this service. Only accounts with admin access can open this page.": {
+    "fr": "Statistiques d’utilisation et gestion des comptes du service. Seuls les comptes ayant un accès administrateur peuvent ouvrir cette page.",
+    "es": "Estadísticas de uso y administración de cuentas del servicio. Solo las cuentas con acceso de administración pueden abrir esta página."
+  },
+  "These figures are calculated when you open this page, only from data the service already stores: accounts, each account's most recent sign-in time and saved lesson completions. Guided versus variation mode, page views, visits and time on page are not recorded, so they cannot be shown. Nothing is sent to third parties.": {
+    "fr": "Ces chiffres sont calculés à l’ouverture de cette page, uniquement à partir des données déjà conservées : comptes, dernière connexion de chaque compte et pratiques terminées enregistrées. Le mode guidé ou variantes, les pages vues, les visites et leur durée ne sont pas enregistrés et ne peuvent donc pas être affichés. Rien n’est transmis à des tiers.",
+    "es": "Estas cifras se calculan al abrir esta página, solo a partir de datos ya guardados: cuentas, último inicio de sesión de cada cuenta y prácticas completadas. No se registran el modo guiado o de variantes, las páginas vistas, las visitas ni el tiempo en página, por lo que no se pueden mostrar. No se envía nada a terceros."
+  },
+  "“Never recorded” includes accounts that have not signed in since sign-in times started being kept.": {
+    "fr": "« Jamais enregistré » inclut les comptes sans connexion depuis le début de l’enregistrement de cette date.",
+    "es": "«Nunca registrado» incluye las cuentas que no han iniciado sesión desde que se empezó a guardar esa fecha."
+  },
+  "Accounts store an email address, password hash, internal ID, creation time, email-verification time and the time of your most recent sign-in. We need these to provide sign-in, account recovery and the private learning service you request. The latest sign-in time is a single value, overwritten each time you sign in or a remembered sign-in is restored; we keep no sign-in history, device or location with it. It lets the publisher see whether accounts are still in use, based on our legitimate interest in running the service. Providing those account features is based on performing our agreement with you. The course list and opening reference can be browsed without an account.": {
+    "fr": "Les comptes conservent une adresse e-mail, un mot de passe haché, un identifiant interne et les dates de création, de confirmation de l’adresse et de dernière connexion. Ces données permettent la connexion, la récupération du compte et le service d’apprentissage privé demandé. La date de dernière connexion est une valeur unique, remplacée à chaque connexion ou restauration d’une connexion mémorisée ; elle n’est associée à aucun historique, appareil ni lieu. Elle permet à l’éditeur de savoir si les comptes sont encore utilisés, dans son intérêt légitime à exploiter le service. Les fonctionnalités du compte reposent sur l’exécution de notre accord avec vous. La liste des cours et le répertoire des ouvertures sont accessibles sans compte.",
+    "es": "Las cuentas guardan una dirección de correo, un hash de contraseña, un identificador interno y las fechas de creación, verificación y último inicio de sesión. Estos datos permiten el acceso, la recuperación de la cuenta y el servicio privado de aprendizaje solicitado. La fecha del último inicio de sesión es un valor único que se sustituye al iniciar sesión o restaurar un acceso recordado; no se asocia a ningún historial, dispositivo ni ubicación. Permite al editor saber si las cuentas siguen en uso, por su interés legítimo en gestionar el servicio. Las funciones de la cuenta se basan en cumplir nuestro acuerdo contigo. La lista de cursos y el catálogo de aperturas se pueden consultar sin cuenta."
+  },
+  "Security limits and operational logs help prevent abuse and diagnose failures, based on our legitimate interest in keeping the service secure. Limits store keyed hashes of email and client-network addresses. Hosting access logs may contain IP addresses and requested paths. Passwords and email-link secrets stay out of request URLs. We do not collect a display name, date of birth or a history of past sign-ins.": {
+    "fr": "Les limites de sécurité et les journaux techniques aident à prévenir les abus et diagnostiquer les problèmes, dans notre intérêt légitime à sécuriser le service. Les limites stockent des empreintes avec clé des adresses e-mail et réseau. Les journaux d’accès de l’hébergeur peuvent contenir des adresses IP et les chemins demandés. Les mots de passe et secrets des liens par e-mail restent hors des URL de requête. Nous ne collectons ni pseudonyme, ni date de naissance, ni historique des connexions passées.",
+    "es": "Los límites de seguridad y los registros técnicos ayudan a prevenir abusos y diagnosticar problemas, por nuestro interés legítimo en proteger el servicio. Los límites guardan hashes con clave de las direcciones de correo y de red. Los registros del alojamiento pueden contener direcciones IP y rutas solicitadas. Las contraseñas y secretos de los enlaces de correo quedan fuera de las URL de solicitud. No recopilamos nombres de usuario, fechas de nacimiento ni historiales de inicios de sesión."
+  },
+  "Administrators appointed by the publisher can see each account's email address, creation, verification and latest sign-in times, number of saved practices and latest practice time, together with aggregated usage figures. They can permanently delete an account; each deletion is recorded with account identifiers only, not the email address.": {
+    "fr": "Les administrateurs désignés par l’éditeur peuvent voir l’adresse e-mail de chaque compte, ses dates de création, de confirmation et de dernière connexion, son nombre de pratiques enregistrées et la date de dernière pratique, ainsi que des statistiques agrégées. Ils peuvent supprimer définitivement un compte ; chaque suppression est consignée avec les seuls identifiants de compte, sans adresse e-mail.",
+    "es": "Los administradores designados por el editor pueden ver el correo de cada cuenta, sus fechas de creación, verificación y último inicio de sesión, el número de prácticas guardadas y la fecha de la última práctica, junto con estadísticas agregadas. Pueden eliminar permanentemente una cuenta; cada eliminación se registra solo con los identificadores de cuenta, sin el correo."
+  },
+  "In Account, download your details (including your latest sign-in time), every saved practice and email-link metadata as JSON, or permanently delete the account, its email links and all practice. Both actions require your current password. Deletion signs you out; other browsers cannot restore the deleted account.": {
+    "fr": "Depuis la page Compte, téléchargez vos données (y compris votre dernière connexion), toutes vos pratiques enregistrées et les métadonnées des liens par e-mail au format JSON, ou supprimez définitivement le compte, ses liens et toutes ses pratiques. Les deux actions exigent votre mot de passe actuel. La suppression vous déconnecte ; aucun autre navigateur ne peut restaurer le compte supprimé.",
+    "es": "En Cuenta, descarga tus datos (incluida la fecha del último inicio de sesión), todas tus prácticas guardadas y los metadatos de enlaces de correo en JSON, o elimina permanentemente la cuenta, sus enlaces y todas sus prácticas. Ambas acciones requieren tu contraseña actual. La eliminación cierra tu sesión; ningún otro navegador puede restaurar la cuenta eliminada."
+  },
+  "Loading accounts…": {
+    "fr": "Chargement des comptes…",
+    "es": "Cargando cuentas…"
+  },
+  "Could not reach the admin service. Check your connection.": {
+    "fr": "Impossible de joindre le service d’administration. Vérifiez votre connexion.",
+    "es": "No se ha podido contactar con el servicio de administración. Comprueba tu conexión."
+  },
+  "The admin service returned an unexpected response.": {
+    "fr": "Le service d’administration a renvoyé une réponse inattendue.",
+    "es": "El servicio de administración ha devuelto una respuesta inesperada."
+  },
+  "The admin service is unavailable.": {
+    "fr": "Le service d’administration est indisponible.",
+    "es": "El servicio de administración no está disponible."
+  },
+  "The admin service is unavailable. Please try again.": {
+    "fr": "Le service d’administration est indisponible. Réessayez.",
+    "es": "El servicio de administración no está disponible. Inténtalo de nuevo."
   }
 }

@@ -103,7 +103,9 @@ try {
     $export = $send($a, 'POST', '/api/me/data-export', ['password' => $password]);
     $assert(200 === $a->getResponse()->getStatusCode(), 'Confirmed export failed.');
     $assert(1 === $export['formatVersion'] && str_ends_with($export['exportedAt'], '+00:00'), 'Export format/time is not explicit.');
-    $assert(['id' => '1', 'email' => 'data1@example.test', 'createdAt' => '2026-10-15T08:00:00+00:00', 'verifiedAt' => '2026-10-15T09:00:00+00:00'] === $export['account'], 'Account export omitted or changed owned metadata.');
+    $lastSignIn = $db->fetchOne('SELECT last_login_at FROM user_account WHERE id=1');
+    $assert(is_string($lastSignIn) && abs(strtotime($lastSignIn.' UTC') - time()) < 300, 'Password sign-in did not record the latest sign-in time.');
+    $assert(['id' => '1', 'email' => 'data1@example.test', 'createdAt' => '2026-10-15T08:00:00+00:00', 'verifiedAt' => '2026-10-15T09:00:00+00:00', 'lastSignInAt' => (new DateTimeImmutable($lastSignIn, new DateTimeZone('UTC')))->format(DATE_ATOM)] === $export['account'], 'Account export omitted or changed owned metadata.');
     $assert(3 === count($export['completions']), 'Export lost history or included another account.');
     $assert(1 === count(array_filter($export['completions'], static fn (array $row): bool => null !== $row['assessment'])), 'Legacy recall was invented or measured evidence lost.');
     $assert(1 === count($export['emailLinks']) && 'reset' === $export['emailLinks'][0]['purpose'], 'Email-link metadata is not user-scoped.');

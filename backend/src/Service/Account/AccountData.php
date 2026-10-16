@@ -57,7 +57,7 @@ SQL, [$userId]);
             return [
                 'formatVersion' => 1,
                 'exportedAt' => gmdate(DATE_ATOM),
-                'account' => ['id' => (string) $account['id'], 'email' => $account['email'], 'createdAt' => self::timestamp((string) $account['created_at']), 'verifiedAt' => null === $account['verified_at'] ? null : self::timestamp((string) $account['verified_at'])],
+                'account' => ['id' => (string) $account['id'], 'email' => $account['email'], 'createdAt' => self::timestamp((string) $account['created_at']), 'verifiedAt' => null === $account['verified_at'] ? null : self::timestamp((string) $account['verified_at']), 'lastSignInAt' => null === $account['last_login_at'] ? null : self::timestamp((string) $account['last_login_at'])],
                 'completions' => $completions,
                 'emailLinks' => $links,
             ];
@@ -81,7 +81,7 @@ SQL, [$userId]);
     private function confirmedAccount(int $userId, #[\SensitiveParameter] string $password): ?array
     {
         // Serialize against password resets, token issuance and deletion. Never trust a stale session hash.
-        $account = $this->connection->fetchAssociative('SELECT id, email, password, created_at, verified_at FROM user_account WHERE id = ? FOR UPDATE', [$userId]);
+        $account = $this->connection->fetchAssociative('SELECT id, email, password, created_at, verified_at, last_login_at FROM user_account WHERE id = ? FOR UPDATE', [$userId]);
         if (false === $account) {
             throw new UnauthorizedHttpException('Session');
         }
