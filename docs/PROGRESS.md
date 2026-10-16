@@ -49,7 +49,7 @@ Retries of one user/attempt identity save one atomic row. A changed measured ass
 
 The private reader uses one repeatable-read view for publication pointers, lesson paths and account rows. It iterates all relevant ledger rows without a second retained event list and caches each immutable revision once; the DBAL/PDO driver may buffer results. Per-user read cost grows with private history. A 10,000-row generated regression proves no silent truncation; materialized aggregates remain a future decision if measured performance requires them.
 
-## Verification
+## M5b verification (2026-10-15)
 
 Verified on 2026-10-15:
 
@@ -62,4 +62,4 @@ Verified on 2026-10-15:
 | Focused frontend units | Training domain **90**, practice response parser **53**, review links **22** |
 | `CHECK_REUSE_SERVICES=1 bash tests/browser/run.sh guided.spec.ts variation.spec.ts practice.spec.ts` | **18 desktop/mobile passes** |
 
-The browser journeys include a separate cookie jar/session, measured hints, normalized save retries, exact colour/revision selection, stale links and expired-session recovery. Native T3 inspection verifies the signed-in ten-course dashboard at 390 px. Fresh bootstrap applies nine schema and 15 lesson migrations. Shared services, the pinned source catalogue and retained learner were preserved. Remote CI and production hosting remain unverified; M6 is next.
+The browser journeys include a separate cookie jar/session, measured hints, normalized save retries, exact colour/revision selection, stale links and expired-session recovery. Native T3 inspection verifies the signed-in ten-course dashboard at 390 px. Fresh bootstrap applies nine schema and 15 lesson migrations. Shared services, the pinned source catalogue and retained learner were preserved. M6a subsequently added [account download/deletion](ACCOUNT_DATA.md), including this ledger. [GitHub CI](https://github.com/Starbugstone/chess-openings/actions/runs/38861773058) later passed for `4e484ef` on 2026-10-16. Production hosting and remaining public privacy/retention work remain unverified.
