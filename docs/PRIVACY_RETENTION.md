@@ -123,7 +123,7 @@ CHESS_PHP=/opt/alt/php83/usr/bin/php    # use your configured PHP CLI
 
 The first command should report `{"configured":true,"missing":[]}`. The second must report `dryRun: true` and `deploymentBackupsConfigured: true` for the standard shared layout. Review counts. With a custom layout, set `PRIVACY_BACKUP_DIRECTORY` in the existing private environment to the actual private SQL-backup directory, then repeat the dry run.
 
-3. Update the installed `production.php` helper under the poll lock. This waits for a running cron deployment, disables polling during the update, lints the fetched helper, atomically replaces it and checks/re-enables polling. Run from one host terminal. The Git source is pinned to the **currently active release**, so another main push cannot change which helper you install. Existing configuration and secrets are retained.
+3. Update the installed `production.php` helper under the poll lock. This waits for a running cron deployment, disables polling during the update, lints the fetched helper, atomically replaces it and checks/re-enables polling. Run from one host terminal. The Git source is pinned to the **currently active release**. The controller already fetched that commit; this update reads its local Git object and needs no separate Git SSH authentication. Existing configuration and secrets are retained.
 
 ```bash
 CHESS_REPO=$("$CHESS_PHP" -r '$c=json_decode(file_get_contents($argv[1]),true,512,JSON_THROW_ON_ERROR); echo $c["repository_path"];' "$CHESS_ROOT/control/config.json")
@@ -134,7 +134,6 @@ CHESS_SHA=$(cut -c1-40 "$CHESS_ROOT/current/public/release.txt")
   flock -x 9
   "$CHESS_PHP" "$CHESS_ROOT/control/deploy.php" "$CHESS_ROOT/control/config.json" disable
   test ! -f "$CHESS_ROOT/state/enabled"
-  git -C "$CHESS_REPO" fetch --no-tags origin "$CHESS_SHA"
   git -C "$CHESS_REPO" show "$CHESS_SHA:scripts/deploy/production.php" > "$CHESS_ROOT/control/production.php.next"
   "$CHESS_PHP" -l "$CHESS_ROOT/control/production.php.next"
   chmod 700 "$CHESS_ROOT/control/production.php.next"
