@@ -2307,10 +2307,6 @@
     "fr": "Administration",
     "es": "Administración"
   },
-  "ADMIN": {
-    "fr": "Administration",
-    "es": "Administración"
-  },
   "Admin.": {
     "fr": "Administration.",
     "es": "Administración."
@@ -2338,10 +2334,6 @@
   "Calculated": {
     "fr": "Calculé le",
     "es": "Calculado el"
-  },
-  ". Dates are in UTC; weeks start on Monday.": {
-    "fr": ". Les dates sont en UTC ; les semaines commencent le lundi.",
-    "es": ". Las fechas están en UTC; las semanas empiezan el lunes."
   },
   "Accounts": {
     "fr": "Comptes",
@@ -2730,5 +2722,57 @@
   "The admin service is unavailable. Please try again.": {
     "fr": "Le service d’administration est indisponible. Réessayez.",
     "es": "El servicio de administración no está disponible. Inténtalo de nuevo."
+  },
+  "Overview": {
+    "fr": "Vue d’ensemble",
+    "es": "Resumen"
+  },
+  "Growth": {
+    "fr": "Croissance",
+    "es": "Crecimiento"
+  },
+  "Signed in as": {
+    "fr": "Connecté en tant que",
+    "es": "Sesión iniciada como"
+  },
+  "Refresh": {
+    "fr": "Actualiser",
+    "es": "Actualizar"
+  },
+  "Today so far": {
+    "fr": "Aujourd’hui, jusqu’à présent",
+    "es": "Hoy, hasta ahora"
+  },
+  "Busiest day: {p0} on {p1}": {
+    "fr": "Jour le plus actif : {p0} le {p1}",
+    "es": "Día con más actividad: {p0} el {p1}"
+  },
+  "Today": {
+    "fr": "Aujourd’hui",
+    "es": "Hoy"
+  },
+  "Week of {p0}": {
+    "fr": "Semaine du {p0}",
+    "es": "Semana del {p0}"
+  },
+  "{p0} sign-ups, {p1} verifications": {
+    "fr": "{p0} inscriptions, {p1} vérifications",
+    "es": "{p0} registros, {p1} verificaciones"
+  },
+  "Show the figures as a table": {
+    "fr": "Afficher les chiffres sous forme de tableau",
+    "es": "Mostrar las cifras en una tabla"
+  },
+  "Share of all saved completions by the side played.": {
+    "fr": "Répartition de toutes les leçons terminées enregistrées selon le camp joué.",
+    "es": "Reparto de todas las lecciones completadas guardadas según el bando jugado."
+  },
+  "Rank": {
+    "fr": "Rang",
+    "es": "Posición"
+  },
+  "Dates are in UTC; weeks start on Monday.": {
+    "fr": "Les dates sont en UTC ; les semaines commencent le lundi.",
+    "es": "Las fechas están en UTC; las semanas empiezan el lunes."
   }
 }

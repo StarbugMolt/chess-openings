@@ -43,3 +43,12 @@ Archivo is self-hosted from `frontend/src/assets/fonts` (latin and latin-ext var
 - Buttons are at least 44 px high. Primary actions are ink (`.primary-link`), secondary actions are outlined (`.secondary-button` or the default `button`), the Hint is a marker button, and destructive actions use `--danger`.
 - The visible keyboard focus is a 3 px ink outline with a 3 px offset.
 - Segmented choices (the Learn side filter) keep native radio inputs stretched transparently over each segment, so assistive technology and pointer input both reach the real control.
+
+## Charts (admin dashboard)
+
+The admin dashboard is the only screen with charts. Its one loud element is an ink band holding the practice totals and a 30-day column chart; the latest column (today, so far) is the marker colour, which keeps the "marker means now" rule. Everything else sits on white panels on paper.
+
+- Columns are HTML list items, at most 24 px wide with a 4 px rounded top, on solid 1 px gridlines at round values. A zero is a 2 px baseline stub.
+- Two-series charts use an ink ramp, `#7f98d0` then `--ink`, checked as an ordinal palette with the dataviz validator. They always have a legend, and the figures are also available as a table.
+- Values and labels use text colours, never series colours. Part-to-whole bars (verified accounts, White/Black) separate segments with a 2 px gap. The White/Black legend reuses `.side-token`.
+- The tooltip is the list item's own text, clipped until hover or keyboard focus, so screen readers and the table never depend on it.

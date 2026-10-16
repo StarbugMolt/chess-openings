@@ -384,3 +384,26 @@ test('language switches translate admin controls without resetting an open confi
     expect(await noOverflow(page)).toBe(true)
   }
 })
+
+test('chart columns are one tab stop and arrow keys reveal each value', async ({ page }) => {
+  await mockAdmin(page)
+  await page.goto('/admin')
+  const daily = page.getByRole('list', { name: 'Completions for each of the last 30 days' })
+  const days = daily.getByRole('listitem')
+  await expect(days).toHaveCount(30)
+  await expect(days.last()).toHaveAttribute('tabindex', '0')
+  await expect(days.first()).toHaveAttribute('tabindex', '-1')
+  await days.last().focus()
+  await expect(days.last().locator('.tip')).toBeVisible()
+  await page.keyboard.press('ArrowLeft')
+  await expect(days.nth(28)).toBeFocused()
+  await expect(days.nth(28).locator('.tip')).toContainText('3 completions')
+  await page.keyboard.press('Home')
+  await expect(days.first()).toBeFocused()
+  await expect(days.first()).toHaveAttribute('tabindex', '0')
+  await expect(page.getByRole('link', { name: 'Overview', exact: true })).toHaveAttribute(
+    'aria-current',
+    'location',
+  )
+  expect(await noOverflow(page)).toBe(true)
+})

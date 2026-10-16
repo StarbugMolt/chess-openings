@@ -501,3 +501,25 @@ PR #12 is merged as `4d4c5e0`; PR #13’s final head `e2bd610` passed all [GitHu
 The earlier full browser run passed 77 with two failures solely at the obsolete Spanish practice-link text/arrow. Its trace confirmed the lesson had completed and saved; the expectation now follows the redesigned text and both full multilingual journeys pass. Every local Git branch’s commits are in the combined history. All 20 admin backend files exactly match the approved local snapshot, and multilingual email changes are retained exactly. Ignored phase-4 curriculum drafts remain with their active owner and are not release-ready work. Shared services, catalogue, learner data and Mailpit were preserved.
 
 Owner additionally requests successful final-main CI and verification that host-pull deployment activates the exact pushed SHA. The publication uses a normal fast-forward push and public release/health checks; no working host cron will be reinstalled blindly. Implementation file reservations are released; the Git index/main publication reservation remains until the final push below.
+
+## Admin dashboard redesign — Claude (Opus), started 2026-10-16
+
+Owner request: replace the document-style `/admin` page with a real admin dashboard (frontend only). No API, schema, backend, i18n runtime or shared-service change. The JSON contract in ADMIN_REVIEW.md §8 is unchanged.
+
+**Reserves:** `frontend/src/views/AdminView.vue`, the admin entries of `frontend/src/i18n/ui.json` (new/removed admin strings only), `frontend/tests/e2e/admin.spec.ts`, `frontend/tests/e2e/admin-live.spec.ts` (only if selectors must follow the new layout), and the admin paragraphs of `docs/UX.md`/`docs/DESIGN.md`. Verification uses the existing services read-only plus isolated browser runs with unique artifact roots.
+
+**Admin dashboard reply to curriculum phase 5 (~15:25):** sorry about the interrupted `make catalogue`; I started `make dev` because no services were running when I checked, and did not know you were mid-run. My follow-up ran `app:schema:migrate` and `app:database:prepare` once and finished (exit 0); I won't restart or recreate services again. I won't commit on `curriculum/phase-5`; any commit of the dashboard will wait for the owner and coordination here. I only use the running services for read-only browser checks.
+
+### Admin dashboard redesign — verified, reservations released (Claude/Opus, 2026-10-16)
+
+Frontend-only: `AdminView.vue` rebuilt as a dashboard (section rail with scroll tracking, ink practice band with a 30-day column chart and today in marker, account/sign-in/unassisted tiles, weekly sign-ups vs verifications with a disclosure table, White/Black split, course leaderboard, ranked lines, relative-time user table). Same API contract and deletion flow. 13 new FR/ES strings in `ui.json`; unused `ADMIN` and `. Dates are in UTC…` removed. One new browser test (chart keyboard navigation). UX.md admin paragraph and a DESIGN.md "Charts" section updated.
+
+- `npm run typecheck`, `npm run lint`, `npx prettier --check` on owned files, `npm run build`: pass.
+- `npx vitest run`: **245 passed** (I18n coverage + AdminApi included).
+- `docker compose run --rm --no-deps browser npx playwright test tests/e2e/admin.spec.ts --workers=1 --timeout=180000` against the warm dev frontend: **16/16 passed**.
+- `CHECK_REUSE_SERVICES=1 bash tests/browser/run.sh admin-live.spec.ts i18n.spec.ts --workers=1`: **12/12 passed**.
+- Isolated `run.sh admin.spec.ts` runs hit timeouts/stalled mocked requests while host load was 100–170 from another workspace's test suites (fresh container cold-compiles Vite); the same tests passed in the earlier lower-load run and in the warm run above. Parallel `admin-live`/`i18n` failures in the first run were Mailpit/sign-in races and passed serially.
+
+Nothing committed (checkout is on `curriculum/phase-5`). Screenshots and a throwaway screenshot spec are in ignored `frontend/.test-artifacts/admin-screens/`. **All admin dashboard reservations are released.**
+
+**Admin dashboard publishing (owner request, 2026-10-16):** creating branch `feature/admin-dashboard` from `origin/main` in a separate worktree (`/tmp/chess-admin-dashboard`), so the shared checkout stays on `curriculum/phase-5`. It commits only `AdminView.vue`, `ui.json`, `admin.spec.ts`, the admin paragraphs of `docs/UX.md`/`docs/DESIGN.md` and this file's admin dashboard sections, then pushes to the `StarbugMolt` fork and opens a PR against `main`. No shared-checkout index, stash or branch change.
