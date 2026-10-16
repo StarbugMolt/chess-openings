@@ -36,11 +36,11 @@ try {
     $full = '1' === getenv('LESSON_FULL_IMPORT');
     $cli(['app:database:prepare',...($full ? [] : ['--source-directory=/app/backend/tests/Fixtures/Lessons/source'])]);
     if ($full) { $assert(3865 === (int)$db->fetchOne('SELECT COUNT(*) FROM opening_entry'),'Full pinned bootstrap source was not imported.'); }
-    $assert(10 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson'),'Fresh bootstrap did not publish courses.');
-    $assert(46 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson_line') && 880 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson_line_step'),'Finite curriculum path count wrong.');
-    $assert(19 === (int)$db->fetchOne('SELECT COUNT(*) FROM doctrine_lesson_versions'),'Lesson history missing.');
+    $assert(19 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson'),'Fresh bootstrap did not publish courses.');
+    $assert(65 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson_line') && 1269 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson_line_step'),'Finite curriculum path count wrong.');
+    $assert(28 === (int)$db->fetchOne('SELECT COUNT(*) FROM doctrine_lesson_versions'),'Lesson history missing.');
     $cli(['app:database:prepare','--source-directory=/missing/retained-catalogue']);
-    $assert(1 === (int)$db->fetchOne('SELECT COUNT(*) FROM opening_import_batch') && 880 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson_line_step'),'Bootstrap rerun changed source or lessons.');
+    $assert(1 === (int)$db->fetchOne('SELECT COUNT(*) FROM opening_import_batch') && 1269 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson_line_step'),'Bootstrap rerun changed source or lessons.');
     $graphWriter = new LessonGraphV1($db);
     $counts = $db->fetchAllKeyValue('SELECT \'positions\',COUNT(*) FROM authored_chess_position UNION ALL SELECT \'moves\',COUNT(*) FROM authored_chess_move');
     $assert((int)$counts['positions'] > 0 && (int)$counts['moves'] > 0,'London continuation has no separate authored provenance.');
@@ -77,9 +77,9 @@ try {
         catch (RuntimeException $e) { $assert(str_contains($e->getMessage(),'Incomplete pinned source'),'Wrong missing-membership failure.'); }
     } finally { $db->rollBack(); }
     $public = $client(); $courses = $get($public,'/api/courses');
-    $assert(10 === count($courses['courses']) && $courses['courses'][0]['title'] === 'Italian Game','Public course entry point wrong.');
+    $assert(19 === count($courses['courses']) && $courses['courses'][0]['title'] === 'Italian Game','Public course entry point wrong.');
     $blackCourses = array_column(array_filter($courses['courses'], static fn(array $course): bool => $course['recommendedColor']==='b'),'id');
-    $assert(['caro-kann','french','sicilian','kings-indian','slav'] === array_values($blackCourses),'Black defences were not discoverable.');
+    $assert(['caro-kann','french','sicilian','kings-indian','slav','petrov','alekhine','nimzo-indian','grunfeld','benoni','tarrasch'] === array_values($blackCourses),'Black defences were not discoverable.');
     $assert(!$public->getResponse()->headers->has('Set-Cookie'),'Public courses created a session.');
     $get($public,'/api/lessons/italian'); $assert(401 === $public->getResponse()->getStatusCode(),'Anonymous training allowed.');
     $get($public,'/api/me/progress'); $assert(401 === $public->getResponse()->getStatusCode(),'Anonymous progress allowed.');
@@ -107,7 +107,7 @@ try {
     $assert('b' === $caro['recommendedColor'] && 3 === $caro['revision'] && [24,19,19] === array_map(static fn(array $l): int => count($l['steps']),$caro['lines']) && 'O-O' === $caro['lines'][2]['steps'][18]['san'],'Black Caro-Kann lines unavailable.');
     $queensGambit = $get($a,'/api/lessons/queens-gambit')['lesson'];
     $assert(2 === $queensGambit['revision'] && [19,28,26] === array_map(static fn(array $l): int => count($l['steps']),$queensGambit['lines']) && 'Qxe5' === $queensGambit['lines'][1]['steps'][27]['san'],'Complete named Queen\'s Gambit lines were not published.');
-    $newCourses = ['ruy-lopez'=>['w',[28,24,36],1],'catalan'=>['w',[23,20],1],'sicilian'=>['b',[18,24,20],1],'kings-indian'=>['b',[27,26],1],'slav'=>['b',[19,29],2]];
+    $newCourses = ['ruy-lopez'=>['w',[28,24,36],1],'catalan'=>['w',[23,20],1],'sicilian'=>['b',[18,24,20],1],'kings-indian'=>['b',[27,26],1],'slav'=>['b',[19,29],2],'scotch'=>['w',[24,21],1],'four-knights'=>['w',[17,20,18],1],'evans-gambit'=>['w',[21,21],1],'petrov'=>['b',[20,18],1],'alekhine'=>['b',[22,21],1],'nimzo-indian'=>['b',[21,18],1],'grunfeld'=>['b',[26,21],1],'benoni'=>['b',[20,20],1],'tarrasch'=>['b',[22,18],1]];
     foreach ($newCourses as $courseId => [$color,$lengths,$revision]) {
         $course = $get($a,'/api/lessons/'.$courseId)['lesson'];
         $assert($revision === $course['revision'] && $color === $course['recommendedColor'] && $lengths === array_map(static fn(array $l): int => count($l['steps']),$course['lines']),'Complete named lines missing for '.$courseId.'.');
@@ -151,7 +151,7 @@ try {
     $assert(3 === (int)$db->fetchOne('SELECT revision FROM user_line_completion WHERE attempt_id=? AND user_id=1',[$body['attemptId']]),'Old progress changed revision.');
     $db->executeStatement('UPDATE opening_catalogue_state SET catalogue_revision=2');
     $post($a,'/api/me/completions',$body); $assert(200 === $a->getResponse()->getStatusCode(),'Catalogue update invalidated pinned authored path.');
-    $assert(372 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson_line_step WHERE revision=1'),'Source change mutated authored steps.');
+    $assert(761 === (int)$db->fetchOne('SELECT COUNT(*) FROM lesson_line_step WHERE revision=1'),'Source change mutated authored steps.');
     $blackBody = [...$body,'attemptId'=>'21234567-89ab-4cde-8fab-0123456789ab','lessonId'=>'caro-kann','lineId'=>$caro['lines'][1]['id'],'playingColor'=>'b','path'=>array_column($caro['lines'][1]['steps'],'uci')];
     $post($a,'/api/me/completions',$blackBody);
     $assert(200 === $a->getResponse()->getStatusCode() && 'b' === $db->fetchOne('SELECT playing_color FROM user_line_completion WHERE attempt_id=?',[$blackBody['attemptId']]),'Black practice was not saved.');

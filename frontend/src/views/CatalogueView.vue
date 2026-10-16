@@ -25,6 +25,15 @@ const families = [
   'Catalan Opening',
   "King's Indian Defense",
   'Slav Defense',
+  'Scotch Game',
+  'Four Knights Game',
+  'Evans Gambit',
+  "Petrov's Defense",
+  'Alekhine Defense',
+  'Nimzo-Indian Defense',
+  'Grünfeld Defense',
+  'Benoni Defense',
+  'Tarrasch Defense',
 ]
 /** Only expanded entries mount a board; each remembers which recorded sequence it shows. */
 const expanded = reactive(new Map<string, number>())
