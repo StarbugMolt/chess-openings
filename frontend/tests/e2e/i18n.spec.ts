@@ -207,7 +207,7 @@ test.describe('French browser preference', () => {
     await expect(page.locator('.move-notes:visible')).toContainText(
       teaching[line.steps.at(-1)!.explanation]!.es,
     )
-    await page.getByRole('link', { name: 'Ver tus prácticas y repasos →', exact: true }).click()
+    await page.getByRole('link', { name: 'Ver tu práctica y tus repasos', exact: true }).click()
     await expect(page.getByRole('heading', { name: 'Tus prácticas.', exact: true })).toBeVisible()
     await expect(page.locator('.course-progress-grid')).toContainText('Sistema Londres')
     await page.goto('/train/london')
