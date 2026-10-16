@@ -51,9 +51,9 @@ final class AccountController extends AbstractController
             }
         }
         if (!$user->isVerified()) {
-            $this->tokens->send($user, 'verify', $candidate->getPassword());
+            $this->tokens->send($user, 'verify', $candidate->getPassword(), $request->getPreferredLanguage(['en', 'fr', 'es']) ?? 'en');
         } else {
-            $this->tokens->registrationNotice($user);
+            $this->tokens->registrationNotice($user, $request->getPreferredLanguage(['en', 'fr', 'es']) ?? 'en');
         }
 
         return $this->accepted();
@@ -67,7 +67,7 @@ final class AccountController extends AbstractController
         $this->mailLimits($request, $email);
         $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
         if ($user instanceof User && $user->isVerified()) {
-            $this->tokens->send($user, 'reset');
+            $this->tokens->send($user, 'reset', locale: $request->getPreferredLanguage(['en', 'fr', 'es']) ?? 'en');
         }
 
         return $this->accepted();
@@ -81,7 +81,7 @@ final class AccountController extends AbstractController
         $this->mailLimits($request, $email);
         $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
         if ($user instanceof User && !$user->isVerified()) {
-            $this->tokens->send($user, 'verify');
+            $this->tokens->send($user, 'verify', locale: $request->getPreferredLanguage(['en', 'fr', 'es']) ?? 'en');
         }
 
         return $this->accepted();

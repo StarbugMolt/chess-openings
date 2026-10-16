@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { t, type Text } from '../../i18n'
 export interface MoveNote {
   /** Who moved, for example "You played" or "Black replied". */
-  who: string
+  who: Text
   /** Numbered SAN, for example "5. d3" or "5... d6". */
   label: string
   explanation: string
@@ -13,17 +14,17 @@ withDefaults(defineProps<{ notes: MoveNote[]; heading?: string | undefined }>(),
 </script>
 
 <template>
-  <section v-if="notes.length" class="move-notes" :aria-label="heading">
-    <span class="eyebrow">{{ heading.toUpperCase() }}</span>
+  <section v-if="notes.length" class="move-notes" :aria-label="t(heading)">
+    <span class="eyebrow">{{ t(heading).toLocaleUpperCase() }}</span>
     <article
       v-for="(note, index) in notes"
       :key="note.label"
       :class="{ latest: index === notes.length - 1 }"
     >
       <p class="move-notes-move">
-        {{ note.who }} <strong>{{ note.label }}</strong>
+        {{ t(note.who) }} <strong>{{ note.label }}</strong>
       </p>
-      <p class="move-notes-text">{{ note.explanation }}</p>
+      <p class="move-notes-text">{{ t(note.explanation) }}</p>
     </article>
   </section>
 </template>

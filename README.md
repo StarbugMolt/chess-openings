@@ -31,6 +31,10 @@ Both modes use the same opening graph. In strict lessons, a valid but different 
 
 This is a friendly, approachable teaching experience inspired by clear chess educators, with its **own** voice and no third-party branding or copied lessons.
 
+## Languages
+
+English, French and Spanish are available through the header language button. The first visit follows the browser's preferred supported language, falling back to English. A manual choice is saved in that browser and overrides automatic detection on later visits. Interface text, the ten current courses' teaching notes and account emails are translated. Switching languages keeps an active exercise and its saved progress intact. See [translation behavior and maintenance](docs/I18N.md).
+
 ## Scope
 
 **MVP:** accounts, imported local opening catalogue, opening selection, responsive board, precise guided lessons, branching variation practice, simple authored explanations, saved progress, and GDPR-oriented account controls.

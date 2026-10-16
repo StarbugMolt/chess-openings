@@ -1,16 +1,17 @@
 <script setup lang="ts">
+import { t, message, type Text } from '../i18n'
 import { nextTick, onBeforeUnmount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAccountStore } from '../stores/account'
 import { AccountError, exportAccountData } from '../api/account'
 const account = useAccountStore()
 const router = useRouter()
-const error = ref('')
+const error = ref<Text>('')
 const busy = ref<'logout' | 'export' | 'delete'>()
 const exportPassword = ref('')
 const deletePassword = ref('')
-const downloadError = ref('')
-const deletionError = ref('')
+const downloadError = ref<Text>('')
+const deletionError = ref<Text>('')
 const downloaded = ref(false)
 const showDeletion = ref(false)
 const deletionConfirmed = ref(false)
@@ -29,12 +30,14 @@ async function recoverSession(cause: unknown): Promise<void> {
   if (cause instanceof AccountError && cause.status === 401) await account.load(true)
 }
 
-function failure(cause: unknown, fallback: string): string {
+function failure(cause: unknown, fallback: string): Text {
   if (cause instanceof AccountError) {
     if (cause.status === 401) return 'Your session has ended. Sign in again to continue.'
     if (cause.status === 429)
       return cause.retryAfter
-        ? `Too many confirmation attempts. Try again in ${cause.retryAfter} seconds.`
+        ? message('Too many confirmation attempts. Try again in {p0} seconds.', {
+            p0: cause.retryAfter,
+          })
         : 'Too many confirmation attempts. Please try again later.'
     return cause.message
   }
@@ -121,54 +124,63 @@ async function logout(): Promise<void> {
   <main id="main-content" class="page-width account-page">
     <template v-if="deleted">
       <div class="account-intro deletion-result">
-        <span class="eyebrow">YOUR ACCOUNT</span>
-        <h1 ref="deletedHeading" tabindex="-1">Account deleted.</h1>
-        <p>Your account and saved practice have been removed. You are signed out.</p>
-        <RouterLink class="primary-link" to="/">Back to home</RouterLink>
+        <span class="eyebrow">{{ t('YOUR ACCOUNT') }}</span>
+        <h1 ref="deletedHeading" tabindex="-1">{{ t('Account deleted.') }}</h1>
+        <p>{{ t('Your account and saved practice have been removed. You are signed out.') }}</p>
+        <RouterLink class="primary-link" to="/">{{ t('Back to home') }}</RouterLink>
       </div>
     </template>
     <template v-else>
       <div class="account-intro">
-        <span class="eyebrow">YOUR ACCOUNT</span>
-        <h1>Your account.</h1>
+        <span class="eyebrow">{{ t('YOUR ACCOUNT') }}</span>
+        <h1>{{ t('Your account.') }}</h1>
         <p v-if="account.user">
-          Your email is verified. Choose a guided lesson to practise an opening, with automatic
-          replies and saved completion.
+          {{
+            t(
+              'Your email is verified. Choose a guided lesson to practise an opening, with automatic replies and saved completion.',
+            )
+          }}
         </p>
       </div>
-      <section class="account-card" aria-label="Account details">
+      <section class="account-card" :aria-label="t('Account details')">
         <template v-if="account.user"
-          ><h2>Signed in</h2>
+          ><h2>{{ t('Signed in') }}</h2>
           <p class="account-email">{{ account.user.email }}</p>
-          <p>Only you can access your account details.</p></template
+          <p>{{ t('Only you can access your account details.') }}</p></template
         >
         <p v-else-if="account.unavailable" role="status">
-          We could not check your sign-in. Please try again.
+          {{ t('We could not check your sign-in. Please try again.') }}
         </p>
         <p v-else>
-          Your session has ended.
-          <RouterLink to="/login?next=/account">Sign in again</RouterLink> to continue.
+          {{ t('Your session has ended.') }}
+          <RouterLink to="/login?next=/account">{{ t('Sign in again') }}</RouterLink>
+          {{ t('to continue.') }}
         </p>
-        <p v-if="error" role="alert" class="account-error">{{ error }}</p>
-        <RouterLink class="primary-link" to="/learn">Choose a lesson →</RouterLink>
-        <RouterLink class="primary-link" to="/progress">Your practice &amp; reviews →</RouterLink>
+        <p v-if="error" role="alert" class="account-error">{{ t(error) }}</p>
+        <RouterLink class="primary-link" to="/learn">{{ t('Choose a lesson →') }}</RouterLink>
+        <RouterLink class="primary-link" to="/progress">{{
+          t('Your practice & reviews →')
+        }}</RouterLink>
         <button v-if="account.user" class="account-signout" :disabled="!!busy" @click="logout">
-          {{ busy === 'logout' ? 'Signing out…' : 'Sign out' }}
+          {{ busy === 'logout' ? t('Signing out…') : t('Sign out') }}
         </button>
         <div class="account-links">
-          <RouterLink to="/forgot-password">Reset password</RouterLink
-          ><RouterLink to="/privacy">Privacy notice</RouterLink>
+          <RouterLink to="/forgot-password">{{ t('Reset password') }}</RouterLink
+          ><RouterLink to="/privacy">{{ t('Privacy notice') }}</RouterLink>
         </div>
       </section>
       <div v-if="account.user" class="account-data">
         <section class="account-card" aria-labelledby="download-heading">
-          <h2 id="download-heading">Download your data</h2>
+          <h2 id="download-heading">{{ t('Download your data') }}</h2>
           <p id="download-description">
-            Get a JSON file with your account details and all saved practice, including earlier
-            course versions. Passwords and sign-in secrets are excluded.
+            {{
+              t(
+                'Get a JSON file with your account details and all saved practice, including earlier course versions. Passwords and sign-in secrets are excluded.',
+              )
+            }}
           </p>
           <form :aria-busy="busy === 'export'" @submit.prevent="download">
-            <label for="export-password">Current password for download</label>
+            <label for="export-password">{{ t('Current password for download') }}</label>
             <input
               id="export-password"
               v-model="exportPassword"
@@ -179,20 +191,23 @@ async function logout(): Promise<void> {
               :disabled="!!busy"
               aria-describedby="download-description"
             />
-            <p v-if="downloadError" role="alert" class="account-error">{{ downloadError }}</p>
+            <p v-if="downloadError" role="alert" class="account-error">{{ t(downloadError) }}</p>
             <p v-if="downloaded" role="status" class="account-success">
-              Your download is ready. Keep the file somewhere private.
+              {{ t('Your download is ready. Keep the file somewhere private.') }}
             </p>
             <button class="primary-link" :disabled="!!busy">
-              {{ busy === 'export' ? 'Preparing download…' : 'Download my data' }}
+              {{ busy === 'export' ? t('Preparing download…') : t('Download my data') }}
             </button>
           </form>
         </section>
         <section class="account-card deletion-card" aria-labelledby="delete-heading">
-          <h2 id="delete-heading">Delete your account</h2>
+          <h2 id="delete-heading">{{ t('Delete your account') }}</h2>
           <p id="delete-description">
-            Permanently remove your account and all saved practice. This cannot be undone. You can
-            download your data first.
+            {{
+              t(
+                'Permanently remove your account and all saved practice. This cannot be undone. You can download your data first.',
+              )
+            }}
           </p>
           <button
             v-if="!showDeletion"
@@ -202,10 +217,10 @@ async function logout(): Promise<void> {
             :disabled="!!busy"
             @click="toggleDeletion(true)"
           >
-            Delete my account…
+            {{ t('Delete my account…') }}
           </button>
           <form v-else :aria-busy="busy === 'delete'" @submit.prevent="removeAccount">
-            <label for="delete-password">Current password for deletion</label>
+            <label for="delete-password">{{ t('Current password for deletion') }}</label>
             <input
               id="delete-password"
               ref="deleteInput"
@@ -219,13 +234,13 @@ async function logout(): Promise<void> {
             />
             <label class="remember-option deletion-confirmation">
               <input v-model="deletionConfirmed" type="checkbox" required :disabled="!!busy" />
-              <span
-                >I understand that my account and saved practice will be permanently deleted.</span
-              >
+              <span>{{
+                t('I understand that my account and saved practice will be permanently deleted.')
+              }}</span>
             </label>
-            <p v-if="deletionError" role="alert" class="account-error">{{ deletionError }}</p>
+            <p v-if="deletionError" role="alert" class="account-error">{{ t(deletionError) }}</p>
             <button class="danger-button" :disabled="!!busy || !deletionConfirmed">
-              {{ busy === 'delete' ? 'Deleting account…' : 'Permanently delete my account' }}
+              {{ busy === 'delete' ? t('Deleting account…') : t('Permanently delete my account') }}
             </button>
             <button
               type="button"
@@ -233,13 +248,13 @@ async function logout(): Promise<void> {
               :disabled="!!busy"
               @click="toggleDeletion(false)"
             >
-              Keep my account
+              {{ t('Keep my account') }}
             </button>
           </form>
           <p class="account-disclosure">
-            <RouterLink to="/privacy"
-              >Read how deletion affects backups and security records.</RouterLink
-            >
+            <RouterLink to="/privacy">{{
+              t('Read how deletion affects backups and security records.')
+            }}</RouterLink>
           </p>
         </section>
       </div>
