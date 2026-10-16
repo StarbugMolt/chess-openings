@@ -27,14 +27,27 @@ test('board input, illegal moves, orientation, undo and restart stay in sync', a
 
 test('tap-to-move validates through chess.js', async ({ page }, testInfo) => {
   await page.goto('/dev/board')
-  await page.locator('cg-board').scrollIntoViewIfNeeded()
-  const board = await page.locator('cg-board').boundingBox()
-  if (!board) throw new Error('Board not mounted')
+  const board = page.locator('cg-board')
+  await expect(board).toBeVisible()
+  await page.evaluate(() => document.fonts.ready.then(() => undefined))
+  await board.scrollIntoViewIfNeeded()
+  // Scroll events invalidate Chessground's cached bounds before coordinate input.
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      ),
+  )
+  const bounds = await board.boundingBox()
+  if (!bounds) throw new Error('Board not mounted')
   // Chessground exposes a single drawing surface, so square interactions use board-relative points.
   const tap = (x: number, y: number) =>
-    testInfo.project.name === 'mobile' ? page.touchscreen.tap(x, y) : page.mouse.click(x, y)
-  await tap(board.x + (board.width * 4.5) / 8, board.y + (board.height * 6.5) / 8)
-  await tap(board.x + (board.width * 4.5) / 8, board.y + (board.height * 4.5) / 8)
+    testInfo.project.name === 'mobile'
+      ? board.tap({ position: { x, y } })
+      : board.click({ position: { x, y } })
+  await tap((bounds.width * 4.5) / 8, (bounds.height * 6.5) / 8)
+  await expect(board.locator('square.move-dest')).toHaveCount(2)
+  await tap((bounds.width * 4.5) / 8, (bounds.height * 4.5) / 8)
   await expect(page.getByRole('status')).toHaveText('Played e4.')
 })
 
